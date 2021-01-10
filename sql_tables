@@ -1,0 +1,69 @@
+CREATE TABLE department(
+    departmentID int AUTO_INCREMENT,
+    departmentName varchar(20),
+    Primary Key(departmentID)
+);
+
+CREATE TABLE student (
+    studentID int AUTO_INCREMENT,
+    name varchar(50),
+    email varchar(50),
+    password varchar(255),
+    departmentID int,
+    Primary Key(studentID),
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE faculty(
+    facultyID int,
+    facultyName varchar(50),
+    departmentID int,
+    facultyInitials varchar(5),
+    approved boolean,
+    teaching double,
+    grading double,
+    humanity double,
+    average double,
+    Primary Key(facultyID),
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+
+
+);
+
+CREATE TABLE vote (
+    studentID int,
+    facultyID int,
+    vote int,
+    Primary Key(studentID, facultyID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE rating (
+    studentID int,
+    facultyID int,
+    teaching double,
+    grading double,
+    humanity double,
+    Primary Key(facultyID,studentID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
+    
+
+);
+
+CREATE TABLE comment (
+    studentID int,
+    facultyID int,
+    comment varchar(500),
+    Primary Key(facultyID,studentID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
+    
+
+);
+
+
+
+
+
