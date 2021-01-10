@@ -1,0 +1,27 @@
+{
+  "name": "faculty_review",
+  "version": "1.0.0",
+  "description": "Faculty review app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FacultyReviewTeam/faculty_review.git"
+  },
+  "keywords": [
+    "Review",
+    "Rating"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FacultyReviewTeam/faculty_review/issues"
+  },
+  "homepage": "https://github.com/FacultyReviewTeam/faculty_review#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
