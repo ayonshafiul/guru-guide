@@ -1,16 +1,15 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mysql = require("mysql");
+
+const jwt = require("jsonwebtoken");
 const server = express();
 
+dotenv.config( );
+const db = require("./db.js");
+const register = require("./student/register");
 
-dotenv.config( {path:"./.env"});
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB
-});
+server.use(express.json());
 
 db.connect((err) => {
     if (err) {
@@ -24,6 +23,13 @@ db.connect((err) => {
 server.get("/", function(req, res) {
     res.json({hello: "string"});
 })
+
+
+server.post('/register', (req, res) => {});
+    
+        
+    
+    
 
 server.listen(8090, function() {
     console.log("server is running");
