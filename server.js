@@ -1,13 +1,13 @@
 const express = require("express");
-const dotenv = require("dotenv");
+const dotenv = require("dotenv").config();
+const db = require("./db.js");
 const mysql = require("mysql");
+const bcrypt = require('bcrypt');
+const authRouter = require("./routes/authRouter");
 
 const jwt = require("jsonwebtoken");
 const server = express();
 
-dotenv.config( );
-const db = require("./db.js");
-const register = require("./student/register");
 
 server.use(express.json());
 
@@ -19,18 +19,9 @@ db.connect((err) => {
     }
 });
 
-
-server.get("/", function(req, res) {
-    res.json({hello: "string"});
-})
+server.use("/", authRouter);
 
 
-server.post('/register', (req, res) => {});
-    
-        
-    
-    
-
-server.listen(8090, function() {
+server.listen(process.env.PORT || 8090, function() {
     console.log("server is running");
-})
+});

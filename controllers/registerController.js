@@ -1,7 +1,10 @@
+const express = require("express");
+const dotenv = require("dotenv").config();
+const db = require("../db.js");
 const bcrypt = require('bcrypt');
 
 
-
+module.exports = function abc(req, res) {
     const{email,password, passwordConfirm}=req.body;
     db.query('select email from student where email=?' , [email], async (error,results) => {
        if(error){
@@ -9,11 +12,11 @@ const bcrypt = require('bcrypt');
        } 
        
        if(results.length>0){
-           return res.json("register",{message:"Email already exists"});
+           return res.json({"success": "false", "message": "Email already exists"});
         
        }
        else if(password !== passwordConfirm){
-            return res.json("register",{message:"passwords do not match"});
+            return res.json({"success": "false", "message": "Passwords do not match"});
             
        }
        var hashedPassword = await bcrypt.hash(password,8);
@@ -34,3 +37,4 @@ const bcrypt = require('bcrypt');
 
          });
     });
+}
