@@ -2,10 +2,11 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const db = require("./db.js");
 const mysql = require("mysql");
-const bcrypt = require('bcrypt');
-const authRouter = require("./routes/authRouter");
 
-const jwt = require("jsonwebtoken");
+const authRouter = require("./routes/authRouter");
+const facultyRouter = require("./routes/facultyRouter");
+
+
 const server = express();
 
 
@@ -20,6 +21,7 @@ db.connect((err) => {
 });
 
 server.use("/", authRouter);
+server.use("/", facultyRouter);
 
 
 server.listen(process.env.PORT || 8090, function() {

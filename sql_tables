@@ -15,7 +15,7 @@ CREATE TABLE student (
 );
 
 CREATE TABLE faculty(
-    facultyID int,
+    facultyID int AUTO_INCREMENT,
     facultyName varchar(50),
     departmentID int,
     facultyInitials varchar(5),

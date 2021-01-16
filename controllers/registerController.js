@@ -1,11 +1,11 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
+
 const db = require("../db.js");
 const bcrypt = require('bcrypt');
 
 
 module.exports = function abc(req, res) {
-    const{email,password, passwordConfirm}=req.body;
+    const{email,password, passwordConfirm,departmentID}=req.body;
     db.query('select email from student where email=?' , [email], async (error,results) => {
        if(error){
            console.log(error);
@@ -24,6 +24,7 @@ module.exports = function abc(req, res) {
         var value = {
             email: req.body.email,
             password: hashedPassword,
+            departmentID: req.body.departmentID
 
          };
         db.query(sql, value, function(error, results, fields) {
@@ -31,7 +32,7 @@ module.exports = function abc(req, res) {
                 console.log(error);
             } 
             else {
-                res.json({data: results});
+                res.json({data:"registered successfully"});
              }
 
 
