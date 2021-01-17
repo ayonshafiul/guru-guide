@@ -5,7 +5,7 @@ const mysql = require("mysql");
 
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
-const voteRouter = require("./routes/voteRouter");
+const actionRouter = require("./routes/actionRouter");
 
 
 const server = express();
@@ -23,7 +23,7 @@ db.connect((err) => {
 
 server.use("/", authRouter);
 server.use("/", facultyRouter);
-server.use("/", voteRouter);
+server.use("/", actionRouter);
 
 
 server.listen(process.env.PORT || 8090, function() {
