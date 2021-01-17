@@ -14,7 +14,7 @@ module.exports= function (req,res){
              return res.json({"success": "false", "message": "Department already exists"});
          }      
     
-        var sql = "INSERT INTO department SET?";
+        var sql = "INSERT INTO department SET ?";
         var value = {
             departmentName : req.body.departmentName
             

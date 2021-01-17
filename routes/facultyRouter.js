@@ -5,9 +5,9 @@ const addFaculty = require("../controllers/addFaculty");
 const addDepartment = require("../controllers/addDepartment");
 
 
-router.route("/addFaculty")
+router.route("/faculty")
     .post(addFaculty);
 
-router.route("/addDepartment")
+router.route("/department")
     .post(addDepartment);    
 module.exports = router;

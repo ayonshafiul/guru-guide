@@ -20,14 +20,13 @@ CREATE TABLE faculty(
     departmentID int,
     facultyInitials varchar(5),
     approved boolean,
+    voteSum int,
     teaching double,
     grading double,
     humanity double,
     average double,
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
-
-
 );
 
 CREATE TABLE vote (
@@ -48,8 +47,6 @@ CREATE TABLE rating (
     Primary Key(facultyID,studentID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
-    
-
 );
 
 CREATE TABLE comment (

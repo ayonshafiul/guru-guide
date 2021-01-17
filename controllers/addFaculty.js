@@ -14,7 +14,7 @@ module.exports= function abc(req,res){
              return res.json({"success": "false", "message": "faculty already exists"});
          }      
     
-        var sql = "INSERT INTO faculty SET?";
+        var sql = "INSERT INTO faculty SET ?";
         var value = {
             departmentID:  req.body.departmentID,
             facultyName: req.body.facultyName,
@@ -26,7 +26,7 @@ module.exports= function abc(req,res){
                 console.log(error);
             }
             else{
-                res.json({data:results});
+                res.json({"success": "true", "message": "Successfully Added faculty!"});
             }
         });
     });
