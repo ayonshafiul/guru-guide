@@ -20,7 +20,8 @@ CREATE TABLE faculty(
     departmentID int,
     facultyInitials varchar(5),
     approved boolean,
-    voteSum int,
+    upVoteSum int,
+    downVoteSum int,
     teaching double,
     grading double,
     humanity double,
@@ -32,7 +33,8 @@ CREATE TABLE faculty(
 CREATE TABLE vote (
     studentID int,
     facultyID int,
-    vote int,
+    upVote int,
+    downVote int,
     Primary Key(studentID, facultyID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -50,15 +52,26 @@ CREATE TABLE rating (
 );
 
 CREATE TABLE comment (
+    commentID int AUTO_INCREMENT,
     studentID int,
     facultyID int,
     comment varchar(500),
-    Primary Key(facultyID,studentID),
+    upVoteSum int,
+    downVoteSum int,
+    Primary Key(commentID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
-    
 
 );
+CREATE TABLE commentRating(
+    studentID int,
+    commentID int,
+    upVote int,
+    downVote int,
+    Primary Key(studentID, commentID),
+    Foreign Key (commentID) references comment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
+)
+
 
 
 
