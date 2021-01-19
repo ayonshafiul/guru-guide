@@ -13,7 +13,7 @@ module.exports = function(req, res){
     let humanity;
     let facultyID;
     function numcheck(x){
-        if(x>=1 && x<=10){
+        if(x>=0 && x<=10){
             return true;
         }
         else{
