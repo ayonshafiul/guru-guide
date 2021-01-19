@@ -19,25 +19,46 @@ module.exports = (req, res) => {
     if (validator.isNumeric(req.params.voteType)) {
         voteType = parseInt(req.params.voteType);
         console.log("voteType", voteType);
-        if (voteType != 1 && voteType != -1) {
+        if (voteType != 1 && voteType != 0) {
             return res.json(errorObj("Vote not valid!"));
         }
     } else {
         return res.json(errorObj("Vote not valid!"));
     }
-    // check if the user already voted?
-    let sql = "UPDATE vote SET vote = ? where studentID = ? and facultyID = ?";
-    db.query(sql, [voteType, studentID, facultyID], (error, results, fields) => {
+    // 1 means upvote
+    // 0 means downvote
+    let sql;
+    let values;
+    if (voteType == 1) {
+        sql = "UPDATE vote SET upVote = ?, downVote = ? where studentID = ? and facultyID = ?";
+        values = [1, 0, studentID, facultyID];
+    } else if ( voteType == 0) {
+        sql = "UPDATE vote SET upVote = ?, downVote = ? where studentID = ? and facultyID = ?";
+        values = [0, 1, studentID, facultyID];
+    }
+
+    db.query(sql, values, (error, results, fields) => {
         if (error) {
             console.log(error);
             return res.json(errorObj("Something bad happened while updating!"));
         } else if (results.affectedRows == 0) {
             let sql = "INSERT INTO vote SET ?";
-            let voteObj = {
-                studentID,
-                facultyID,
-                vote: voteType
-            };
+            let voteObj;
+            if (voteType == 1) {
+                voteObj = {
+                    studentID,
+                    facultyID,
+                    upVote: 1,
+                    downVote: 0
+                };
+            } else if (voteType == 0) {
+                voteObj = {
+                    studentID,
+                    facultyID,
+                    upVote: 0,
+                    downVote: 1
+                };
+            }
 
             db.query(sql, voteObj, (error, results, fields) => {
                 if (error) {
