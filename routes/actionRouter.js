@@ -15,6 +15,6 @@ router.route("/rate/:facultyID")
 router.route("/comment/:facultyID")
 .post(commentController);
 
-var j =schedule.scheduleJob('1 * * * * *', sumVoteController);
+// var j =schedule.scheduleJob('1 * * * * *', sumVoteController);
    
 module.exports = router;

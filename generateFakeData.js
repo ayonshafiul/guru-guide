@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 
 const numStudents = 100;
 const numFaculties = 30;
+const departmentArray = ['CSE', 'EEE', 'ESS', 'ARC', 'MNS', 'BBS', 'PHR'];
 const numVotes = 100;
 const numRates = 100;
 const numComments = 100;
@@ -20,13 +21,26 @@ db.connect((err) => {
         console.log("Mysql connected...");
     }
 });
+departmentArray.forEach((dept) => {
+    let sql = "INSERT INTO department SET ?";
+    let departmentObj = {
+        departmentName: dept
+    };
+    db.query(sql, departmentObj, (error, results, fields) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(dept + " added!");
+        }
+    });
+})
 
 setTimeout(fakeStudents, timeBetweenEntry * 1000);
-setTimeout(fakeFaculties,timeBetweenEntry * 1000);
-setTimeout(fakeVotes, timeBetweenEntry * 1000);
-setTimeout(fakeRating, timeBetweenEntry * 1000);
-setTimeout(fakeComments,timeBetweenEntry *1000);
-setTimeout(fakeCommentsRating,timeBetweenEntry *1000);
+setTimeout(fakeFaculties,timeBetweenEntry * 1000 * 3);
+setTimeout(fakeVotes, timeBetweenEntry * 1000 * 4)
+setTimeout(fakeRating, timeBetweenEntry * 1000 * 5);
+setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
+setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
 
 
 
@@ -36,7 +50,7 @@ function fakeStudents(){
         student.push({
             email: faker.internet.email(),
             password:"1234",
-            departmentID: faker.random.number({'min': 1,'max':7})
+            departmentID: faker.random.number({'min': 1,'max': departmentArray.length})
         })
     }
 
@@ -65,11 +79,11 @@ student.forEach((student) =>{
 function fakeFaculties(){
     const faculty = [];
 
-    for(let i = 1 ; i < numFaculties; i++ ){
+    for(let i = 1 ; i <= numFaculties; i++ ){
         faculty.push(
             {
                 facultyName:faker.name.firstName()+" "+ faker.name.lastName(),
-                DepartmentID: faker.random.number({'min':1, 'max':7}),
+                DepartmentID: faker.random.number({'min':1, 'max': departmentArray.length}),
                 facultyInitials: faker.name.firstName().substring(0,2).toUpperCase()+faker.name.lastName().charAt(0),
                 Approved: 0
             }
@@ -90,16 +104,29 @@ function fakeFaculties(){
     });
     console.log("fake faculties created");
 }
+var decidedUpVote = 0;
+var decidedDownVote = 0;
+function decideUpOrDown() {
+    let random = Math.random(); 
+    if (random < 0.5) {
+        decidedUpVote = 1;
+        decidedDownVote = 0;
+    } else {
+        decidedUpVote = 0;
+        decidedDownVote = 1;
+    }
+}
 function fakeVotes(){
     const vote = [];
 
     for(let i = 1 ; i < numVotes; i++ ){
+        decideUpOrDown();
         vote.push(
             {
                 studentID: faker.random.number({'min':1 ,'max':numStudents}),
                 facultyID: faker.random.number({'min':1 ,'max':numFaculties}),
-                upVote : faker.random.number({'min':0,'max':1}),
-                downVote: faker.random.number({'min':0,'max':1})
+                upVote : decidedUpVote,
+                downVote: decidedDownVote
             }
         )
 
@@ -177,20 +204,21 @@ function fakeComments(){
 function fakeCommentsRating(){
     const commentrating = [];
 
-    for(let i = 1 ; i < numCommentRating; i++ ){
+    for(let i = 1 ; i <= numCommentRating; i++ ){
+        decideUpOrDown();
         commentrating.push(
             {
                 commentId:faker.random.number({'min':1 ,'max':numComments}),
                 studentID: faker.random.number({'min':1 ,'max':numStudents}),
-                upVote : faker.random.number({'min':0,'max':1}),
-                downVote: faker.random.number({'min':0,'max':1})
+                upVote : decidedUpVote,
+                downVote: decidedDownVote
             }
             
         )
 
     }
     commentrating.forEach((commentrating)=>{
-        var sql ='INSERT INTO commentrating SET ?';
+        var sql ='INSERT INTO commentRating SET ?';
 
         db.query (sql,commentrating,function(error,results,fields){
             if(error){
