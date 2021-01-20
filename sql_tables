@@ -20,12 +20,12 @@ CREATE TABLE faculty(
     departmentID int,
     facultyInitials varchar(5),
     approved boolean,
-    upVoteSum int,
-    downVoteSum int,
-    teaching double,
-    grading double,
-    humanity double,
-    average double,
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
+    teaching double not null default '0.00',
+    grading double not null default '0.00',
+    humanity double not null default '0.00',
+    average double not null default '0.00',
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -33,8 +33,8 @@ CREATE TABLE faculty(
 CREATE TABLE vote (
     studentID int,
     facultyID int,
-    upVote int default 0,
-    downVote int default 0,
+    upVote int,
+    downVote int,
     Primary Key(studentID, facultyID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -43,9 +43,9 @@ CREATE TABLE vote (
 CREATE TABLE rating (
     studentID int,
     facultyID int,
-    teaching double,
-    grading double,
-    humanity double,
+    teaching double  not null default '0.00',
+    grading double not null default '0.00',
+    humanity double not null default '0.00',
     Primary Key(facultyID,studentID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -56,8 +56,8 @@ CREATE TABLE comment (
     studentID int,
     facultyID int,
     comment varchar(500),
-    upVoteSum int,
-    downVoteSum int,
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
     Primary Key(commentID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -66,8 +66,8 @@ CREATE TABLE comment (
 CREATE TABLE commentRating(
     studentID int,
     commentID int,
-    upVote int default 0,
-    downVote int default 0,
+    upVote int,
+    downVote int,
     Primary Key(studentID, commentID),
     Foreign Key (commentID) references comment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
 );

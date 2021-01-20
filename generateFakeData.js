@@ -72,9 +72,9 @@ student.forEach((student) =>{
             
         });
     });
-    console.log("Fake students created");
+    
 })
-
+console.log("Fake students created");
 }
 function fakeFaculties(){
     const faculty = [];
@@ -85,7 +85,9 @@ function fakeFaculties(){
                 facultyName:faker.name.firstName()+" "+ faker.name.lastName(),
                 DepartmentID: faker.random.number({'min':1, 'max': departmentArray.length}),
                 facultyInitials: faker.name.firstName().substring(0,2).toUpperCase()+faker.name.lastName().charAt(0),
-                Approved: 0
+                Approved: 0,
+                upVoteSum: 0,
+                downVoteSum: 0
             }
         )
 
@@ -182,7 +184,9 @@ function fakeComments(){
             {
                 studentID: faker.random.number({'min':1 ,'max':numStudents}),
                 facultyID: faker.random.number({'min':1 ,'max':numFaculties}),
-                comment:faker.lorem.paragraph()
+                comment:faker.lorem.paragraph(),
+                upVoteSum: 0,
+                downVoteSum: 0
             }
         )
 
