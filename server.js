@@ -3,9 +3,11 @@ const dotenv = require("dotenv").config();
 const db = require("./db.js");
 const mysql = require("mysql");
 
+
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
 const actionRouter = require("./routes/actionRouter");
+const sumVoteController = require("./controllers/sumVoteController");
 
 
 const server = express();
@@ -20,10 +22,10 @@ db.connect((err) => {
         console.log("Mysql connected...");
     }
 });
-
 server.use("/", authRouter);
 server.use("/", facultyRouter);
 server.use("/", actionRouter);
+
 
 
 server.listen(process.env.PORT || 8090, function() {

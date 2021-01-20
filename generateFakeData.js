@@ -21,11 +21,11 @@ db.connect((err) => {
     }
 });
 
-// setTimeout(fakeStudents, timeBetweenEntry * 1000);
-// setTimeout(fakeFaculties,timeBetweenEntry * 1000);
-// setTimeout(fakeVotes, timeBetweenEntry * 1000);
-// setTimeout(fakeRating, timeBetweenEntry * 1000);
-// setTimeout(fakeComments,timeBetweenEntry *1000);
+setTimeout(fakeStudents, timeBetweenEntry * 1000);
+setTimeout(fakeFaculties,timeBetweenEntry * 1000);
+setTimeout(fakeVotes, timeBetweenEntry * 1000);
+setTimeout(fakeRating, timeBetweenEntry * 1000);
+setTimeout(fakeComments,timeBetweenEntry *1000);
 setTimeout(fakeCommentsRating,timeBetweenEntry *1000);
 
 
