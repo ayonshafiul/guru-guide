@@ -7,7 +7,8 @@ const mysql = require("mysql");
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
 const actionRouter = require("./routes/actionRouter");
-const sumVoteController = require("./controllers/sumVoteController");
+const deleteFacultyController = require("./controllers/deleteFacultyController");
+const e = require("express");
 
 
 const server = express();
@@ -25,6 +26,11 @@ db.connect((err) => {
 server.use("/", authRouter);
 server.use("/", facultyRouter);
 server.use("/", actionRouter);
+let lateInterval = 24*60*60*1000;
+
+setInterval(deleteFacultyController.approve,lateInterval);
+setInterval(deleteFacultyController.removeUnapproved,lateInterval+5000);
+setInterval(deleteFacultyController.removeDuplicate,lateInterval+10000);
 
 
 
