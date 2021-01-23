@@ -25,7 +25,7 @@ CREATE TABLE faculty(
     teaching double not null default '0.00',
     grading double not null default '0.00',
     humanity double not null default '0.00',
-    average double not null default '0.00',
+    voteCount int not null default '0',
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
