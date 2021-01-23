@@ -1,13 +1,8 @@
 const db = require("../db");
 const validator = require("validator");
 const e = require("express");
+const {createcreateErrorObjectect, createSuccessObject} = require("../utils");
 
-function errorObj(msg) {
-    return { "success": "false", error: msg}
-}
-function successObj(msg) {
-     return { "success": "true", error: msg}
-}
 
 
 module.exports = (req, res) => {
@@ -21,15 +16,15 @@ module.exports = (req, res) => {
     if (validator.isNumeric(req.params.facultyID)) {
         facultyID = parseInt(req.params.facultyID);
     } else {
-        return res.json(errorObj("facultyID not valid!"));
+        return res.json(createErrorObject("facultyID not valid!"));
     }
     if (validator.isNumeric(req.params.voteType)) {
         voteType = parseInt(req.params.voteType);
         if (voteType != 1 && voteType != 0) {
-            return res.json(errorObj("Vote not valid!"));
+            return res.json(createErrorObject("Vote not valid!"));
         }
     } else {
-        return res.json(errorObj("Vote not valid!"));
+        return res.json(createErrorObject("Vote not valid!"));
     }
     // 1 means upvote
     // 0 means downvote
@@ -42,7 +37,7 @@ module.exports = (req, res) => {
     db.query(selectSql, [studentID, facultyID], (error, results, fields) => {
         if (error) {
             console.log(error);
-            return res.json(errorObj("Hoilo na"));
+            return res.json(createErrorObject("Hoilo na"));
         } else {
             if (results.length == 0) {
                 // vote doesn't yet exist 
@@ -53,14 +48,14 @@ module.exports = (req, res) => {
                     // downvoting..
                     downVote(req, res, facultyID, voteType, studentID);
                 } else {
-                    return res.json(errorObj("no need to upvote as alredy upvote exists!"));
+                    return res.json(createErrorObject("no need to upvote as alredy upvote exists!"));
                 }
             } else if ( results[0].upVote == 0 && results[0].downVote == 1) { // already downvoted
                 if (voteType == 1) { // only update if vote is changed to upvote
                     // upvoting...
                     upVote(req, res, facultyID, voteType, studentID);
                 } else {
-                    return res.json(errorObj("No need to downvote as downvote exists"));
+                    return res.json(createErrorObject("No need to downvote as downvote exists"));
                 }
             }
         }
@@ -72,14 +67,14 @@ function upVote(req, res, facultyID, voteType, studentID) {
     db.query(sql, values, (error, results, fields) => {
         if (error) {
             console.log(error);
-            return res.json(errorObj("Upvoting failed!"));
+            return res.json(createErrorObject("Upvoting failed!"));
         } else { // updating successful
             // update the total sum
             let sql = "UPDATE faculty set upVoteSum = upVoteSum + 1, downVoteSum = downVoteSum - 1 where facultyID = ?";
             db.query(sql, facultyID, (error, results, fields) => {
                 if(error) {
                     console.log(error);
-                    return res.json(errorObj("Updating the sum after upvoting failed!"));
+                    return res.json(createErrorObject("Updating the sum after upvoting failed!"));
                 } else {
                     // sum updated successfully
                     return res.json(results);
@@ -95,14 +90,14 @@ function downVote(req, res, facultyID, voteType, studentID) {
     db.query(sql, values, (error, results, fields) => {
         if (error) {
             console.log(error);
-            return res.json(errorObj("Downvoting failed!"));
+            return res.json(createErrorObject("Downvoting failed!"));
         } else { // updating successful
             // update the total sum
             let sql = "UPDATE faculty set upVoteSum = upVoteSum - 1, downVoteSum = downVoteSum + 1 where facultyID = ?";
             db.query(sql, facultyID, (error, results, fields) => {
                 if(error) {
                     console.log(error);
-                    return res.json(errorObj("Updating the sum after downvoting failed!"));
+                    return res.json(createErrorObject("Updating the sum after downvoting failed!"));
                 } else {
                     // sum updated successfully
                     return res.json(results);
@@ -138,7 +133,7 @@ function insertData(req, res, facultyID, voteType, studentID) {
     db.query(sql, voteObj, (error, results, fields) => {
         if (error) {
             console.log(error);
-            res.json(errorObj("Query failed! Get a new life!"));
+            res.json(createErrorObject("Query failed! Get a new life!"));
         } else {
             db.query(sumSql, facultyID, (error, results, fields) => {
                 if (error) {

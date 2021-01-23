@@ -26,8 +26,10 @@ db.connect((err) => {
 server.use("/", authRouter);
 server.use("/", facultyRouter);
 server.use("/", actionRouter);
-let lateInterval = 24*60*60*1000;
 
+
+
+let lateInterval = 24*60*60*1000;
 setInterval(deleteFacultyController.approve,lateInterval);
 setInterval(deleteFacultyController.removeUnapproved,lateInterval+5000);
 setInterval(deleteFacultyController.removeDuplicate,lateInterval+10000);
