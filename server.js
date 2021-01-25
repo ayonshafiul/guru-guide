@@ -8,13 +8,13 @@ const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
 const actionRouter = require("./routes/actionRouter");
 const deleteFacultyController = require("./controllers/deleteFacultyController");
-const e = require("express");
-
+const auth = require("./authentication");
 
 const server = express();
 
 
 server.use(express.json());
+server.set('view engine', 'ejs');
 
 db.connect((err) => {
     if (err) {
@@ -28,6 +28,13 @@ server.use("/", facultyRouter);
 server.use("/", actionRouter);
 
 
+server.get("/login", (req, res) => {
+    res.render("login");
+})
+
+server.post("/validate", auth,(req, res) => {
+    res.send("hello!");
+})
 
 let lateInterval = 24*60*60*1000;
 setInterval(deleteFacultyController.approve,lateInterval);

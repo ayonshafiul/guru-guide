@@ -2,10 +2,16 @@ const express = require("express");
 
 const db = require("../db.js");
 const bcrypt = require('bcrypt');
-
+const {validateUserRegistration, createErrorObject} = require("../utils");
 
 module.exports = function abc(req, res) {
     const{email,password, passwordConfirm,departmentID}=req.body;
+
+    const userValidationObject = validateUserRegistration(req.body);
+    if (userValidationObject.error) {
+        console.log(userValidationObject);
+        return res.json(createErrorObject(userValidationObject.error.message));
+    }
     db.query('select email from student where email=?' , [email], async (error,results) => {
        if(error){
            console.log(error);
