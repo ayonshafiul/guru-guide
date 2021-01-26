@@ -25,6 +25,13 @@ module.exports.createSuccessObject = (msg) => {
     }
 }
 
+module.exports.createSuccessObjectWithData = (data) => {
+    return {
+        success: true,
+        data: data
+    }
+}
+
 module.exports.createErrorObject = (msg) =>{
     return {
         success: false,
