@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 
 const numStudents = 100;
 const numFaculties = 30;
-const departmentArray = ['CSE', 'EEE', 'ESS', 'ARC', 'MNS', 'BBS', 'PHR'];
+const departmentArray = ['CSE', 'EEE', 'ESS', 'ARC', 'MNS', 'BBS', 'PHR', 'TBA'];
 const numVotes = 100;
 const numRates = 100;
 const numComments = 100;
@@ -35,12 +35,12 @@ departmentArray.forEach((dept) => {
     });
 })
 
-setTimeout(fakeStudents, timeBetweenEntry * 1000);
+// setTimeout(fakeStudents, timeBetweenEntry * 1000);
 setTimeout(fakeFaculties,timeBetweenEntry * 1000 * 3);
-setTimeout(fakeVotes, timeBetweenEntry * 1000 * 4)
-setTimeout(fakeRating, timeBetweenEntry * 1000 * 5);
-setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
-setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
+// setTimeout(fakeVotes, timeBetweenEntry * 1000 * 4)
+// setTimeout(fakeRating, timeBetweenEntry * 1000 * 5);
+// setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
+// setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
 
 
 

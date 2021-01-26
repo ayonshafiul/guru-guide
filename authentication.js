@@ -1,5 +1,7 @@
 const {OAuth2Client} = require('google-auth-library');
-const CLIENT_ID = "187042784096-npj4khs2vuamrgch4odu4fmoboiv8f7v.apps.googleusercontent.com";
+const CLIENT_ID = process.env.CLIENT_ID;
+const db = require('./db');
+const {createErrorObject, createSuccessObject} = require("./utils");
 
 module.exports = function(req, res, next) {
     const token = req.body.token;
@@ -13,8 +15,32 @@ module.exports = function(req, res, next) {
         });
         const payload = ticket.getPayload();
         console.log(payload);
-        // If request specified a G Suite domain:
-        // const domain = payload['hd'];
+        let sql = "SELECT studentID from student where studentID = ?";
+        db.query(sql, payload.sub, (error, results) => {
+            if (error) {
+                console.log(error);
+                return res.json(createErrorObject("Error while querying for student!"));
+            } else {
+                if (results.length == 0) {
+                    sql = "Insert into student set ?";
+                    let studentObject = {
+                        studentID: payload.sub,
+                        name: "",
+                        departmentID: 8,
+                        email: payload.email,
+                    };
+                    db.query(sql, studentObject, (error, results) => {
+                        if (error) {
+                            console.log(error);
+                            return res.json(createErrorObject("Error while creating a new student!"));
+                        } else {
+                            console.log("created new student!");
+                        }
+                    })
+                }
+            }
+            
+        })
     }
     verify().then(function() {
         console.log("Verified!");
