@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import FacultyListItem from "./FacultyListItem";
+import FacultyList from "./FacultyList";
+import { Router, Link } from "@reach/router";
+import Faculty from "./Faculty";
 
 function App() {
   const [faculties, setFaculties] = useState([]);
@@ -15,21 +18,10 @@ function App() {
       });
   }, []);
   return (
-    <div>
-      <h1>Faculties</h1>
-      {faculties.map((faculty) => {
-        const rating =
-          (faculty.teaching + faculty.grading + faculty.humanity) / 3;
-        return (
-          <FacultyListItem
-            key={faculty.facultyID}
-            name={faculty.facultyName}
-            initials={faculty.facultyInitials}
-            rating={rating}
-          />
-        );
-      })}
-    </div>
+    <Router>
+      <FacultyList path="/faculty" faculties={faculties} />
+      <Faculty path="/faculty/:id" faculties={faculties} />
+    </Router>
   );
 }
 

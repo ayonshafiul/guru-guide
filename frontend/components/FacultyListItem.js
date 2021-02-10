@@ -8,6 +8,10 @@ function FacultyListItem(props) {
       <div className="facultyRating">
         <span style={{ color: "#FDCC0D" }}>&#9733;</span> {props.rating}
       </div>
+      <div
+        className="facultyRatingOverlay"
+        style={{ width: props.rating * 10 + "%" }}
+      ></div>
     </div>
   );
 }

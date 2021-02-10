@@ -12,6 +12,13 @@ body {
   color: #1f1f1f;
 }
 
+.facultyListHeader {
+  text-align: center;
+  font-family: "Exo 2";
+  color: #c4a878;
+  font-size: 3em;
+}
+
 .faculty {
   position: relative;
   background: #c4a878;
@@ -20,8 +27,21 @@ body {
   padding: 1em;
   margin: 1em;
   font-family: "Exo 2";
+  border: 2px solid #c4a878;
 }
-
+.facultyRatingOverlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.05);
+}
+.faculty:hover {
+  text-decoration: none;
+  background: #fdf2e9;
+  color: #c4a878;
+}
 .facultyName {
   font-size: 2em;
 }
