@@ -4,6 +4,35 @@
 }
 
 body {
-  background: #1f1f1f;
-  color: white;
+  background: #fdf2e9;
+}
+.facultyContainer {
+  width: 80%;
+  margin: 0 auto;
+  color: #1f1f1f;
+}
+
+.faculty {
+  position: relative;
+  background: #c4a878;
+  border-radius: 10px;
+  color: #fdf2e9;
+  padding: 1em;
+  margin: 1em;
+  font-family: "Exo 2";
+}
+
+.facultyName {
+  font-size: 2em;
+}
+
+.facultyInitials {
+  margin-top: 1em;
+}
+
+.facultyRating {
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+  font-size: 2em;
 }
