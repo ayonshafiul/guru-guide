@@ -5,7 +5,7 @@ CREATE TABLE department(
 );
 
 CREATE TABLE student (
-    studentID varchar(30),
+    studentID int AUTO_INCREMENT,
     name varchar(50),
     email varchar(50),
     departmentID int,
@@ -30,7 +30,7 @@ CREATE TABLE faculty(
 );
 
 CREATE TABLE vote (
-    studentID varchar(30),
+    studentID int,
     facultyID int,
     upVote int,
     downVote int,
@@ -40,7 +40,7 @@ CREATE TABLE vote (
 );
 
 CREATE TABLE rating (
-    studentID varchar(30),
+    studentID int,
     facultyID int,
     teaching double  not null default '0.00',
     grading double not null default '0.00',
@@ -52,7 +52,7 @@ CREATE TABLE rating (
 
 CREATE TABLE comment (
     commentID int AUTO_INCREMENT,
-    studentID varchar(30),
+    studentID int,
     facultyID int,
     comment varchar(500),
     upVoteSum int not null default '0',
@@ -63,7 +63,7 @@ CREATE TABLE comment (
 
 );
 CREATE TABLE commentRating(
-    studentID varchar(30),
+    studentID int,
     commentID int,
     upVote int,
     downVote int,

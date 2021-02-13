@@ -3,6 +3,7 @@ const dotenv = require("dotenv").config();
 const db = require("./db.js");
 const mysql = require("mysql");
 const cors = require("cors");
+const path = require("path");
 
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
@@ -14,6 +15,7 @@ const server = express();
 
 server.use(express.json());
 server.use(cors());
+server.use(express.static(path.join(__dirname, "public")));
 server.set("view engine", "ejs");
 
 db.connect((err) => {

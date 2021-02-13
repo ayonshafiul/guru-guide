@@ -1,12 +1,10 @@
+const db = require("../db");
+const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = process.env.CLIENT_ID;
-const db = require("./db");
-const { createErrorObject, createSuccessObject } = require("./utils");
+const { createErrorObject, createSuccessObject } = require("../utils");
 
-module.exports = function (req, res, next) {
-  if (!req.headers.auth) {
-    return res.json(createErrorObject("Send a auth token"));
-  }
+module.exports = function login(req, res) {
   const token = req.headers.auth;
   const client = new OAuth2Client(CLIENT_ID);
   async function verify() {
@@ -17,9 +15,8 @@ module.exports = function (req, res, next) {
       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
     const payload = ticket.getPayload();
-    console.log(payload);
-    let sql = "SELECT studentID from student where studentID = ?";
-    db.query(sql, payload.sub, (error, results) => {
+    let sql = "SELECT email,studentID from student where email = ?";
+    db.query(sql, payload.email, (error, results) => {
       if (error) {
         console.log(error);
         return res.json(createErrorObject("Error while querying for student!"));
@@ -27,8 +24,7 @@ module.exports = function (req, res, next) {
         if (results.length == 0) {
           sql = "Insert into student set ?";
           let studentObject = {
-            studentID: payload.sub,
-            name: "",
+            name: payload.name,
             departmentID: 8,
             email: payload.email,
           };
@@ -40,14 +36,32 @@ module.exports = function (req, res, next) {
               );
             } else {
               console.log("created new student!");
+              signInUser(results.insertId);
             }
           });
+        } else {
+          signInUser(results[0].studentID);
         }
       }
     });
   }
+
   verify().then(function () {
     console.log("Verified!");
-    next();
   });
+
+  function signInUser(studentID) {
+    const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
+      expiresIn: process.env.JWT_EXPIRES_IN,
+    });
+
+    cookieOptions = {
+      expires: new Date(
+        Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60
+      ),
+      httpOnly: true,
+    };
+    console.log("The token is" + token);
+    res.status(200).json({ message: "user logged in", token: token });
+  }
 };
