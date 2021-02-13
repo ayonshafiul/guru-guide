@@ -34,11 +34,15 @@ function App() {
   }
 
   useEffect(() => {
-    fetch("http://localhost:8080/faculty")
+    fetch("http://localhost:8080/faculty",
+    {method:"Get",
+    credentials: 'include'}
+    )
       .then((data) => {
         return data.json();
       })
       .then((results) => {
+        console.log(results);
         setFaculties(results.data);
       });
   }, []);

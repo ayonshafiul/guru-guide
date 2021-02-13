@@ -1,53 +1,19 @@
-const { OAuth2Client } = require("google-auth-library");
-const CLIENT_ID = process.env.CLIENT_ID;
-const db = require("./db");
-const { createErrorObject, createSuccessObject } = require("./utils");
+const jwt = require("jsonwebtoken");
 
-module.exports = function (req, res, next) {
-  if (!req.headers.auth) {
-    return res.json(createErrorObject("Send a auth token"));
-  }
-  const token = req.headers.auth;
-  const client = new OAuth2Client(CLIENT_ID);
-  async function verify() {
-    const ticket = await client.verifyIdToken({
-      idToken: token,
-      audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-      // Or, if multiple clients access the backend:
-      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-    });
-    const payload = ticket.getPayload();
-    console.log(payload);
-    let sql = "SELECT studentID from student where studentID = ?";
-    db.query(sql, payload.sub, (error, results) => {
-      if (error) {
-        console.log(error);
-        return res.json(createErrorObject("Error while querying for student!"));
-      } else {
-        if (results.length == 0) {
-          sql = "Insert into student set ?";
-          let studentObject = {
-            studentID: payload.sub,
-            name: "",
-            departmentID: 8,
-            email: payload.email,
-          };
-          db.query(sql, studentObject, (error, results) => {
-            if (error) {
-              console.log(error);
-              return res.json(
-                createErrorObject("Error while creating a new student!")
-              );
-            } else {
-              console.log("created new student!");
-            }
-          });
-        }
-      }
-    });
-  }
-  verify().then(function () {
-    console.log("Verified!");
-    next();
-  });
-};
+const {createSuccessObjectWithData,createErrorObject}= require("./utils");
+
+module.exports = function(req, res , next){
+    
+
+    console.log(req.cookies);
+    const token= req.cookies["jwt"];
+    
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    if(typeof decode.id != "undefined"){
+        req.user={stdentID:decode.id};
+        next();
+    }else{
+        return res.json(createErrorObject("token invalid"));
+    }
+
+}
