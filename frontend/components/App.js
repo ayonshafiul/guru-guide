@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import FacultyListItem from "./FacultyListItem";
 import FacultyList from "./FacultyList";
-import { Router, Link, Redirect, redirectTo } from "@reach/router";
+import { Router, Link, Redirect, redirectTo, navigate } from "@reach/router";
 import Faculty from "./Faculty";
-import GoogleLogin from "react-google-login";
+import GoogleLoginButton from "./GoogleLoginButton";
 import { CookiesProvider, useCookies } from "react-cookie";
+import GoogleLogin from "react-google-login";
 
 function responseGoogle() {}
 
@@ -28,6 +29,7 @@ function App() {
         setCookie("jwt", data.token, {
           path: "/",
         });
+        navigate("/");
       });
   }
 
@@ -40,17 +42,14 @@ function App() {
         setFaculties(results.data);
       });
   }, []);
+
   return (
     <Router>
-      <Redirect from="/faculty" to="/login" default noThrow />
-
-      <GoogleLogin
+      <GoogleLoginButton
         path="/login"
-        clientId="187042784096-npj4khs2vuamrgch4odu4fmoboiv8f7v.apps.googleusercontent.com"
-        buttonText="Login"
-        onSuccess={logInUser}
-        onFailure={responseGoogle}
-        cookiePolicy={"single_host_origin"}
+        cookies={cookies}
+        logInUser={logInUser}
+        responseGoogle={responseGoogle}
       />
       <FacultyList path="/faculty" faculties={faculties} />
       <Faculty path="/faculty/:id" faculties={faculties} />

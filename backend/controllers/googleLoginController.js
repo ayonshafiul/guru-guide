@@ -15,6 +15,7 @@ module.exports = function login(req, res) {
       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });
     const payload = ticket.getPayload();
+    // Chance of error! Fix in future
     let sql = "SELECT email,studentID from student where email = ?";
     db.query(sql, payload.email, (error, results) => {
       if (error) {
@@ -54,13 +55,6 @@ module.exports = function login(req, res) {
     const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-
-    cookieOptions = {
-      expires: new Date(
-        Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60
-      ),
-      httpOnly: true,
-    };
     console.log("The token is" + token);
     res.status(200).json({ message: "user logged in", token: token });
   }
