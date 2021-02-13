@@ -34,10 +34,10 @@ function App() {
   }
 
   useEffect(() => {
-    fetch("http://localhost:8080/faculty",
-    {method:"Get",
-    credentials: 'include'}
-    )
+    fetch("http://localhost:8080/faculty", {
+      method: "GET",
+      credentials: "include",
+    })
       .then((data) => {
         return data.json();
       })
