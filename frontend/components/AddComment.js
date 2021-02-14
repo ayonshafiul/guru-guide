@@ -1,16 +1,21 @@
 import React from "react";
 
-
 function AddComment(props) {
-
-    return (
-        <form> 
-            <input type =  "text" value ={props.comment} onChange={(event) => {props.setComment(event.target.value)}} /> 
-            <button onClick={props.addComment}> Submit </button>
-        </form>
-      
-    )
+  return (
+    <form className="ac">
+      <input
+        type="text"
+        className="ac-comment"
+        value={props.comment}
+        onChange={(event) => {
+          props.setComment(event.target.value);
+        }}
+      />
+      <button className="ac-submit" onClick={props.addComment}>
+        Submit
+      </button>
+    </form>
+  );
 }
 
-
-export default AddComment
+export default AddComment;

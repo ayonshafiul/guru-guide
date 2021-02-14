@@ -4,9 +4,8 @@ const db = require("./db.js");
 const mysql = require("mysql");
 const cors = require("cors");
 const path = require("path");
-const cookieParser =  require("cookie-parser");
+const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-
 
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
@@ -15,13 +14,15 @@ const deleteFacultyController = require("./controllers/deleteFacultyController")
 const auth = require("./authentication");
 
 const server = express();
-server.use(bodyParser.urlencoded({ extended: true }));
-// server.use(express.json());
+server.use(bodyParser.urlencoded({ extended: false }));
+server.use(express.json());
 server.use(cookieParser());
 
-server.use(cors({
-  origin: 'http://localhost:1234'
-}));
+server.use(
+  cors({
+    origin: "http://localhost:1234",
+  })
+);
 
 server.use(express.static(path.join(__dirname, "public")));
 server.set("view engine", "ejs");
@@ -34,8 +35,8 @@ db.connect((err) => {
   }
 });
 server.use("/", authRouter);
-server.use("/", auth,facultyRouter);
-server.use("/", auth,actionRouter);
+server.use("/", auth, facultyRouter);
+server.use("/", auth, actionRouter);
 
 server.get("/login", (req, res) => {
   res.render("login");
