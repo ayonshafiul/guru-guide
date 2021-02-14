@@ -8,19 +8,21 @@ module.exports = function(req, res) {
     let comment;
     let facultyID;
     let studentID;
+    // res.setHeader("Access-Control-Allow-Credentials", true);
+    console.log(req.body);
     if (validator.isNumeric(req.params.facultyID)) {
         facultyID = parseInt(req.params.facultyID);
     } else {
         return res.json(createErrorObject("facultyID not valid!"));
     }
-    const validationObject = validateComment(req.body.comment);
+    const validationObject = validateComment(req.body.commentTxt);
     if(!validationObject.error) {
-       comment = req.body.comment; 
+       comment = req.body.commentTxt; 
     } else {
         return res.json(createErrorObject("comment is invalid!"));
     }
     
-    studentID=5;
+    studentID=req.user.studentID;
     let sql = "UPDATE comment SET comment=? where studentID = ? and facultyID = ?";
     db.query(sql, [comment, studentID, facultyID], (error, results, fields) => {
         if (error) {

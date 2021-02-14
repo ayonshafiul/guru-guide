@@ -8,10 +8,12 @@ import GoogleLoginButton from "./GoogleLoginButton";
 import { CookiesProvider, useCookies } from "react-cookie";
 import GoogleLogin from "react-google-login";
 
+
 function responseGoogle() {}
 
 function App() {
   const [faculties, setFaculties] = useState([]);
+  
   const [cookies, setCookie] = useCookies(["jwt"]);
 
   function logInUser(googleUser) {
