@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import FacultyDetails from "./FacultyDetails";
 import AddComment from "./AddComment";
 import CommentList from "./CommentList";
+import Rating from  "./Rating";
 
 function Faculty(props) {
   const facultyArray = props.faculties.filter((faculty) => {
@@ -10,6 +11,7 @@ function Faculty(props) {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const [dataUpdate, setDataUpdate] = useState(false);
+  const [rating, setRating] = useState({});
 
 
   useEffect(() => {
@@ -46,6 +48,7 @@ function Faculty(props) {
       })
       .then((data) => {
         if(data.success==true ){
+          setComment("");
           setDataUpdate(!dataUpdate);
         }
         console.log(data);
@@ -88,6 +91,34 @@ function Faculty(props) {
       });
   }
 
+  function changeRating(type, buttonNo) {
+    setRating(
+      {
+        ...rating,
+        [type]: buttonNo
+      }
+    )
+  }
+  function submitRating() {
+    if(rating["teaching"] && rating["humanity"] && rating["grading"]) {
+      fetch("http://localhost:8080/rate/" + props.id, {
+      method: "POST",
+      credentials: "include",
+      body: "teaching=" + rating["teaching"] + "&grading=" + rating["grading"] + "&humanity=" + rating["humanity"],
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    })
+      .then((data) => {
+        return data.json();
+      })
+      .then((data) => {
+        if(data.success==true ){
+        }
+      });
+    }
+  }
+
   return (
     <div>
       {facultyArray.length > 0 ? (
@@ -95,11 +126,19 @@ function Faculty(props) {
       ) : (
         <FacultyDetails faculty={{ facultyName: "loading.." }} />
       )}
+      <Rating type="teaching" rating={rating} changeRating={changeRating}/>
+      <Rating type="grading" rating={rating} changeRating={changeRating}/>
+      <Rating type="humanity" rating={rating}changeRating={changeRating}/>
+      { rating["teaching"] && rating["humanity"] && rating["grading"] ? 
+        <div className="submit-rating" onClick={submitRating}>Rate</div> :
+        <div className="submit-rating-disabled" onClick={submitRating}>Rate</div> 
+      }
       <AddComment
         comment={comment}
         setComment={setComment}
         addComment={addComment}
       />
+
       <CommentList comments={comments} like={like} dislike={dislike} />
     </div>
   );

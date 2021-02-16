@@ -41,7 +41,7 @@ module.exports = function(req, res){
     else{
         return res.json(createErrorObject("humanity is invalid"));
     }
-    studentID=34;
+    studentID=req.user.studentID;
     let sql = "SELECT * from rating where studentID = ? and facultyID = ?";
     db.query(sql, [studentID, facultyID], (error, results, fields) => {
         if (error) {

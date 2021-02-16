@@ -7,6 +7,7 @@ function AddComment(props) {
         type="text"
         className="ac-comment"
         value={props.comment}
+        placeholder="Say something!"
         onChange={(event) => {
           props.setComment(event.target.value);
         }}

@@ -160,3 +160,71 @@ body {
   font-size: 1em;
   color:white;
 }
+
+.ratingBox {
+  max-width: 960px;
+  margin: 20px auto;
+  font-family: "Exo 2";
+  font-size: 1em;
+  /* border: 2px dashed #c4a878; */
+  padding: 10px;
+}
+.rc{
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  grid-gap: 10px;
+  justify-items: end;
+  align-items: center;
+}
+.rc-title {
+  color: #1f1f1f;
+  text-transform: uppercase;
+  font-size: 2em;
+  /* padding: 10px;
+  margin-bottom: 10px; */
+  /* background: #c4a878; */
+  grid-column: 1/3;
+
+}
+
+.rc-emoji {
+  margin: 10;
+}
+
+.rc-emoji-active {
+  width: 40px;
+  height: 40px;
+  opacity: 1
+}
+.rc-emoji-img:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+.rc-emoji-img{
+  width: 40px;
+  height: 40px;
+  opacity: 0.6;
+}
+
+.rating-box-info {
+  font-size: 2em;
+  color: black;
+
+}
+
+.submit-rating, .submit-rating-disabled{
+  max-width: 960px;
+  margin: 10px auto;
+  background: #c4a878;
+  text-align: center;
+  padding: 1em 0em;
+  text-transform: uppercase;
+  font-family: "Exo 2";
+  color: white;
+  cursor: pointer;
+}
+.submit-rating-disabled {
+  background: lightgrey;
+  cursor: not-allowed;
+}
+
