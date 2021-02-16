@@ -7,7 +7,7 @@ function CommentList(props) {
         {
             props.comments.map((comment)=>{
                 return(
-                    <CommentListItem comment={comment} key={comment.commentID}/>
+                    <CommentListItem comment={comment} key={comment.commentID} like={props.like} dislike={props.dislike}/>
                 )
             })
 

@@ -8,7 +8,7 @@ module.exports=function(req, res){
     // validation
    
     let voteType;
-    let studentID =10;
+    let studentID =req.user.studentID;
     let commentID = 1; //TODO: authenticate student and use that authenticated studentID
     if (validator.isNumeric(req.params.commentID)) {
         commentID = parseInt(req.params.commentID);

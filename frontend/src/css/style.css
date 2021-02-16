@@ -108,7 +108,7 @@ body {
 
 .ac {
   display: grid;
-  margin: 10px auto;
+  margin: 50px auto;
   max-width: 960px;
   grid-gap: 10px;
   font-family: "Exo 2";
@@ -120,17 +120,43 @@ body {
 }
 
 .ac-comment {
-  background: #2a9d8f;
-  color: white;
+  background: #e5d5ba;
+  color: #1f1f1f;
   border: 0;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
 }
 
 .ac-submit {
   border: none;
-  background: #264653;
+  background: #c4a878;
   font-family: "Exo 2";
   text-transform: uppercase;
   font-weight: bold;
   color: white;
+}
+
+.cl {
+  display: grid;
+  border-radius: 5px;
+  margin: 20px auto;
+  max-width: 960px;
+  grid-gap: 10px;
+  font-family: "Exo 2";
+  font-size: 1.5em;
+  grid-template-columns: 6fr 1fr 1fr;
+  color:white;
+  
+}
+
+.cl-comment {
+  background:#c4a878;
+  padding :1em;
+} 
+
+.cl-vote {
+  border:none;
+  background:#c4a878;
+  font-family: "Exo 2";
+  font-size: 1em;
+  color:white;
 }
