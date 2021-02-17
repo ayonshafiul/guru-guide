@@ -60,7 +60,7 @@ body {
 .fg {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: repeat(3, minmax(150px, auto));
+  grid-template-rows: repeat(4, minmax(150px, auto));
   grid-gap: 10px;
   max-width: 960px;
   margin: 10px auto;
@@ -79,7 +79,12 @@ body {
   grid-column: 1/7;
   background: #e63946;
 }
-
+.fg-department {
+  grid-column: 1/7;
+  grid-row: 2/3;
+  background:	#00c772;
+  font-size: 1.5em;
+}
 .fg-initials {
   grid-column: 1/4;
   background: #2a9d8f;
