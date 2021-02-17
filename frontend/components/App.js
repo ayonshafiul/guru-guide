@@ -32,7 +32,7 @@ function App() {
         setCookie("jwt", data.token, {
           path: "/",
         });
-        navigate("/");
+        navigate("/faculty");
       });
   }
 
@@ -53,7 +53,7 @@ function App() {
   return (
     <Router>
       <GoogleLoginButton
-        path="/login"
+        path="/"
         cookies={cookies}
         logInUser={logInUser}
         responseGoogle={responseGoogle}

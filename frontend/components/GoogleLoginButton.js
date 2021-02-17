@@ -12,7 +12,7 @@ function GoogleLoginButton(props) {
       cookiePolicy={"single_host_origin"}
     />
   ) : (
-    <Redirect to="/">You are already logged in!</Redirect>
+    <Redirect to="/faculty" noThrow>You are already logged in!</Redirect>
   );
 }
 
