@@ -1,7 +1,7 @@
 const db = require("../db");
 const validator = require("validator");
 const e = require("express");
-const {createcreateErrorObjectect, createSuccessObject} = require("../utils");
+const {createErrorObject, createSuccessObject} = require("../utils");
 
 
 
@@ -12,7 +12,7 @@ module.exports = (req, res) => {
     // validation
     let facultyID;
     let voteType;
-    let studentID = 1; //TODO: authenticate student and use that authenticated studentID
+    let studentID = req.user.studentID; //TODO: authenticate student and use that authenticated studentID
     if (validator.isNumeric(req.params.facultyID)) {
         facultyID = parseInt(req.params.facultyID);
     } else {
@@ -100,7 +100,7 @@ function downVote(req, res, facultyID, voteType, studentID) {
                     return res.json(createErrorObject("Updating the sum after downvoting failed!"));
                 } else {
                     // sum updated successfully
-                    return res.json(results);
+                    return res.json(createSuccessObject("downvote inserted"));
                 }
             });
         }
@@ -139,7 +139,7 @@ function insertData(req, res, facultyID, voteType, studentID) {
                 if (error) {
                     console.log(error);
                 } else {
-                    return res.json(successObj("Inserted!"));
+                    return res.json(createSuccessObject("Inserted!"));
                 }
             });
         }

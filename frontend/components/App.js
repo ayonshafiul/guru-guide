@@ -7,6 +7,7 @@ import Faculty from "./Faculty";
 import GoogleLoginButton from "./GoogleLoginButton";
 import { CookiesProvider, useCookies } from "react-cookie";
 import GoogleLogin from "react-google-login";
+import FacultyVotingList from "./FacultyVotingList";
 
 
 function responseGoogle() {}
@@ -59,6 +60,7 @@ function App() {
       />
       <FacultyList path="/faculty" faculties={faculties} />
       <Faculty path="/faculty/:id" faculties={faculties} />
+      <FacultyVotingList path="/faculty/vote" faculties={faculties} />
     </Router>
   );
 }
