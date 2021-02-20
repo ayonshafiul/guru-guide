@@ -7,7 +7,7 @@ module.exports= function abc(req,res){
     const{departmentID,facultyName, facultyInitials}=req.body;
     var sql = "INSERT INTO faculty SET ?";
     var value = {
-        departmentID:  req.body.departmentID,
+        departmentID:  Number(req.body.departmentID),
         facultyName: req.body.facultyName,
         facultyInitials: req.body.facultyInitials,
         approved:0,

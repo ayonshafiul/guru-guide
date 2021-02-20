@@ -12,7 +12,7 @@ body {
   color: #1f1f1f;
 }
 
-.facultyListHeader {
+.facultyListHeader,.af-title {
   text-align: center;
   font-family: "Exo 2";
   color: #c4a878;
@@ -250,6 +250,44 @@ body {
 
 .f-vote:hover{
   border: 2px solid #c4a878;
+}
+
+.af{
+  display: grid;
+  margin: 50px auto;
+  max-width: 960px;
+  grid-gap: 10px;
+  font-family: "Exo 2";
+  font-size: 1em;
+  letter-spacing: 2px;
+  grid-template-columns: repeat(6,1fr);
+  grid-template-rows: repeat(4,auto);
+}
+
+
+.af-select{
+  background-color:#e5d5ba;
+  grid-column: 2/6;
+  border:2px solid  #e76f51 ;
+}
+
+.af-details{
+  padding:5px;
+  font-size:1.5em;
+  grid-column: 2/6;
+  border:2px solid  #e76f51 ;
+}
+
+.af-create{
+
+  font-size:1.5em;
+  grid-column: 2/6;
+  border:2px solid  #e76f51 ;
+  
+}
+.af-create:hover{
+ background-color:#f4a261 ;
+ color:white;
 }
 
 
