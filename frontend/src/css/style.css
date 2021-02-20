@@ -18,7 +18,13 @@ body {
   color: #c4a878;
   font-size: 3em;
 }
-
+.sort-select-container{
+  width: 80%;
+  margin: 1em auto;
+}
+.sort-select {
+  z-index: 2000;
+}
 .faculty {
   position: relative;
   background: #c4a878;
@@ -245,3 +251,5 @@ body {
 .f-vote:hover{
   border: 2px solid #c4a878;
 }
+
+

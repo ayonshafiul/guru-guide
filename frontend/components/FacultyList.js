@@ -1,12 +1,16 @@
 import React from "react";
 import FacultyListItem from "./FacultyListItem";
 import { Link } from "@reach/router";
-
+import SortComponent from "./SortComponent";
 function FacultyList(props) {
   console.log(props);
+  function handleChange(data) {
+    console.log(data);
+  }
   return (
     <React.Fragment>
       <h1 className="facultyListHeader">Faculties</h1>
+      <SortComponent handleChange={handleChange}/>
       {props.faculties.map((faculty) => {
         const rating = (
           (faculty.teaching + faculty.grading + faculty.humanity) /
