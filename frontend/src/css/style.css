@@ -148,29 +148,44 @@ body {
 
 .cl {
   display: grid;
-  border-radius: 5px;
-  margin: 20px auto;
+  margin: 50px auto;
   max-width: 960px;
   grid-gap: 10px;
+  border: 1px solid #e9c46a;
+  border-radius:10px;
+  grid-template-columns: repeat(6,1fr);
+  grid-template-rows: repeat(3,auto);
   font-family: "Exo 2";
   font-size: 1.5em;
-  grid-template-columns: 6fr 1fr 1fr;
-  color:white;
-  
+  padding: 15px;
+  background:#fdf2e9;
 }
 
 .cl-comment {
-  background:#c4a878;
+  grid-column: 1/7;
   padding :1em;
+  border-bottom: 3px dotted #c4a878;
 } 
 
-.cl-vote {
+.cl-vote-up {
   border:none;
-  background:#c4a878;
+  grid-column: 1/4;
   font-family: "Exo 2";
   font-size: 1em;
-  color:white;
+  color:black;
 }
+.cl-vote-down{
+  border:none;
+  grid-column: 4/7;
+  font-family: "Exo 2";
+  font-size: 1em;
+  color:black;
+}
+.cl-vote-up:hover,.cl-vote-down:hover{
+  background:#c4a878;
+  color: white
+}
+
 
 .ratingBox {
   max-width: 960px;
@@ -262,6 +277,7 @@ body {
   letter-spacing: 2px;
   grid-template-columns: repeat(6,1fr);
   grid-template-rows: repeat(4,auto);
+  background:#fdf2e9
 }
 
 
