@@ -277,33 +277,50 @@ body {
   letter-spacing: 2px;
   grid-template-columns: repeat(6,1fr);
   grid-template-rows: repeat(4,auto);
-  background:#fdf2e9
+  
 }
-
 
 .af-select{
   background-color:#e5d5ba;
   grid-column: 2/6;
-  border:2px solid  #e76f51 ;
+  border:2px solid  #c4a878 ;
+  border-radius: 4px;
 }
 
 .af-details{
+  font-family: "Exo 2";
   padding:5px;
   font-size:1.5em;
   grid-column: 2/6;
-  border:2px solid  #e76f51 ;
+  border:2px solid  #c4a878 ;
+  border-radius: 4px;
 }
 
 .af-create{
 
+  background: white;
   font-size:1.5em;
   grid-column: 2/6;
-  border:2px solid  #e76f51 ;
-  
+  border:2px solid  #c4a878 ;
+  border-radius: 4px;
+  color:#c4a878;
+  text-transform: uppercase;
+  font-family: "Exo 2";
+  font-weight:bold;
 }
 .af-create:hover{
- background-color:#f4a261 ;
+ background-color:#c4a878 ;
  color:white;
 }
-
+.af-create:focus{
+  outline:none;
+  border-color:#e76f51;
+  background-color:#c4a878 ;
+  color:white;
+}
+.af-details:focus{
+  outline:none;
+  border-color:#e76f51;
+  color:white;
+}
 
