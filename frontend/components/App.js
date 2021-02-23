@@ -98,6 +98,76 @@ function App() {
     console.log("Please provide all the DETAILS");
   }
   }
+  function sortFaculty(type) {
+    if(type=== "ratingdesc") {
+      const tempFaculties = [...faculties];
+      
+      tempFaculties.sort(function(item1, item2){
+        const item1total = item1.grading + item1.humanity + item1.teaching;
+        const item2total = item2.grading + item2.humanity + item2.teaching;
+        if(item1total < item2total) {
+          return 1;
+        } else if (item1total > item2total) {
+          return -1;
+        } else { 
+          if(item1.facultyName < item2.facultyName) {
+            return -1;
+          } else if (item1.facultyName > item2.facultyName) {
+            return 1;
+          }
+        }
+      }); 
+      setFaculties(tempFaculties);
+    } else if(type=== "ratingasc") {
+      const tempFaculties = [...faculties];
+      
+      tempFaculties.sort(function(item1, item2){
+        const item1total = item1.grading + item1.humanity + item1.teaching;
+        const item2total = item2.grading + item2.humanity + item2.teaching;
+        if(item1total < item2total) {
+          return -1;
+        } else if (item1total > item2total) {
+          return 1;
+        } else { 
+          if(item1.facultyName < item2.facultyName) {
+            return -1;
+          } else if (item1.facultyName > item2.facultyName) {
+            return 1;
+          }
+        }
+      }); 
+      setFaculties(tempFaculties);
+
+    } else if (type==="nameasc") {
+      const tempFaculties = [...faculties];
+      
+      tempFaculties.sort(function(item1, item2){
+        if(item1.facultyName < item2.facultyName) {
+          return -1;
+        } else if (item1.facultyName > item2.facultyName) {
+          return 1;
+        } else { 
+          return 0;
+        }
+      }); 
+      setFaculties(tempFaculties);
+
+    } else if (type==="namedesc") {
+      const tempFaculties = [...faculties];
+      
+      tempFaculties.sort(function(item1, item2){
+        if(item1.facultyName < item2.facultyName) {
+          return 1;
+        } else if (item1.facultyName > item2.facultyName) {
+          return -1;
+        } else { 
+          return 0;
+        }
+      }); 
+      setFaculties(tempFaculties);
+
+    }
+  }
 
   return (
     <Router>
@@ -107,7 +177,7 @@ function App() {
         logInUser={logInUser}
         responseGoogle={responseGoogle}
       />
-      <FacultyList path="/faculty" faculties={faculties} />
+      <FacultyList path="/faculty" faculties={faculties} sortFaculty={sortFaculty}/>
       <Faculty path="/faculty/:id" faculties={faculties} />
       <FacultyVotingList path="/faculty/vote" faculties={faculties} />
       <AddFaculty path="/faculty/add" handleChange={handleChange} addFaculty={addFaculty}/>

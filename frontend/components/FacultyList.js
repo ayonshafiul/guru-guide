@@ -5,7 +5,7 @@ import SortComponent from "./SortComponent";
 function FacultyList(props) {
   console.log(props);
   function handleChange(data) {
-    console.log(data);
+    props.sortFaculty(data.value);
   }
   return (
     <React.Fragment>

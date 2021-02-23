@@ -7,9 +7,7 @@ export default function SortComponent(props) {
     { value: 'ratingdesc', label: 'Rating High > Low' },
     { value: 'ratingasc', label: 'Rating Low < High' },
     { value: 'nameasc', label: 'Name A-Z' },
-    { value: 'namedesc', label: 'Name Z-A' },
-    { value: 'departmentdesc', label: 'Department Z-A' },
-    { value: 'departmentasc', label: 'Department A-Z' },
+    { value: 'namedesc', label: 'Name Z-A' }
   ];
   return (
     <div className="sort-select-container">
