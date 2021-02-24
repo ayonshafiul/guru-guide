@@ -1,10 +1,11 @@
 import React from "react";
 import FacultyVotingListItem from "./FacultyVotingListItem";
 import { Link } from "@reach/router";
+import {useToasts} from "react-toast-notifications";
 
 
 function FacultyVotingList(props) {
-  console.log(props);
+  const {addToast} = useToasts();
 
   function like(facultyID){
     const url ="http://localhost:8080/vote/"+facultyID+"/1"
@@ -18,7 +19,7 @@ function FacultyVotingList(props) {
       })
       .then((data) => {
         if(data.success==true ){
-          console.log("voting done");
+          addToast('Thank you for helping us verify the authenticity of the faculty!', {appearance: 'success'});
         }
         console.log(data);
       });
@@ -35,7 +36,7 @@ function FacultyVotingList(props) {
       })
       .then((data) => {
         if(data.success==true ){
-          console.log("voting done");
+          addToast('Thank you for helping us verify the authenticity of the faculty!', {appearance: 'success'});
         }
         console.log(data);
       });

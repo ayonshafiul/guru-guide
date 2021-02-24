@@ -321,6 +321,6 @@ body {
 .af-details:focus{
   outline:none;
   border-color:#e76f51;
-  color:white;
+  color:black;
 }
 

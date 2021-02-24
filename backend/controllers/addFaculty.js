@@ -1,6 +1,7 @@
 
 const db = require("../db.js");
 const mysql = require("mysql");
+const { createErrorObject, createSuccessObjectWithData } = require("../utils");
 
 
 module.exports= function abc(req,res){
@@ -19,7 +20,7 @@ module.exports= function abc(req,res){
             console.log(error);
         }
         else{
-            res.json({"success": "true", "message": "Successfully Added faculty!"});
+            res.json(createSuccessObjectWithData("Faculty added!"));
         }
     });
     

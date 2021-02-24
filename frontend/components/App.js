@@ -10,15 +10,16 @@ import GoogleLogin from "react-google-login";
 import FacultyVotingList from "./FacultyVotingList";
 import AddFaculty from "./AddFaculty";
 import {getDepartmentID} from "../utils/departmentDetails";
+import { ToastProvider, useToasts } from 'react-toast-notifications';
 
 
 function responseGoogle() {}
 
 function App() {
   const [faculties, setFaculties] = useState([]);
-  
   const [cookies, setCookie] = useCookies(["jwt"]);
   const [faculty, setFaculty] = useState({});
+  const { addToast } = useToasts();
 
   function logInUser(googleUser) {
     const token = googleUser.getAuthResponse().id_token;
@@ -40,6 +41,7 @@ function App() {
   }
 
   useEffect(() => {
+    
     fetch("http://localhost:8080/faculty", {
       method: "GET",
       credentials: "include",
@@ -49,6 +51,7 @@ function App() {
       })
       .then((results) => {
         console.log(results);
+        
         setFaculties(results.data);
       });
   }, []);
@@ -89,13 +92,13 @@ function App() {
       return data.json();
     })
     .then((data) => {
-      if(data.success==true ){
-        console.log("Faculty added succesfully");
-      }
+      if (data.success)
+        addToast("Faculty added in the database!", {appearance: 'success'});
+      
     });
   }
   else{
-    console.log("Please provide all the DETAILS");
+    addToast("Please fill up all required fields!", {appearance: 'error'});
   }
   }
   function sortFaculty(type) {
@@ -186,8 +189,14 @@ function App() {
 }
 
 ReactDOM.render(
-  <CookiesProvider>
-    <App />
-  </CookiesProvider>,
+  <ToastProvider
+    autoDismiss
+    autoDismissTimeout={4000}
+    placement="bottom-right"
+  >
+    <CookiesProvider>
+      <App />
+    </CookiesProvider>
+  </ToastProvider>,
   document.getElementById("root")
 );

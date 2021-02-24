@@ -3,6 +3,7 @@ import FacultyDetails from "./FacultyDetails";
 import AddComment from "./AddComment";
 import CommentList from "./CommentList";
 import Rating from  "./Rating";
+import {useToasts} from "react-toast-notifications";
 
 function Faculty(props) {
   const facultyArray = props.faculties.filter((faculty) => {
@@ -12,6 +13,7 @@ function Faculty(props) {
   const [comment, setComment] = useState("");
   const [dataUpdate, setDataUpdate] = useState(false);
   const [rating, setRating] = useState({});
+  const { addToast } = useToasts();
 
 
   useEffect(() => {
@@ -50,6 +52,7 @@ function Faculty(props) {
         if(data.success==true ){
           setComment("");
           setDataUpdate(!dataUpdate);
+          addToast("Comment posted!", {appearance: 'success'});
         }
         console.log(data);
       });
@@ -114,6 +117,7 @@ function Faculty(props) {
       })
       .then((data) => {
         if(data.success==true ){
+          addToast("Thank you for your valuable feedback!", {appearance: 'success'});
         }
       });
     }
