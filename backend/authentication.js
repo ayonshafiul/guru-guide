@@ -8,6 +8,9 @@ module.exports = function (req, res, next) {
     return res.json(createErrorObject("invalid credentials"));
   }
   const token = req.cookies["jwt"];
+  if (!token) {
+    return res.json(createErrorObject("No cookies!"));
+  }
   const decode = jwt.verify(token, process.env.JWT_SECRET);
   if (typeof decode.studentID != "undefined") {
     req.user = { studentID: decode.studentID };

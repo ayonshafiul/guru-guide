@@ -10,6 +10,7 @@ import GoogleLogin from "react-google-login";
 import FacultyVotingList from "./FacultyVotingList";
 import AddFaculty from "./AddFaculty";
 import {getDepartmentID} from "../utils/departmentDetails";
+import serverDetails from "../utils/serverDetails";
 import { ToastProvider, useToasts } from 'react-toast-notifications';
 
 
@@ -19,11 +20,12 @@ function App() {
   const [faculties, setFaculties] = useState([]);
   const [cookies, setCookie] = useCookies(["jwt"]);
   const [faculty, setFaculty] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { addToast } = useToasts();
 
   function logInUser(googleUser) {
     const token = googleUser.getAuthResponse().id_token;
-    fetch("http://localhost:8080/googlelogin", {
+    fetch(serverDetails.server + "api/googlelogin", {
       method: "get",
       headers: {
         auth: token,
@@ -33,28 +35,28 @@ function App() {
         return data.json();
       })
       .then(function (data) {
+        console.log("Setting cookies...");
         setCookie("jwt", data.token, {
           path: "/",
         });
+        setIsLoggedIn(true);
         navigate("/faculty");
       });
   }
 
   useEffect(() => {
-    
-    fetch("http://localhost:8080/faculty", {
+    fetch(serverDetails.server + "api/faculty", {
       method: "GET",
       credentials: "include",
     })
       .then((data) => {
         return data.json();
       })
-      .then((results) => {
-        console.log(results);
-        
-        setFaculties(results.data);
+      .then((result) => {
+        if (result.success)
+          setFaculties(result.data);
       });
-  }, []);
+  }, [isLoggedIn]);
 
   function handleChange(event){
     
@@ -77,7 +79,7 @@ function App() {
   if(faculty["departmentID"]&&faculty["facultyName"]&&faculty["facultyInitials"]){
     console.log(faculty);
   
-    let url = "http://localhost:8080/faculty" ;
+    let url = serverDetails.server + "api/faculty" ;
 
     fetch(url,{
       method: "POST",

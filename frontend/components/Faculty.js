@@ -4,6 +4,7 @@ import AddComment from "./AddComment";
 import CommentList from "./CommentList";
 import Rating from  "./Rating";
 import {useToasts} from "react-toast-notifications";
+import serverDetails from "../utils/serverDetails";
 
 function Faculty(props) {
   const facultyArray = props.faculties.filter((faculty) => {
@@ -17,7 +18,7 @@ function Faculty(props) {
 
 
   useEffect(() => {
-    let url = "http://localhost:8080/comment/" + props.id;
+    let url = serverDetails.server + "api/comment/" + props.id;
     fetch(url, {
       method: "GET",
       credentials: "include",
@@ -34,10 +35,8 @@ function Faculty(props) {
   function addComment(event) {
     event.preventDefault();
     console.log(typeof comment);
-    let txt = String(comment);
-    let url = "http://localhost:8080/comment/" + props.id;
 
-    fetch("http://localhost:8080/comment/" + props.id, {
+    fetch(serverDetails.server + "api/comment/" + props.id, {
       method: "POST",
       credentials: "include",
       body: "comment=" + comment,
@@ -59,7 +58,7 @@ function Faculty(props) {
   }
 
   function like(commentID){
-    const url ="http://localhost:8080/comment/rate/"+commentID+"/1"
+    const url = serverDetails.server + "api/comment/rate/"+commentID+"/1"
     fetch(url, {
       method: "POST",
       credentials: "include",
@@ -77,7 +76,7 @@ function Faculty(props) {
   }
 
   function dislike(commentID){
-    const url ="http://localhost:8080/comment/rate/"+commentID+"/0"
+    const url =serverDetails.server + "api/comment/rate/"+commentID+"/0"
     fetch(url, {
       method: "POST",
       credentials: "include",
@@ -104,7 +103,7 @@ function Faculty(props) {
   }
   function submitRating() {
     if(rating["teaching"] && rating["humanity"] && rating["grading"]) {
-      fetch("http://localhost:8080/rate/" + props.id, {
+      fetch(serverDetails.server + "api/rate/" + props.id, {
       method: "POST",
       credentials: "include",
       body: "teaching=" + rating["teaching"] + "&grading=" + rating["grading"] + "&humanity=" + rating["humanity"],

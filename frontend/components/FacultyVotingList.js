@@ -2,13 +2,14 @@ import React from "react";
 import FacultyVotingListItem from "./FacultyVotingListItem";
 import { Link } from "@reach/router";
 import {useToasts} from "react-toast-notifications";
+import serverDetails from "../utils/serverDetails";
 
 
 function FacultyVotingList(props) {
   const {addToast} = useToasts();
 
   function like(facultyID){
-    const url ="http://localhost:8080/vote/"+facultyID+"/1"
+    const url = serverDetails.server + "api/vote/"+facultyID+"/1"
     fetch(url, {
       method: "POST",
       credentials: "include",
@@ -25,7 +26,7 @@ function FacultyVotingList(props) {
       });
   }
   function dislike(facultyID){
-    const url ="http://localhost:8080/vote/"+facultyID+"/0"
+    const url = serverDetails.server + "api/vote/"+facultyID+"/0"
     fetch(url, {
       method: "POST",
       credentials: "include",

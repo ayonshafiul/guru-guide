@@ -34,13 +34,9 @@ db.connect((err) => {
     console.log("Mysql connected...");
   }
 });
-server.use("/", authRouter);
-server.use("/", auth, facultyRouter);
-server.use("/", auth, actionRouter);
-
-server.get("/login", (req, res) => {
-  res.render("login");
-});
+server.use("/api", authRouter);
+server.use("/api", auth, facultyRouter);
+server.use("/api", auth, actionRouter);
 
 let lateInterval = 24 * 60 * 60 * 1000;
 setInterval(deleteFacultyController.approve, lateInterval);
