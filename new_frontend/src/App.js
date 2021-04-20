@@ -1,3 +1,11 @@
+import Navbar from "./Navbar";
+import './App.css';
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
+import Home from "./Home";
+import Verify from "./Verify";
+import Contribute from "./Contribute";
+import Help from "./Help";
+import Contact from "./Contact";
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -45,16 +53,25 @@ function App() {
     console.log(error);
   }
   return (
-    <div className="App">
-      {!isAuth && <GoogleLogin
-        clientId="187042784096-npj4khs2vuamrgch4odu4fmoboiv8f7v.apps.googleusercontent.com"
-        buttonText="Login with your BRAC GSUITE ID to continue..."
-        prompt="consent"
-        onSuccess={responseGoogle}
-        onFailure={handleFailure}
-      />}
-
-    </div>
+    <Router>
+      <Navbar></Navbar>
+      <div className="App">
+        {!isAuth && <GoogleLogin
+          clientId="187042784096-npj4khs2vuamrgch4odu4fmoboiv8f7v.apps.googleusercontent.com"
+          buttonText="Login with your BRAC GSUITE ID to continue..."
+          prompt="consent"
+          onSuccess={responseGoogle}
+          onFailure={handleFailure}
+        />}
+        <Switch>
+            <Route exact path="/contribute"><Contribute/></Route>
+            <Route exact path="/verify"><Verify/></Route>
+            <Route exact path="/help"><Help/></Route>
+            <Route exact path="/contact"><Contact/></Route>
+            <Route exact path="/home"><Home/></Route>
+          </Switch>
+      </div>
+    </Router>
   );
 }
 
