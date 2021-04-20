@@ -20,7 +20,8 @@ server.use(cookieParser());
 
 server.use(
   cors({
-    origin: "http://localhost:1234",
+    origin: ["http://localhost", "http://localhost:3000", "http://guruguide.rocks"],
+    credentials: true
   })
 );
 

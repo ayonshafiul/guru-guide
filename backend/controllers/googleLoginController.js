@@ -56,6 +56,12 @@ module.exports = function login(req, res) {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
     console.log("The token is" + token);
+    res.cookie("jwt", token, 
+      {
+        expires: new Date(Date.now() + (Number(process.env.JWT_COOKIE_EXPIRES) * 86400)), 
+        httpOnly: true
+      }
+    );
     res.status(200).json({ message: "user logged in", token: token });
   }
 };
