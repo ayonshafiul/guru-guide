@@ -1,17 +1,20 @@
 .title {
     text-align: center;
-    border-bottom: 5px solid cyan;
+    border-bottom: 5px solid #61DAFB;
     padding: 20px;
+    text-transform: uppercase;
     width: 90%;
     margin: 0px auto;
 }
 
 .navbar {
     width: 25%;
+    min-width: 220px;
     position: fixed;
     top: 0;
     left: 0;
-    background: #1f1f1f;
+    background: #171717;
+    border-right:1px solid #303134;
     color: white;
     height: 100vh;
 }
@@ -28,25 +31,26 @@
     height: 40px;
     background: #ccc;
     color: black;
+    font-weight: bold;
     margin: 5px auto;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 5px;
     width: 90%;
-    max-width: 330px;
+    max-width: 280px;
 }
 
 .nav-list-item:hover {
-    font-weight: bold;
+    transform: translateX(2px);
 }
 
 .nav-list-item-active {
     background-color: #1f1f1f;
-    color: white;
+    color: #61DAFB;
     font-weight: bold;
-    border-left: 3px solid cyan;
-    border-right: 3px solid cyan;
+    border-left: 3px solid #61DAFB;
+    border-right: 3px solid #61DAFB;
     
     transition: background-color .35s ease-in;
 }
