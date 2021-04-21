@@ -1,8 +1,16 @@
+import {motion} from 'framer-motion';
+import pageAnimationVariant from './AnimationData';
+
 const Home = () => {
     return ( 
-        <div className="home">
+        <motion.div 
+            className="home"
+            variants={pageAnimationVariant}
+            initial="initial"
+            animate="animate"
+        >
             Home
-        </div>
+        </motion.div>
      );
 }
  

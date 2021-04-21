@@ -1,8 +1,16 @@
+import {motion} from 'framer-motion';
+import pageAnimationVariant from './AnimationData';
+
 const Contribute = () => {
     return ( 
-        <div className="contribute">
-            Contribute
-        </div>
+        <motion.div 
+            className="contribute"
+            variants={pageAnimationVariant}
+            initial="initial"
+            animate="animate"
+        >
+            contribute
+        </motion.div>
      );
 }
  

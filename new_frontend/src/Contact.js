@@ -1,8 +1,16 @@
+import {motion} from 'framer-motion';
+import pageAnimationVariant from './AnimationData';
+
 const Contact = () => {
     return (  
-        <div className="contact">
-            Contact
-        </div>
+        <motion.div 
+            className="contact"
+            variants={pageAnimationVariant}
+            initial="initial"
+            animate="animate"
+        >
+            contact
+        </motion.div>
     );
 }
  
