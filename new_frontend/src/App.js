@@ -1,7 +1,6 @@
 import Navbar from "./Navbar";
 import './App.css';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-import Home from "./Home";
 import Verify from "./Verify";
 import Contribute from "./Contribute";
 import Help from "./Help";
@@ -10,6 +9,7 @@ import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import server from './serverDetails'
+import FacultyList from "./FacultyList";
 
 
 
@@ -68,7 +68,7 @@ function App() {
             <Route exact path="/verify"><Verify/></Route>
             <Route exact path="/help"><Help/></Route>
             <Route exact path="/contact"><Contact/></Route>
-            <Route exact path="/home"><Home/></Route>
+            <Route exact path="/faculty"><FacultyList/></Route>
           </Switch>
       </div>
     </Router>

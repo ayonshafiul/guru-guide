@@ -1,7 +1,7 @@
 export default [
     {
-        title: "Home",
-        path: "/home"
+        title: "Faculty",
+        path: "/faculty"
     },
     {
         title: "Contribute",

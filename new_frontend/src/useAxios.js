@@ -1,28 +1,39 @@
 import axios from 'axios';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import server from './serverDetails'
 
 
 const useAxios = (url, options) => {
+    const cache = useRef({});
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
-    const [response, setResponse] = useState();
+    const [error, setError] = useState(null);
+    const [response, setResponse] = useState(null);
 
     const axiosOptions = {
-        ...options
+        ...options,
+        withCredentials: true
     };
-    if(!axiosOptoins.url) {
+    if(!axiosOptions.url) {
         axiosOptions.url = server.url + url;
     }
     if (!axiosOptions.method) {
-        axiosOptions.method = "get"
+        axiosOptions.method = "get";
     }
-
-    axios(axiosOptions).then((res) => {
-        setResponse(res.data)
-    }).catch((err) => {
-        setError(error)
-    })
+    useEffect(() => {
+        if(!url) return;
+        if(cache.current[url]) {
+            setResponse(cache.current[url]);
+            return;
+        }
+        axios(axiosOptions).then((res) => {
+            cache.current[url] = res.data;
+            console.log(cache);
+            setResponse(res.data);
+        }).catch((err) => {
+            setError(error)
+        })
+    }, []);
+    
 
     return {isLoading, response, error};
 

@@ -1,0 +1,50 @@
+.faculty-wrapper {
+    display: flex;
+    width: 80%;
+    min-width: 550px;
+    margin: 20px auto;
+    color: black;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.name-wrapper {
+    flex: 10 4 0;
+    display: flex;
+    justify-content: space-between;
+    background: #ccc;
+    border-radius: 10px;
+    padding: 1em;
+}
+
+
+.rating-wrapper {
+    margin-left: 1em;
+    padding: 1em;
+    border-radius: 10px;
+    background: #ccc;
+    flex: 2 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.rating-bar-wrapper{
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+.average-rating {
+    flex-shrink: 0;
+}
+.rating-bar {
+    
+    width: 5px;
+    height: 20px;
+    background: red;
+    margin-left: 5px;
+}
+
+
