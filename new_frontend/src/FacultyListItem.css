@@ -1,6 +1,6 @@
 .faculty-wrapper {
     display: flex;
-    width: 80%;
+    width: 70%;
     min-width: 550px;
     margin: 20px auto;
     color: black;
@@ -40,7 +40,6 @@
     flex-shrink: 0;
 }
 .rating-bar {
-    
     width: 5px;
     height: 20px;
     background: red;

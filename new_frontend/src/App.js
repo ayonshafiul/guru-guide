@@ -5,12 +5,11 @@ import Verify from "./Verify";
 import Contribute from "./Contribute";
 import Help from "./Help";
 import Contact from "./Contact";
-import GoogleLogin from 'react-google-login';
+import {useState, useEffect} from 'react';
+import server from './serverDetails';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import server from './serverDetails'
 import FacultyList from "./FacultyList";
-
+import Login from './Login';
 
 
 
@@ -19,56 +18,30 @@ function App() {
   const [isAuth, setIsAuth] = useState('false');
 
   useEffect(() => {
-    console.log(server);
+    console.log("Fetch!")
     axios.get(server.url + "/api/isauth", {
       withCredentials: true
     }).then((res) => {
-      console.log(res.data)
       if(res.data.success) {
-        console.log("suceess");
         setIsAuth(true)
-        
       } else {
-        console.log("not success");
         setIsAuth(false)
       }
     })
   }, [])
-
-  const responseGoogle = (googleUser) => {
-    var id_token = googleUser.getAuthResponse().id_token;
-    axios.get("http://localhost:8080/api/googlelogin", {
-      headers: {
-        auth: id_token
-      },
-      withCredentials: true
-    }).then((res) => {
-      console.log(res);
-      setIsAuth(true);
-    }).catch((err) =>{
-      console.log(err)
-    })
-  }
-  const handleFailure = (error) => {
-    console.log(error);
-  }
+  
   return (
     <Router>
       <Navbar></Navbar>
       <div className="App">
-        {!isAuth && <GoogleLogin
-          clientId="187042784096-npj4khs2vuamrgch4odu4fmoboiv8f7v.apps.googleusercontent.com"
-          buttonText="Login with your BRAC GSUITE ID to continue..."
-          prompt="consent"
-          onSuccess={responseGoogle}
-          onFailure={handleFailure}
-        />}
         <Switch>
-            <Route exact path="/contribute"><Contribute/></Route>
-            <Route exact path="/verify"><Verify/></Route>
-            <Route exact path="/help"><Help/></Route>
-            <Route exact path="/contact"><Contact/></Route>
-            <Route exact path="/faculty"><FacultyList/></Route>
+            <Route exact path="/contribute">{isAuth ? <Contribute/> : <Redirect to="/login"/> }</Route>
+            <Route exact path="/verify">{isAuth ? <Verify/> : <Redirect to="/login"/> }</Route>
+            <Route exact path="/help">{isAuth ? <Help/> : <Redirect to="/login"/> }</Route>
+            <Route exact path="/contact">{isAuth ? <Contact/> :<Redirect to="/login"/> }</Route>
+            <Route exact path="/faculty">{isAuth ? <FacultyList/> :<Redirect to="/login"/> }</Route>
+            <Route exact path="/login"><Login isAuth={isAuth} setIsAuth={setIsAuth}/></Route>
+            <Route path="*"><Redirect to="login"/></Route>
           </Switch>
       </div>
     </Router>

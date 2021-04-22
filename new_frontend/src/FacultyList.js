@@ -18,7 +18,7 @@ const FacultyList = () => {
         >
         <h1 className="header"> Faculty List</h1>
         {response && response.data.map((faculty) => {
-            return <FacultyListItem faculty={faculty}/>
+            return <FacultyListItem faculty={faculty} key={faculty.facultyID}/>
         })}
         </motion.div>
      );

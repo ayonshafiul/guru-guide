@@ -2,6 +2,7 @@ import './FacultyListItem.css';
 
 const FacultyListItem = (props)  => {
     const {facultyName, facultyInitials, teaching, grading, humanity} = props.faculty;
+    console.log(props);
     return (
     <div className="faculty-wrapper">
       <div className="name-wrapper">
