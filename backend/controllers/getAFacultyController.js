@@ -15,7 +15,7 @@ module.exports = function (req, res) {
       console.log(error);
       return res.json(createErrorObject("Error while querying"));
     } else {
-      return res.json(createSuccessObjectWithData(results));
+      return res.json(createSuccessObjectWithData(results[0]));
     }
   });
 };

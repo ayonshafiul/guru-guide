@@ -1,0 +1,63 @@
+.faculty-details-wrapper {
+    position: relative;
+    width: 90%;
+    margin: 20px auto;
+    text-align: left;
+}
+
+.faculty-details-name, .faculty-details-initials, .faculty-details-department {
+    font-size: 1.5em;
+    margin: 1em;
+    font-weight: bold;
+    text-align: center;
+    color: #61DAFB;
+}
+.faculty-details-name {
+    font-size: 2em;
+}
+.faculty-details-initials {
+    letter-spacing: 10px;
+}
+
+.faculty-details-department {
+
+}
+
+.faculty-details-overall {
+    color:black !important;
+}
+
+.faculty-details-grading, .faculty-details-teaching , .faculty-details-humanity, .faculty-details-overall{
+    position: relative;
+    padding: 1em;
+    background: #ccc;
+    margin: 10px;
+    border-radius: 10px;
+    color: #61DAFB;
+    z-index: 2;
+    font-weight: bold;
+    min-width: 480px;
+}
+
+.faculty-details-teaching {
+
+}
+
+.faculty-details-humanity {
+
+}
+
+.faculty-details-overlay {
+    position: absolute;
+    top: 0;
+    left: -1px;
+    border-radius: 10px;
+    width: 50%;
+    height: 100%;
+    background: #202124;
+    z-index: -1;
+}
+.faculty-details-overall-background-overlay {
+    color: black;
+    background: #FDCC0D;
+}

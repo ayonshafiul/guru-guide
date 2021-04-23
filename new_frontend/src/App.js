@@ -15,6 +15,7 @@ import ScrollToTop from "./ScrollToTop";
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ReactQueryDevtools } from 'react-query/devtools'
+import FacultyDetails from "./FacultyDetails";
 
 
 
@@ -60,6 +61,7 @@ function App() {
               <Route exact path="/help">{isAuth ? <Help/> : <Redirect to="/login"/> }</Route>
               <Route exact path="/contact">{isAuth ? <Contact/> :<Redirect to="/login"/> }</Route>
               <Route exact path="/faculty">{isAuth ? <FacultyList/> :<Redirect to="/login"/> }</Route>
+              <Route exact path="/faculty/:id">{isAuth ? <FacultyDetails/> :<Redirect to="/login"/> }</Route>
               <Route exact path="/login"><Login isAuth={isAuth} setIsAuth={setIsAuth}/></Route>
               <Route path="*"><Page404/></Route>
             </Switch>

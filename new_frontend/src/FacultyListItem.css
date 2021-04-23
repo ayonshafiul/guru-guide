@@ -18,7 +18,10 @@
     border-radius: 10px;
     padding: 1em;
 }
-
+.name-wrapper:hover {
+    background: #202124;
+    color: #61DAFB;
+}
 
 .rating-wrapper {
     margin-left: 1em;
@@ -29,6 +32,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.rating-wrapper:hover {
+    background: #202124;
+    color: #61DAFB;
 }
 
 .rating-bar-wrapper{
