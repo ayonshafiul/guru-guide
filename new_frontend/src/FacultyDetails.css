@@ -60,12 +60,16 @@
 
 .faculty-details-comments, .faculty-details-rate {
     width: 49%;
-    background: #ccc;
     padding: 1em;
     cursor: pointer;
     color: #61DAFB;
     background-color: #202124;
     border: 2px solid #61DAFB;
     border-radius: 10px;
+}
+
+.faculty-details-active {
+    background-color: #61DAFB;
+    color: black;
 }
 

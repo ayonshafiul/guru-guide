@@ -54,10 +54,9 @@ const FacultyDetails = () => {
             </div> }
 
             {isSuccess && <div className="faculty-details-button-wrapper">
-                <div className="faculty-details-comments" onClick={() => setPage('comments')}>Comments</div>
-                <div className="faculty-details-rate" onClick={() => setPage('rate')}>Rate</div>
+                <div className={page == 'comments' ? "faculty-details-comments faculty-details-active" : "faculty-details-comments"} onClick={() => setPage('comments')}>Comments</div>
+                <div className={page == 'rate' ? "faculty-details-rate faculty-details-active" : "faculty-details-rate"} onClick={() => setPage('rate')}>Rate</div>
             </div>}
-            {console.log(commentData)}
         </motion.div>
     );
 }
