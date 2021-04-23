@@ -19,10 +19,6 @@ const FacultyDetails = () => {
             animate="animate"
         >
             {
-                isFetching && <div>Fetching...</div>
-            }
-            
-            {
                 isError && <div>Error....</div>
             }
             {isSuccess && 

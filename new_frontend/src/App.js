@@ -30,10 +30,7 @@ function App() {
         staleTime: 120000,
         cacheTime: 300000,
         refetchOnMount: false
-      },
-      mutations: {
-        // mutation options
-      },
+      }
     },
   });
 

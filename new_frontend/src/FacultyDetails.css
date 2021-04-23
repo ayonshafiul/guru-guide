@@ -19,10 +19,6 @@
     letter-spacing: 10px;
 }
 
-.faculty-details-department {
-
-}
-
 .faculty-details-overall {
     color:black !important;
 }
@@ -39,13 +35,6 @@
     min-width: 480px;
 }
 
-.faculty-details-teaching {
-
-}
-
-.faculty-details-humanity {
-
-}
 
 .faculty-details-overlay {
     position: absolute;

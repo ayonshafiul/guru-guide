@@ -20,15 +20,11 @@ const FacultyList = () => {
         >
         <h1 className="header"> Faculty List</h1>
         {
-            isFetching ? <img src={grid}/>: null
-        }
-        {
             isError ? <div>Error Fetching data...</div>: null
         }
         {isSuccess && data.data.map((faculty) => {
             return <FacultyListItem faculty={faculty} key={faculty.facultyID}/>
         })}
-        {console.log(data)}
         </motion.div>
      );
 }
