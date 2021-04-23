@@ -10,6 +10,9 @@ import server from './serverDetails';
 import axios from 'axios';
 import FacultyList from "./FacultyList";
 import Login from './Login';
+import Page404 from "./Page404";
+import ScrollToTop from "./ScrollToTop";
+
 
 
 
@@ -41,9 +44,10 @@ function App() {
             <Route exact path="/contact">{isAuth ? <Contact/> :<Redirect to="/login"/> }</Route>
             <Route exact path="/faculty">{isAuth ? <FacultyList/> :<Redirect to="/login"/> }</Route>
             <Route exact path="/login"><Login isAuth={isAuth} setIsAuth={setIsAuth}/></Route>
-            <Route path="*"><Redirect to="login"/></Route>
+            <Route path="*"><Page404/></Route>
           </Switch>
       </div>
+      <ScrollToTop/>
     </Router>
   );
 }
