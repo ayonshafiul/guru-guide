@@ -3,14 +3,19 @@ import {motion} from 'framer-motion';
 import grid from './grid.svg';
 import pageAnimationVariant from './AnimationData';
 import FacultyListItem from './FacultyListItem';
+import {useState} from 'react';
 import {useQuery} from 'react-query';
 import {useParams} from 'react-router-dom';
-import {getAFaculty} from './Queries'
+import {getAFaculty, getComment} from './Queries'
 
 
 const FacultyDetails = () => {
     const {id} = useParams(); 
+    const [page, setPage] = useState('');
     const {isLoading, isSuccess, isFetching, data, error, isError} = useQuery(['/api/faculty', id], getAFaculty);
+    const {isLoading: commentIsLoading, isSuccess: commentIsSuccess, data: commentData, error: commentError, isError: commentIsError} = useQuery(['/api/comment', id], getComment,{
+        enabled: !!data && page =='comments'
+    });
     return (
         <motion.div 
             className="facultylist"
@@ -19,7 +24,7 @@ const FacultyDetails = () => {
             animate="animate"
         >
             {
-                isError && <div>Error....</div>
+                isError && <div className="faculty-details-wrapper">Error....</div>
             }
             {isSuccess && 
             <div className="faculty-details-wrapper">
@@ -47,6 +52,12 @@ const FacultyDetails = () => {
                     </div>
                 </div>
             </div> }
+
+            {isSuccess && <div className="faculty-details-button-wrapper">
+                <div className="faculty-details-comments" onClick={() => setPage('comments')}>Comments</div>
+                <div className="faculty-details-rate" onClick={() => setPage('rate')}>Rate</div>
+            </div>}
+            {console.log(commentData)}
         </motion.div>
     );
 }

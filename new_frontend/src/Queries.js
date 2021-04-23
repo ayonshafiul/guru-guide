@@ -6,8 +6,13 @@ export const getFaculty = async ( ) => {
 }
 
 export const getAFaculty = async ({ queryKey }) => {
-    console.log(queryKey);
     const [keyName, id] = queryKey;
     const res = await axios.get(server.url + "/api/faculty/" + id, {withCredentials: true});
+    return res.data;
+}
+
+export const getComment = async ({ queryKey }) => {
+    const [keyName, id] = queryKey;
+    const res = await axios.get(server.url + "/api/comment/" + id, {withCredentials: true});
     return res.data;
 }
