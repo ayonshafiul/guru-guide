@@ -1,14 +1,16 @@
 import './FacultyList.css';
 import {motion} from 'framer-motion';
-
+import grid from './grid.svg';
 import pageAnimationVariant from './AnimationData';
 import FacultyListItem from './FacultyListItem';
-import useAxios from './useAxios';
+import {useQuery} from 'react-query';
+import {getFaculty} from './Queries'
 
 const FacultyList = () => {
     
-    const {isLoading, response, error} = useAxios('/api/faculty');
+    const {isSuccess, isLoading, isError, error, data, isFetching } = useQuery('/api/faculty', getFaculty);
     
+
     return ( 
         <motion.div 
             className="facultylist"
@@ -17,9 +19,16 @@ const FacultyList = () => {
             animate="animate"
         >
         <h1 className="header"> Faculty List</h1>
-        {response && response.data.map((faculty) => {
+        {
+            isFetching ? <img src={grid}/>: null
+        }
+        {
+            isError ? <div>Error Fetching data...</div>: null
+        }
+        {isSuccess && data.data.map((faculty) => {
             return <FacultyListItem faculty={faculty} key={faculty.facultyID}/>
         })}
+        {console.log(data)}
         </motion.div>
      );
 }
