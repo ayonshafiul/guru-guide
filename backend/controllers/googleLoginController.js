@@ -10,7 +10,7 @@ module.exports = function login(req, res) {
   async function verify() {
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
+      audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
       // Or, if multiple clients access the backend:
       //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
     });

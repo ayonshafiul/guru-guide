@@ -19,8 +19,6 @@ CREATE TABLE faculty(
     departmentID int,
     facultyInitials varchar(5),
     approved boolean,
-    upVoteSum int not null default '0',
-    downVoteSum int not null default '0',
     teaching double not null default '0.00',
     grading double not null default '0.00',
     humanity double not null default '0.00',
@@ -28,6 +26,18 @@ CREATE TABLE faculty(
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+CREATE TABLE facultyverify (
+    facultyID int AUTO_INCREMENT,
+    facultyName varchar(50),
+    departmentID int,
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
+    facultyInitials varchar(5),
+    Primary Key(facultyID),
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+)
 
 CREATE TABLE vote (
     studentID int,

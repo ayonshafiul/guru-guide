@@ -11,9 +11,6 @@ module.exports= function abc(req,res){
         departmentID:  Number(req.body.departmentID),
         facultyName: req.body.facultyName,
         facultyInitials: req.body.facultyInitials,
-        approved:0,
-        upVoteSum: 0,
-        downVoteSum: 0
     };
     db.query(sql,value,function(error,results){
         if(error){

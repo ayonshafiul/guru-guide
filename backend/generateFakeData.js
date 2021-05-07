@@ -5,8 +5,8 @@ const db = require("./db");
 const bcrypt = require("bcrypt");
 
 
-const numStudents = 100;
-const numFaculties = 30;
+const numStudents = 5000;
+const numFaculties = 100;
 const departmentArray = ['CSE', 'EEE', 'ESS', 'ARC', 'MNS', 'BBS', 'PHR', 'TBA'];
 const numVotes = 100;
 const numRates = 100;
@@ -21,24 +21,24 @@ db.connect((err) => {
         console.log("Mysql connected...");
     }
 });
-departmentArray.forEach((dept) => {
-    let sql = "INSERT INTO department SET ?";
-    let departmentObj = {
-        departmentName: dept
-    };
-    db.query(sql, departmentObj, (error, results, fields) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log(dept + " added!");
-        }
-    });
-})
+// departmentArray.forEach((dept) => {
+//     let sql = "INSERT INTO department SET ?";
+//     let departmentObj = {
+//         departmentName: dept
+//     };
+//     db.query(sql, departmentObj, (error, results, fields) => {
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             console.log(dept + " added!");
+//         }
+//     });
+// })
 
-// setTimeout(fakeStudents, timeBetweenEntry * 1000);
-setTimeout(fakeFaculties,timeBetweenEntry * 1000 * 3);
+// setTimeout(fakeStudents, timeBetweenEntry );
+// setTimeout(fakeFaculties,timeBetweenEntry);
 // setTimeout(fakeVotes, timeBetweenEntry * 1000 * 4)
-// setTimeout(fakeRating, timeBetweenEntry * 1000 * 5);
+setTimeout(fakeRating, timeBetweenEntry);
 // setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
 // setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
 
@@ -47,33 +47,32 @@ setTimeout(fakeFaculties,timeBetweenEntry * 1000 * 3);
 function fakeStudents(){
     const student = [];
     for(let i =0; i<numStudents; i++){
-        student.push({
-            email: faker.internet.email(),
-            password:"1234",
-            departmentID: faker.random.number({'min': 1,'max': departmentArray.length})
-        })
-    }
-
-
-student.forEach((student) =>{
-    db.query("SELECT email FROM student WHERE email=?",[student.email],async (error,results) => {
-        if(error){
-            console.log(error);
-        }
-        var hashedPassword = await bcrypt.hash(student.password,8);
-        student.password = hashedPassword;
-
-        var sql = "INSERT INTO student SET ?";
-
-        db.query(sql,student,function(error, results, fields){
+       
+        db.query("SELECT email FROM student WHERE email=?",[student.email],async (error,results) => {
             if(error){
                 console.log(error);
             }
-            
-        });
-    });
+            var sql = "INSERT INTO student SET ?";
     
-})
+            db.query(sql, {
+                email: faker.internet.email(),
+                departmentID: faker.random.number({'min': 1,'max': departmentArray.length})
+            },function(error, results, fields){
+                if(error){
+                    console.log(error);
+                }
+                
+            });
+        })
+
+    }
+
+
+
+    
+  
+    
+
 console.log("Fake students created");
 }
 function fakeFaculties(){
@@ -150,30 +149,27 @@ function fakeVotes(){
 function fakeRating(){
     const rating = [];
 
-    for(let i = 1 ; i < numRates; i++ ){
-        rating.push(
-            {
-                studentID: faker.random.number({'min':1 ,'max':numStudents}),
-                facultyID: faker.random.number({'min':1 ,'max':numFaculties}),
-                teaching : faker.random.number({'min':0,'max':10}),
+    for(let i = 1001 ; i <= 2000; i++ ){
+        
+        for (let j = 1; j <= numFaculties; j++ ) {
+            var sql ='INSERT INTO rating SET ?';
+            db.query (sql,{
+                studentID: i,
+                facultyID: j,
+                teaching : faker.random.number({'min':1,'max':10}),
                 grading: faker.random.number({'min':1,'max':10}),
                 humanity: faker.random.number({'min':1,'max':10})
-            }
-        )
-
+            },function(error,results,fields){
+                if(error){
+                    console.log(error);
+                }
+                else{
+                    // console.log("success");
+                }
+            });
+        }
+        
     }
-    rating.forEach((rating)=>{
-        var sql ='INSERT INTO rating SET ?';
-
-        db.query (sql,rating,function(error,results,fields){
-            if(error){
-                console.log(error);
-            }
-            else{
-                // console.log("success");
-            }
-        });
-    });
     console.log("fake rating created");
 }
 function fakeComments(){
