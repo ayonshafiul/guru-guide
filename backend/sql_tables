@@ -17,7 +17,7 @@ CREATE TABLE faculty(
     facultyID int AUTO_INCREMENT,
     facultyName varchar(50),
     departmentID int,
-    facultyInitials varchar(5),
+    facultyInitials varchar(3) not null,
     approved boolean,
     teaching double not null default '0.00',
     grading double not null default '0.00',
@@ -34,10 +34,32 @@ CREATE TABLE facultyverify (
     departmentID int,
     upVoteSum int not null default '0',
     downVoteSum int not null default '0',
-    facultyInitials varchar(5),
+    facultyInitials varchar(3) not null,
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
-)
+);
+
+CREATE TABLE course (
+    courseID int AUTO_INCREMENT,
+    courseTitle varchar(50),
+    departmentID int,
+    courseCode varchar(7) not null,
+    approved boolean,
+    Primary Key(courseID),
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE courseverify (
+    courseID int AUTO_INCREMENT,
+    courseTitle varchar(50),
+    departmentID int,
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
+    courseCode varchar(7) not null,
+    Primary Key(courseID),
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 CREATE TABLE vote (
     studentID int,
@@ -47,6 +69,17 @@ CREATE TABLE vote (
     Primary Key(studentID, facultyID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE coursevote (
+    studentID int,
+    courseID int,
+    upVote int,
+    downVote int,
+    Primary Key(studentID, courseID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE rating (

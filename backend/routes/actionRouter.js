@@ -8,7 +8,7 @@ const commentController = require("../controllers/commentController");
 const commentRatingController = require("../controllers/commentRatingController");
 const getCommentController = require("../controllers/getCommentController");
 
-router.route("/vote/:facultyID/:voteType")
+router.route("/facultyvote/:facultyID/:voteType")
     .post(voteController);
 
 router.route("/rate/:facultyID")

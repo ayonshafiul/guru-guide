@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 
 const numStudents = 5000;
 const numFaculties = 100;
+const numFakeFacultyVerify = 20;
 const departmentArray = ['CSE', 'EEE', 'ESS', 'ARC', 'MNS', 'BBS', 'PHR', 'TBA'];
 const numVotes = 100;
 const numRates = 100;
@@ -21,26 +22,31 @@ db.connect((err) => {
         console.log("Mysql connected...");
     }
 });
-// departmentArray.forEach((dept) => {
-//     let sql = "INSERT INTO department SET ?";
-//     let departmentObj = {
-//         departmentName: dept
-//     };
-//     db.query(sql, departmentObj, (error, results, fields) => {
-//         if (error) {
-//             console.log(error);
-//         } else {
-//             console.log(dept + " added!");
-//         }
-//     });
-// })
+function insertDepartments() {
+    departmentArray.forEach((dept) => {
+        let sql = "INSERT INTO department SET ?";
+        let departmentObj = {
+            departmentName: dept
+        };
+        db.query(sql, departmentObj, (error, results, fields) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(dept + " added!");
+            }
+        });
+    });
+}
+
 
 // setTimeout(fakeStudents, timeBetweenEntry );
 // setTimeout(fakeFaculties,timeBetweenEntry);
 // setTimeout(fakeVotes, timeBetweenEntry * 1000 * 4)
-setTimeout(fakeRating, timeBetweenEntry);
+// setTimeout(fakeRating, timeBetweenEntry);
 // setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
 // setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
+// insertDepartments();
+fakeFacultyVerify();
 
 
 
@@ -75,6 +81,37 @@ function fakeStudents(){
 
 console.log("Fake students created");
 }
+function fakeFacultyVerify(){
+    const faculty = [];
+
+    for(let i = 1 ; i <= numFakeFacultyVerify; i++ ){
+        var sql ='INSERT INTO facultyverify SET ?';
+
+        db.query (sql,{
+            facultyName: 'Shafiul Muslebeen',
+            departmentID: 2,
+            facultyInitials: 'SMA',
+            upVoteSum: faker.random.number({'min': 0, 'max': 50}),
+            downVoteSum: faker.random.number({'min': 0, 'max': 50})
+        },function(error,results,fields){
+            if(error){
+                console.log(error);
+            }
+            else{
+                // console.log("success");
+            }
+        });
+    }
+    faculty.forEach((faculty)=>{
+        
+    });
+    console.log("fake faculties created");
+}
+
+
+
+
+
 function fakeFaculties(){
     const faculty = [];
 
