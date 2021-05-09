@@ -18,9 +18,7 @@ module.exports = function (req, res, next) {
     } else {
       return res.json(createErrorObject("token invalid"));
     }
-  }
-  catch(error) {
+  } catch (error) {
     res.json(createErrorObject("Error in the token"));
   }
-  
 };

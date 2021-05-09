@@ -36,7 +36,8 @@ CREATE TABLE facultyverify (
     downVoteSum int not null default '0',
     facultyInitials varchar(3) not null,
     Primary Key(facultyID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index facultyverify(facultyInitials, departmentID, upVoteSum)
 );
 
 CREATE TABLE course (
@@ -56,9 +57,10 @@ CREATE TABLE courseverify (
     departmentID int,
     upVoteSum int not null default '0',
     downVoteSum int not null default '0',
-    courseCode varchar(7) not null,
+    courseCode varchar(6) not null,
     Primary Key(courseID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index courseverify(courseCode, departmentID, upVoteSum)
 );
 
 CREATE TABLE vote (

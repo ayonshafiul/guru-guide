@@ -20,8 +20,12 @@ server.use(cookieParser());
 
 server.use(
   cors({
-    origin: ["http://localhost", "http://localhost:3000", "http://guruguide.rocks"],
-    credentials: true
+    origin: [
+      "http://localhost",
+      "http://localhost:3000",
+      "http://guruguide.rocks",
+    ],
+    credentials: true,
   })
 );
 
@@ -36,14 +40,14 @@ db.connect((err) => {
   }
 });
 server.use("/api", authRouter);
-server.use("/api", auth, facultyRouter);
-server.use("/api", auth, actionRouter);
+server.use("/api", facultyRouter);
+server.use("/api", actionRouter);
 
 let lateInterval = 24 * 60 * 60 * 1000;
 setInterval(deleteFacultyController.approve, lateInterval);
 setInterval(deleteFacultyController.removeUnapproved, lateInterval + 5000);
 setInterval(deleteFacultyController.removeDuplicate, lateInterval + 10000);
 
-server.listen(process.env.PORT || 8090, function () {
-  console.log("server is running");
+server.listen(process.env.PORT, function () {
+  console.log(`Server is running on ${process.env.PORT}`);
 });
