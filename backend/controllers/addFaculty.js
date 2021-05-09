@@ -6,7 +6,7 @@ const {
   validateCharactersOnly,
 } = require("../utils");
 
-module.exports = function abc(req, res) {
+module.exports = function addFaculty(req, res) {
   let { departmentID, facultyName, facultyInitials } = req.body;
   departmentID = validateNumber(departmentID);
   facultyName = validateCharactersOnlyWithSpaces(facultyName);

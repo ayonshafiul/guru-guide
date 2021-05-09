@@ -12,6 +12,8 @@ const facultyRouter = require("./routes/facultyRouter");
 const actionRouter = require("./routes/actionRouter");
 const deleteFacultyController = require("./controllers/deleteFacultyController");
 const auth = require("./authentication");
+const facultyVerify = require("./facultyVerify");
+const courseVerify = require("./courseVerify");
 
 const server = express();
 server.use(bodyParser.urlencoded({ extended: false }));
@@ -43,10 +45,10 @@ server.use("/api", authRouter);
 server.use("/api", facultyRouter);
 server.use("/api", actionRouter);
 
-let lateInterval = 24 * 60 * 60 * 1000;
-setInterval(deleteFacultyController.approve, lateInterval);
-setInterval(deleteFacultyController.removeUnapproved, lateInterval + 5000);
-setInterval(deleteFacultyController.removeDuplicate, lateInterval + 10000);
+let interval = 3 * 60 * 60 * 1000;
+
+setInterval(facultyVerify(), interval);
+setInterval(courseVerify(), interval);
 
 server.listen(process.env.PORT, function () {
   console.log(`Server is running on ${process.env.PORT}`);
