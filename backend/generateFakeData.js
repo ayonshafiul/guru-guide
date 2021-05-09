@@ -7,6 +7,7 @@ const bcrypt = require("bcrypt");
 const numStudents = 5000;
 const numFaculties = 100;
 const numFakeFacultyVerify = 20;
+const numFakeCourseVerify = 20;
 const departmentArray = [
   "CSE",
   "EEE",
@@ -53,7 +54,8 @@ function insertDepartments() {
 // setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
 // insertDepartments();
 // fakeStudents();
-fakeFacultyVerify();
+// fakeFacultyVerify();
+fakeCourseVerify();
 
 function fakeStudents() {
   const student = [];
@@ -116,6 +118,31 @@ function fakeFacultyVerify() {
 
   faculty.forEach((faculty) => {});
   console.log("fake faculties created");
+}
+
+function fakeCourseVerify() {
+  for (let j = 1; j <= departmentArray.length; j++) {
+    for (let i = 1; i <= numFakeCourseVerify; i++) {
+      var sql = "INSERT INTO courseverify SET ?";
+      db.query(
+        sql,
+        {
+          courseTitle: "Intro to programming",
+          departmentID: j,
+          courseCode: "CSE110",
+          upVoteSum: faker.random.number({ min: 0, max: 50 }),
+          downVoteSum: faker.random.number({ min: 0, max: 50 }),
+        },
+        function (error, results, fields) {
+          if (error) {
+            console.log(error);
+          } else {
+            // console.log("success");
+          }
+        }
+      );
+    }
+  }
 }
 
 function fakeFaculties() {

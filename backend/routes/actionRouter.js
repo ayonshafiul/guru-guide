@@ -8,6 +8,8 @@ const commentRatingController = require("../controllers/commentRatingController"
 const getCommentController = require("../controllers/getCommentController");
 const getFacultyVerificationController = require("../controllers/getFacultyVerificationController");
 const getAFacultyVerificationController = require("../controllers/getAFacultyVerificationController");
+const getCourseVerificationController = require("../controllers/getCourseVerificationController");
+const getACourseVerificationController = require("../controllers/getACourseVerificationController");
 
 router.route("/facultyvote/:facultyID/:voteType").post(voteController);
 
@@ -18,6 +20,11 @@ router
 router
   .route("/facultyverify/:departmentID/:facultyInitials")
   .get(getAFacultyVerificationController);
+
+router.route("/courseverify/:departmentID").get(getCourseVerificationController);
+
+router.route("/courseverify/:departmentID/:courseCode").get(getACourseVerificationController);
+
 
 router.route("/rate/:facultyID").post(rateController);
 
