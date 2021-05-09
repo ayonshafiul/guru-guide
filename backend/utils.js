@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const commenValidatorSchema = Joi.object({
-  comment: Joi.string().regex(/^[a-zA-Z0-9 ,().'"]{1,500}$/),
+  comment: Joi.string().regex(/^[a-zA-Z0-9 ,().]{1,500}$/),
 });
 
 const userLoginValidatorSchema = Joi.object({
@@ -46,6 +46,26 @@ module.exports.validateComment = (cmnt) => {
   return commenValidatorSchema.validate({
     comment: cmnt,
   });
+};
+
+module.exports.validateNumber = (num) => {
+  return Joi.number().integer().validate(num);
+};
+
+module.exports.validateCharactersOnly = (str) => {
+  return Joi.string()
+    .regex(/^[a-zA-Z]*$/)
+    .validate(str);
+};
+
+module.exports.validateCharactersOnlyWithSpaces = (str) => {
+  return Joi.string()
+    .regex(/^[a-zA-Z ]*$/)
+    .validate(str);
+};
+
+module.exports.validateAlphaNumeric = (str) => {
+  return Joi.string().alphanum().validate(str);
 };
 
 module.exports.validateUserRegistration = (userObject) => {

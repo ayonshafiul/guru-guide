@@ -1,27 +1,32 @@
 const db = require("../db.js");
 const { createErrorObject, createSuccessObjectWithData } = require("../utils");
+const {
+  validateNumber,
+  validateCharactersOnlyWithSpaces,
+  validateCharactersOnly,
+} = require("../utils");
 
 module.exports = function abc(req, res) {
   let { departmentID, facultyName, facultyInitials } = req.body;
-  departmentID = parseInt(departmentID);
-  facultyName = String(facultyName);
-  facultyInitials = String(facultyInitials).substring(0, 3);
+  departmentID = validateNumber(departmentID);
+  facultyName = validateCharactersOnlyWithSpaces(facultyName);
+  facultyInitials = validateCharactersOnly(facultyInitials);
 
-  if (
-    typeof departmentID !== "number" ||
-    typeof facultyInitials !== "string" ||
-    typeof facultyName !== "string"
-  ) {
-    return res.json(createErrorObject("Invalid parameters"));
+  if (departmentID.error || facultyInitials.error || facultyName.error) {
+    return res.json(
+      createErrorObject(
+        "Invalid departmentID or facultyInitials or facultyName"
+      )
+    );
   }
 
   var sql = "INSERT INTO facultyverify SET ?";
-  var value = {
-    departmentID,
-    facultyName,
-    facultyInitials,
+  var faculty = {
+    departmentID: departmentID.value,
+    facultyName: facultyName.value,
+    facultyInitials: facultyInitials.value,
   };
-  db.query(sql, value, function (error, results) {
+  db.query(sql, faculty, function (error, results) {
     if (error) {
       console.log(error);
     } else {
