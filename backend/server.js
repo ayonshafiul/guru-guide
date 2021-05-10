@@ -10,7 +10,6 @@ const bodyParser = require("body-parser");
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
 const actionRouter = require("./routes/actionRouter");
-const deleteFacultyController = require("./controllers/deleteFacultyController");
 const auth = require("./authentication");
 const facultyVerify = require("./facultyVerify");
 const courseVerify = require("./courseVerify");
@@ -31,9 +30,6 @@ server.use(
   })
 );
 
-server.use(express.static(path.join(__dirname, "public")));
-server.set("view engine", "ejs");
-
 db.connect((err) => {
   if (err) {
     console.log(err.message);
@@ -46,7 +42,6 @@ server.use("/api", facultyRouter);
 server.use("/api", actionRouter);
 
 let interval = 3 * 60 * 60 * 1000;
-
 setInterval(facultyVerify, interval);
 setInterval(courseVerify, interval);
 
