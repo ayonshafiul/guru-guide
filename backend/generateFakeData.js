@@ -55,7 +55,8 @@ function insertDepartments() {
 // insertDepartments();
 // fakeStudents();
 // fakeFacultyVerify();
-fakeCourseVerify();
+// fakeCourseVerify();
+fakeRating();
 
 function fakeStudents() {
   const student = [];
@@ -216,13 +217,14 @@ function fakeRating() {
   const rating = [];
 
   for (let i = 1001; i <= 2000; i++) {
-    for (let j = 1; j <= numFaculties; j++) {
+    for (let j = 27; j <= 33; j++) {
       var sql = "INSERT INTO rating SET ?";
       db.query(
         sql,
         {
           studentID: i,
           facultyID: j,
+          courseID: faker.random.number({ min: 1, max: 8 }),
           teaching: faker.random.number({ min: 1, max: 10 }),
           grading: faker.random.number({ min: 1, max: 10 }),
           humanity: faker.random.number({ min: 1, max: 10 }),

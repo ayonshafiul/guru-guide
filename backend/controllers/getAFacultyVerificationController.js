@@ -12,7 +12,7 @@ module.exports = function (req, res) {
   }
 
   let sql =
-    "SELECT facultyName, facultyInitials, departmentID, upVoteSum, downVoteSum from facultyverify where facultyInitials = ? and departmentID = ?";
+    "SELECT facultyID, facultyName, facultyInitials, departmentID, upVoteSum, downVoteSum from facultyverify where facultyInitials = ? and departmentID = ?";
   db.query(
     sql,
     [facultyInitials.value, departmentID.value],

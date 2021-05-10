@@ -70,7 +70,7 @@ CREATE TABLE vote (
     downVote int,
     Primary Key(studentID, facultyID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(facultyID) references facultyverify(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
@@ -87,27 +87,35 @@ CREATE TABLE coursevote (
 CREATE TABLE rating (
     studentID int,
     facultyID int,
+    courseID int,
     teaching double  not null default '0.00',
     grading double not null default '0.00',
     humanity double not null default '0.00',
-    Primary Key(facultyID,studentID),
+    Primary Key(facultyID,studentID,courseID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index ratingIndex(facultyID, courseID),
+    index indexRating(courseID, facultyID)
 );
 
 CREATE TABLE comment (
     commentID int AUTO_INCREMENT,
     studentID int,
     facultyID int,
+    courseID int,
     comment varchar(500),
     upVoteSum int not null default '0',
     downVoteSum int not null default '0',
     Primary Key(commentID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
-
+    Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
+    unique index comment(facultyID, courseID, studentID),
+    index commentIndex(facultyID, courseID),
+    index indexComment(courseID, facultyID)
 );
-CREATE TABLE commentRating(
+CREATE TABLE commentvote(
     studentID int,
     commentID int,
     upVote int,
@@ -115,3 +123,5 @@ CREATE TABLE commentRating(
     Primary Key(studentID, commentID),
     Foreign Key (commentID) references comment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+SELECT c1.courseTitle, c1.courseCode, c1.courseID, r2.facultyID from course c1 inner join (SELECT facultyID, courseID from rating where facultyID = 27 group by facultyID, courseID) r2 on r2.courseID = c1.courseID;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             humanity

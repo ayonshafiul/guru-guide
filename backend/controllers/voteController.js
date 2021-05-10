@@ -5,154 +5,120 @@ const {
   createSuccessObject,
 } = require("../utils");
 
-module.exports = (req, res) => {
-  let facultyID = validateNumber(req.params.facultyID);
+module.exports = function (req, res) {
   let voteType = validateNumber(req.params.voteType);
-  let studentID = req.user.studentID;
+  let studentID = 1; //req.user.studentID;
+  let facultyID = validateNumber(req.params.facultyID);
 
-  if (facultyID.error || voteType.error) {
-    return res.json(createErrorObject("Invalid facultyID or voteType"));
+  if (voteType.error || facultyID.error) {
+    return res.json(createErrorObject("Invalid studentID or facultyID"));
   }
 
-  if (voteType != 1 && voteType != 0) {
-    return res.json(createErrorObject("Invalid voteType"));
+  if (voteType.value != 1 && voteType.value != 0) {
+    return res.json(createErrorObject("Vote not valid!"));
   }
 
-  let selectSql =
-    "SELECT upVote, downVote from vote where studentID = ? and facultyID = ?";
+  // 1 means upvote
+  // 0 means downvote
 
-  db.query(
-    selectSql,
-    [studentID, facultyID.value],
-    (error, results, fields) => {
-      if (error) {
-        return res.json(createErrorObject("No results found!"));
-      } else {
-        if (results.length == 0) {
-          // vote doesn't yet exist
-          // insert new data
-          insertData(req, res, facultyID.value, voteType.value, studentID);
-        } else if (results[0].upVote == 1 && results[0].downVote == 0) {
-          // alredy upvoted
-          if (voteType == 0) {
-            // only update if vote is changed to downvote
-            // downvoting..
-            downVote(req, res, facultyID.value, voteType.value, studentID);
-          } else {
-            return res.json(
-              createSuccessObject("No need to upvote as upvote exists!")
-            );
-          }
-        } else if (results[0].upVote == 0 && results[0].downVote == 1) {
-          // already downvoted
-          if (voteType == 1) {
-            // only update if vote is changed to upvote
-            // upvoting...
-            upVote(req, res, facultyID.value, voteType.value, studentID);
-          } else {
-            return res.json(
-              createSuccessObject("No need to downvote as downvote exists!")
-            );
-          }
+  //************************************************** */
+
+  let sql =
+    "SELECT facultyID, studentID, upVote, downVote from vote where facultyID = ? AND studentID = ?";
+  db.query(sql, [facultyID.value, studentID], function (error, results) {
+    if (error) {
+      console.log(error);
+      return res.json(createErrorObject("comment voting failed"));
+    } else {
+      if (results.length == 0) {
+        let commentratingObj;
+        let secondsql;
+        sql = "INSERT into commentvote set ?";
+
+        if (voteType.value == 1) {
+          commentratingObj = {
+            facultyID: facultyID.value,
+            studentID: studentID,
+            upVote: 1,
+            downVote: 0,
+          };
+          secondsql =
+            "Update facultyverify set upVoteSum = upVoteSum + 1 where facultyID = ? ";
+        } else {
+          commentratingObj = {
+            facultyID: facultyID.value,
+            studentID: studentID,
+            upVote: 0,
+            downVote: 1,
+          };
+          secondsql =
+            "Update facultyverify set downVoteSum = downVoteSum + 1 where facultyID = ? ";
         }
+        db.query(sql, commentratingObj, function (error, results) {
+          if (error) {
+            console.log(error);
+            res.json(createErrorObject("Voting error"));
+          } else {
+            db.query(secondsql, [facultyID.value], function (error, results) {
+              if (error) {
+                console.log(error);
+                res.json(createErrorObject("vote not inserted"));
+              } else {
+                res.json(createSuccessObject("vote inserted successfully"));
+              }
+            });
+          }
+        });
+      } else {
+        let firstSql;
+        let secondSql;
+        if (
+          results[0].upVote == 1 &&
+          results[0].downVote == 0 &&
+          voteType.value == 0
+        ) {
+          //when vote is changed from upVote to downVote
+          firstSql =
+            "UPDATE vote set upVote=0 , downVote = 1 where facultyID =? and studentID =?";
+          secondSql =
+            "UPDATE facultyverify set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where facultyID =?";
+        } else if (
+          results[0].upVote == 0 &&
+          results[0].downVote == 1 &&
+          voteType.value == 1
+        ) {
+          //when vote is changed from downVote to upVote
+          firstSql =
+            "UPDATE vote set upVote=1 , downVote = 0 where facultyID =? and studentID =?";
+          secondSql =
+            "UPDATE facultyverify set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where facultyID =?";
+        } else {
+          return res.json(createSuccessObject("No need to update"));
+        }
+
+        db.query(
+          firstSql,
+          [facultyID.value, studentID],
+          function (error, results) {
+            if (error) {
+              console.log(error);
+              res.json(createErrorObject("vote not updated"));
+            } else {
+              //run second sql here
+              db.query(secondSql, facultyID.value, function (error, results) {
+                if (error) {
+                  console.log(error);
+                  res.json(createErrorObject("voteSum not updated"));
+                } else {
+                  res.json(
+                    createSuccessObject("voteSum is updated successfully")
+                  );
+                }
+              });
+            }
+          }
+        );
       }
     }
-  );
+  });
 };
-function upVote(req, res, facultyID, voteType, studentID) {
-  let sql =
-    "UPDATE vote SET upVote = ?, downVote = ? where studentID = ? and facultyID = ?";
-  let values = [1, 0, studentID, facultyID];
-  db.query(sql, values, (error, results, fields) => {
-    if (error) {
-      console.log(error);
-      return res.json(createErrorObject("Upvoting failed!"));
-    } else {
-      // updating successful
-      // update the total sum
-      let sql =
-        "UPDATE facultyverify set upVoteSum = upVoteSum + 1, downVoteSum = downVoteSum - 1 where facultyID = ?";
-      db.query(sql, facultyID, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          return res.json(
-            createErrorObject("Updating the sum after upvoting failed!")
-          );
-        } else {
-          // sum updated successfully
-          return res.json(createSuccessObject("Upvote updated!"));
-        }
-      });
-    }
-  });
-}
-
-function downVote(req, res, facultyID, voteType, studentID) {
-  let sql =
-    "UPDATE vote SET upVote = ?, downVote = ? where studentID = ? and facultyID = ?";
-  let values = [0, 1, studentID, facultyID];
-  db.query(sql, values, (error, results, fields) => {
-    if (error) {
-      console.log(error);
-      return res.json(createErrorObject("Downvoting failed!"));
-    } else {
-      // updating successful
-      // update the total sum
-      let sql =
-        "UPDATE facultyverify set upVoteSum = upVoteSum - 1, downVoteSum = downVoteSum + 1 where facultyID = ?";
-      db.query(sql, facultyID, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-          return res.json(
-            createErrorObject("Updating the sum after downvoting failed!")
-          );
-        } else {
-          // sum updated successfully
-          return res.json(createSuccessObject("Downvote updated!"));
-        }
-      });
-    }
-  });
-}
-
-function insertData(req, res, facultyID, voteType, studentID) {
-  let sql = "INSERT INTO vote SET ?";
-  let sumSql;
-  let voteObj;
-  if (voteType == 1) {
-    voteObj = {
-      studentID,
-      facultyID,
-      upVote: 1,
-      downVote: 0,
-    };
-    sumSql =
-      "UPDATE facultyverify set upVoteSum = upVoteSum + 1 where facultyID = ?";
-  } else if (voteType == 0) {
-    voteObj = {
-      studentID,
-      facultyID,
-      upVote: 0,
-      downVote: 1,
-    };
-    sumSql =
-      "UPDATE facultyverify set downVoteSum = downVoteSum + 1 where facultyID = ?";
-  }
-
-  db.query(sql, voteObj, (error, results, fields) => {
-    if (error) {
-      console.log(error);
-      return res.json(createErrorObject("Inserting new vote failed!"));
-    } else {
-      db.query(sumSql, facultyID, (error, results, fields) => {
-        if (error) {
-          console.log(error);
-        } else {
-          return res.json(
-            createSuccessObject("Inserted new vote succesfully!")
-          );
-        }
-      });
-    }
-  });
-}

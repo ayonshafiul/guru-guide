@@ -7,7 +7,7 @@ const {
 
 module.exports = function (req, res) {
   let voteType = validateNumber(req.params.voteType);
-  let studentID = req.user.studentID;
+  let studentID = 1; //req.user.studentID;
   let commentID = validateNumber(req.params.commentID);
 
   if (voteType.error || commentID.error) {
@@ -23,8 +23,9 @@ module.exports = function (req, res) {
 
   //************************************************** */
 
-  let sql = "SELECT * from commentrating where commentID = ? AND studentID = ?";
-  db.query(sql, [commentID.value, studentID.value], function (error, results) {
+  let sql =
+    "SELECT commentID, studentID from commentvote where commentID = ? AND studentID = ?";
+  db.query(sql, [commentID.value, studentID], function (error, results) {
     if (error) {
       console.log(error);
       return res.json(createErrorObject("comment voting failed"));
@@ -32,12 +33,12 @@ module.exports = function (req, res) {
       if (results.length == 0) {
         let commentratingObj;
         let secondsql;
-        sql = "INSERT into commentrating set ?";
+        sql = "INSERT into commentvote set ?";
 
-        if (voteType == 1) {
+        if (voteType.value == 1) {
           commentratingObj = {
             commentID: commentID.value,
-            studentID: studentID.value,
+            studentID: studentID,
             upVote: 1,
             downVote: 0,
           };
@@ -46,7 +47,7 @@ module.exports = function (req, res) {
         } else {
           commentratingObj = {
             commentID: commentID.value,
-            studentID: studentID.value,
+            studentID: studentID,
             upVote: 0,
             downVote: 1,
           };
@@ -56,14 +57,13 @@ module.exports = function (req, res) {
         db.query(sql, commentratingObj, function (error, results) {
           if (error) {
             console.log(error);
-            res.json(createErrorObject("vote not inserted"));
+            res.json(createErrorObject("Voting error"));
           } else {
             db.query(secondsql, [commentID.value], function (error, results) {
               if (error) {
                 console.log(error);
                 res.json(createErrorObject("vote not inserted"));
               } else {
-                console.log(results);
                 res.json(createSuccessObject("vote inserted successfully"));
               }
             });
@@ -72,26 +72,33 @@ module.exports = function (req, res) {
       } else {
         let firstSql;
         let secondSql;
-        if (results[0].upVote == 1 && voteType == 0) {
+        if (
+          results[0].upVote == 1 &&
+          results[0].downVote == 0 &&
+          voteType.value == 0
+        ) {
           //when vote is changed from upVote to downVote
-
           firstSql =
-            "UPDATE commentrating set upVote=0 , downVote = 1 where commentID =? and studentID =?";
+            "UPDATE commentvote set upVote=0 , downVote = 1 where commentID =? and studentID =?";
           secondSql =
             "UPDATE comment set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where commentID =?";
-        } else if (results[0].upVote == 0 && voteType == 1) {
+        } else if (
+          results[0].upVote == 0 &&
+          results[0].downVote == 1 &&
+          voteType.value == 1
+        ) {
           //when vote is changed from downVote to upVote
           firstSql =
-            "UPDATE commentrating set upVote=1 , downVote = 0 where commentID =? and studentID =?";
+            "UPDATE commentvote set upVote=1 , downVote = 0 where commentID =? and studentID =?";
           secondSql =
             "UPDATE comment set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where commentID =?";
         } else {
-          return res.json(createErrorObject("no need to update"));
+          return res.json(createSuccessObject("No need to update"));
         }
 
         db.query(
           firstSql,
-          [commentID.value, studentID.value],
+          [commentID.value, studentID],
           function (error, results) {
             if (error) {
               console.log(error);
@@ -103,7 +110,6 @@ module.exports = function (req, res) {
                   console.log(error);
                   res.json(createErrorObject("voteSum not updated"));
                 } else {
-                  console.log(results);
                   res.json(
                     createSuccessObject("voteSum is updated successfully")
                   );
