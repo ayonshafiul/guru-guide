@@ -58,6 +58,7 @@ module.exports.validateCharactersOnly = (str) => {
     .validate(str);
 };
 
+
 module.exports.validateCharactersOnlyWithSpaces = (str) => {
   return Joi.string()
     .regex(/^[a-zA-Z ]*$/)

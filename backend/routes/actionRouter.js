@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const voteController = require("../controllers/voteController");
+const facultyVoteController = require("../controllers/facultyVoteController");
 const rateController = require("../controllers/rateController");
 const addComment = require("../controllers/addComment");
 const commentVoteController = require("../controllers/commentVoteController");
@@ -10,8 +10,9 @@ const getFacultyVerificationController = require("../controllers/getFacultyVerif
 const getAFacultyVerificationController = require("../controllers/getAFacultyVerificationController");
 const getCourseVerificationController = require("../controllers/getCourseVerificationController");
 const getACourseVerificationController = require("../controllers/getACourseVerificationController");
+const addCourse = require("../controllers/addCourse");
 
-router.route("/facultyvote/:facultyID/:voteType").get(voteController);
+router.route("/facultyvote/:facultyID/:voteType").get(facultyVoteController);
 
 router
   .route("/facultyverify/:departmentID")
@@ -20,6 +21,8 @@ router
 router
   .route("/facultyverify/:departmentID/:facultyInitials")
   .get(getAFacultyVerificationController);
+
+router.route("/course").post(addCourse);
 
 router
   .route("/courseverify/:departmentID")

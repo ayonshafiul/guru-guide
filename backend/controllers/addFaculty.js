@@ -1,5 +1,5 @@
 const db = require("../db.js");
-const { createErrorObject, createSuccessObjectWithData } = require("../utils");
+const { createErrorObject, createSuccessObjectWithData, createSuccessObject } = require("../utils");
 const {
   validateNumber,
   validateCharactersOnlyWithSpaces,
@@ -30,7 +30,7 @@ module.exports = function addFaculty(req, res) {
     if (error) {
       console.log(error);
     } else {
-      res.json(createSuccessObjectWithData("Faculty added!"));
+      res.json(createSuccessObject("Faculty added!"));
     }
   });
 };
