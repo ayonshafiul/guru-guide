@@ -1,6 +1,6 @@
-const db = require("../db");
+const db = require("../../db");
 const jwt = require("jsonwebtoken");
-const { createErrorObject, createSuccessObject } = require("../utils");
+const { createErrorObject, createSuccessObject } = require("../../utils");
 
 module.exports = (req, res, next) => {
   if (typeof req.cookies["jwt"] != "undefined") {

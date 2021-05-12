@@ -1,6 +1,11 @@
-const db = require("../db");
-const { createErrorObject, createSuccessObjectWithData } = require("../utils");
-const { validateNumber, validateCharactersOnly } = require("../utils");
+const db = require("../../db");
+const {
+  createErrorObject,
+  createSuccessObjectWithData,
+  validateNumber,
+  validateCharactersOnly,
+} = require("../../utils");
+
 module.exports = function (req, res) {
   let departmentID = validateNumber(req.params.departmentID);
   let facultyInitials = validateCharactersOnly(req.params.facultyInitials);

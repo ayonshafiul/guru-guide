@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const { createSuccessObjectWithData, createErrorObject } = require("./utils");
+const { createSuccessObjectWithData, createErrorObject } = require("../utils");
 
 module.exports = function (req, res, next) {
   if (typeof req.cookies == "undefined") {

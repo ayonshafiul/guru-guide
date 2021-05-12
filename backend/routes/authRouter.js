@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const cookieParser = require("cookie-parser");
 
-const googleLoginController = require("../controllers/googleLoginController");
-const verifycookiesexistcontroller= require("../controllers/verifycookiesexistcontroller");
+const googleLoginController = require("../controllers/auth/googleLoginController");
+const verifycookiesexistcontroller= require("../controllers/auth/verifycookiesexistcontroller");
 
 
 router.route("/googlelogin").get(googleLoginController);

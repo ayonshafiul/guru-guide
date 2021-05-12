@@ -1,9 +1,9 @@
-const db = require("../db.js");
+const db = require("../../db.js");
 const {
   validateNumber,
   createErrorObject,
   createSuccessObject,
-} = require("../utils");
+} = require("../../utils");
 
 function isInvalidRating(x) {
   if (x >= 0 && x <= 10) {

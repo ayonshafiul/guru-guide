@@ -1,14 +1,13 @@
-const db = require("../db.js");
+const db = require("../../db.js");
 const {
   createErrorObject,
   createSuccessObjectWithData,
   createSuccessObject,
   validateAlphaNumeric,
-} = require("../utils");
-const {
   validateNumber,
-  validateCharactersOnlyWithSpaces,
-} = require("../utils");
+  validateCharactersOnlyWithSpaces
+} = require("../../utils");
+
 
 module.exports = function addCourse(req, res) {
   let { departmentID, courseTitle, courseCode } = req.body;

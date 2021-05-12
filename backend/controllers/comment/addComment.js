@@ -1,10 +1,10 @@
-const db = require("../db.js");
+const db = require("../../db.js");
 const {
   validateComment,
   validateNumber,
   createErrorObject,
   createSuccessObject,
-} = require("../utils");
+} = require("../../utils");
 
 module.exports = function (req, res) {
   let comment = validateComment(req.body.comment);

@@ -1,10 +1,10 @@
-const db = require("../db.js");
-const { createErrorObject, createSuccessObjectWithData, createSuccessObject } = require("../utils");
+const db = require("../../db.js");
+const { createErrorObject, createSuccessObjectWithData, createSuccessObject } = require("../../utils");
 const {
   validateNumber,
   validateCharactersOnlyWithSpaces,
   validateCharactersOnly,
-} = require("../utils");
+} = require("../../utils");
 
 module.exports = function addFaculty(req, res) {
   let { departmentID, facultyName, facultyInitials } = req.body;

@@ -1,17 +1,17 @@
-const db = require("../db");
+const db = require("../../db");
 const {
   validateNumber,
   createErrorObject,
   createSuccessObject,
-} = require("../utils");
+} = require("../../utils");
 
 module.exports = function (req, res) {
   let voteType = validateNumber(req.params.voteType);
   let studentID = 1; //req.user.studentID;
-  let commentID = validateNumber(req.params.commentID);
+  let facultyID = validateNumber(req.params.facultyID);
 
-  if (voteType.error || commentID.error) {
-    return res.json(createErrorObject("Invalid studentID or commentID"));
+  if (voteType.error || facultyID.error) {
+    return res.json(createErrorObject("Invalid studentID or facultyID"));
   }
 
   if (voteType.value != 1 && voteType.value != 0) {
@@ -24,8 +24,8 @@ module.exports = function (req, res) {
   //************************************************** */
 
   let sql =
-    "SELECT commentID, studentID from commentvote where commentID = ? AND studentID = ?";
-  db.query(sql, [commentID.value, studentID], function (error, results) {
+    "SELECT facultyID, studentID, upVote, downVote from vote where facultyID = ? AND studentID = ?";
+  db.query(sql, [facultyID.value, studentID], function (error, results) {
     if (error) {
       console.log(error);
       return res.json(createErrorObject("comment voting failed"));
@@ -37,29 +37,29 @@ module.exports = function (req, res) {
 
         if (voteType.value == 1) {
           commentratingObj = {
-            commentID: commentID.value,
+            facultyID: facultyID.value,
             studentID: studentID,
             upVote: 1,
             downVote: 0,
           };
           secondsql =
-            "Update comment set upVoteSum = upVoteSum + 1 where commentID = ? ";
+            "Update facultyverify set upVoteSum = upVoteSum + 1 where facultyID = ? ";
         } else {
           commentratingObj = {
-            commentID: commentID.value,
+            facultyID: facultyID.value,
             studentID: studentID,
             upVote: 0,
             downVote: 1,
           };
           secondsql =
-            "Update comment set downVoteSum = downVoteSum + 1 where commentID = ? ";
+            "Update facultyverify set downVoteSum = downVoteSum + 1 where facultyID = ? ";
         }
         db.query(sql, commentratingObj, function (error, results) {
           if (error) {
             console.log(error);
             res.json(createErrorObject("Voting error"));
           } else {
-            db.query(secondsql, [commentID.value], function (error, results) {
+            db.query(secondsql, [facultyID.value], function (error, results) {
               if (error) {
                 console.log(error);
                 res.json(createErrorObject("vote not inserted"));
@@ -79,9 +79,9 @@ module.exports = function (req, res) {
         ) {
           //when vote is changed from upVote to downVote
           firstSql =
-            "UPDATE commentvote set upVote=0 , downVote = 1 where commentID =? and studentID =?";
+            "UPDATE vote set upVote=0 , downVote = 1 where facultyID =? and studentID =?";
           secondSql =
-            "UPDATE comment set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where commentID =?";
+            "UPDATE facultyverify set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where facultyID =?";
         } else if (
           results[0].upVote == 0 &&
           results[0].downVote == 1 &&
@@ -89,23 +89,23 @@ module.exports = function (req, res) {
         ) {
           //when vote is changed from downVote to upVote
           firstSql =
-            "UPDATE commentvote set upVote=1 , downVote = 0 where commentID =? and studentID =?";
+            "UPDATE vote set upVote=1 , downVote = 0 where facultyID =? and studentID =?";
           secondSql =
-            "UPDATE comment set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where commentID =?";
+            "UPDATE facultyverify set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where facultyID =?";
         } else {
           return res.json(createSuccessObject("No need to update"));
         }
 
         db.query(
           firstSql,
-          [commentID.value, studentID],
+          [facultyID.value, studentID],
           function (error, results) {
             if (error) {
               console.log(error);
               res.json(createErrorObject("vote not updated"));
             } else {
               //run second sql here
-              db.query(secondSql, commentID.value, function (error, results) {
+              db.query(secondSql, facultyID.value, function (error, results) {
                 if (error) {
                   console.log(error);
                   res.json(createErrorObject("voteSum not updated"));

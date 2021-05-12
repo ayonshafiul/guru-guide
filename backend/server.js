@@ -9,8 +9,10 @@ const bodyParser = require("body-parser");
 
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
-const actionRouter = require("./routes/actionRouter");
-const auth = require("./authentication");
+const courseRouter = require("./routes/courseRouter");
+const commentRouter = require("./routes/commentRouter");
+
+const authMiddleware = require("./middlewares/authentication");
 const facultyVerify = require("./facultyVerify");
 const courseVerify = require("./courseVerify");
 
@@ -37,9 +39,11 @@ db.connect((err) => {
     console.log("Mysql connected...");
   }
 });
+
 server.use("/api", authRouter);
 server.use("/api", facultyRouter);
-server.use("/api", actionRouter);
+server.use("/api", courseRouter);
+server.use("/api", commentRouter);
 
 let interval = 3 * 60 * 60 * 1000;
 setInterval(facultyVerify, interval);

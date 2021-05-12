@@ -1,8 +1,8 @@
-const db = require("../db");
+const db = require("../../db");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = process.env.CLIENT_ID;
-const { createErrorObject, createSuccessObject } = require("../utils");
+const { createErrorObject, createSuccessObject } = require("../../utils");
 
 module.exports = function login(req, res) {
   const token = req.headers.auth;

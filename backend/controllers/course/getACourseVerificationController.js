@@ -1,10 +1,10 @@
-const db = require("../db");
+const db = require("../../db");
 const {
   createErrorObject,
   createSuccessObjectWithData,
   validateAlphaNumeric,
   validateNumber,
-} = require("../utils");
+} = require("../../utils");
 module.exports = function (req, res) {
   let departmentID = validateNumber(req.params.departmentID);
   let courseCode = validateAlphaNumeric(req.params.courseCode);
