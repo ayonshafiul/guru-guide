@@ -1,5 +1,5 @@
 import {motion} from 'framer-motion';
-import pageAnimationVariant from './AnimationData';
+import pageAnimationVariant from '../../AnimationData';
 
 const Verify = () => {
     return ( 

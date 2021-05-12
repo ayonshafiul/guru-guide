@@ -41,9 +41,9 @@ db.connect((err) => {
 });
 
 server.use("/api", authRouter);
-server.use("/api", facultyRouter);
-server.use("/api", courseRouter);
-server.use("/api", commentRouter);
+server.use("/api", authMiddleware, facultyRouter);
+server.use("/api", authMiddleware, courseRouter);
+server.use("/api", authMiddleware, commentRouter);
 
 let interval = 3 * 60 * 60 * 1000;
 setInterval(facultyVerify, interval);

@@ -11,7 +11,7 @@ const getAFacultyVerificationController = require("../controllers/faculty/getAFa
 
 router.route("/faculty").post(addFaculty);
 
-router.route("/faculty/:departmentID").get(getFaculty);
+router.route("/faculty/department/:departmentID").get(getFaculty);
 
 router.route("/faculty/:facultyID").get(getAFaculty);
 

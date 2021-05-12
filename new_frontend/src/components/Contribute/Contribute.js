@@ -1,17 +1,17 @@
 import {motion} from 'framer-motion';
-import pageAnimationVariant from './AnimationData';
+import pageAnimationVariant from '../../AnimationData';
 
-const Help = () => {
-    return (
+const Contribute = () => {
+    return ( 
         <motion.div 
-            className="help"
+            className="contribute"
             variants={pageAnimationVariant}
             initial="initial"
             animate="animate"
         >
-            help
+            contribute
         </motion.div>
-    );
+     );
 }
  
-export default Help;
+export default Contribute;

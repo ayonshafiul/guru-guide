@@ -1,14 +1,14 @@
 import './FacultyList.css';
 import {motion} from 'framer-motion';
-import grid from './grid.svg';
-import pageAnimationVariant from './AnimationData';
-import FacultyListItem from './FacultyListItem';
+import {useState} from 'react';
+import pageAnimationVariant from '../../AnimationData';
+import FacultyListItem from '../FacultyListItem/FacultyListItem';
 import {useQuery} from 'react-query';
-import {getFaculty} from './Queries'
+import {getFaculty} from '../../Queries'
 
 const FacultyList = () => {
-    
-    const {isSuccess, isLoading, isError, error, data, isFetching } = useQuery('/api/faculty', getFaculty);
+    const [departmentID, setDepartmentID] = useState(3);
+    const {isSuccess, isLoading, isError, error, data, isFetching } = useQuery(['/api/faculty', departmentID], getFaculty);
     
 
     return ( 

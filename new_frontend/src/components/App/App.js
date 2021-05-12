@@ -1,21 +1,21 @@
-import Navbar from "./Navbar";
+import Navbar from "../Navbar/Navbar";
 import './App.css';
 import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
-import Verify from "./Verify";
-import Contribute from "./Contribute";
-import Help from "./Help";
-import Contact from "./Contact";
+import Verify from "../Verify/Verify";
+import Contribute from "../Contribute/Contribute";
+import Help from "../Help/Help";
+import Contact from "../Contact/Contact";
 import {useState, useEffect} from 'react';
-import server from './serverDetails';
+import server from '../../serverDetails';
 import axios from 'axios';
-import FacultyList from "./FacultyList";
-import Login from './Login';
-import Page404 from "./Page404";
-import ScrollToTop from "./ScrollToTop";
+import FacultyList from "../FacultyList/FacultyList";
+import Login from '../Login/Login';
+import Page404 from "../Page404/Page404";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { ReactQueryDevtools } from 'react-query/devtools'
-import FacultyDetails from "./FacultyDetails";
+import FacultyDetails from "../FacultyDetails/FacultyDetails";
 
 
 
@@ -35,7 +35,6 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("Fetch!")
     axios.get(server.url + "/api/isauth", {
       withCredentials: true
     }).then((res) => {

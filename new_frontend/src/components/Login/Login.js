@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect} from 'react';
 import {useHistory, Redirect} from 'react-router-dom';
-import server from './serverDetails'
+import server from '../../serverDetails'
 import GoogleLogin from 'react-google-login';
 import "./Login.css";
 
