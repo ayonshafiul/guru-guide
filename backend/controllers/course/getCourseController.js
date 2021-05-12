@@ -12,7 +12,7 @@ module.exports = function (req, res) {
     return res.json(createErrorObject("Invalid departmentID"));
   }
 
-  let sql = "SELECT * from faculty where departmentID = ? and approved = 1";
+  let sql = "SELECT * from course where departmentID = ? and approved = 1";
 
   db.query(sql, departmentID.value, (error, results) => {
     if (error) {

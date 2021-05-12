@@ -9,7 +9,9 @@ const rateController = require("../controllers/faculty/rateController");
 const getFacultyVerificationController = require("../controllers/faculty/getFacultyVerificationController");
 const getAFacultyVerificationController = require("../controllers/faculty/getAFacultyVerificationController");
 
-router.route("/faculty").post(addFaculty).get(getFaculty);
+router.route("/faculty").post(addFaculty);
+
+router.route("/faculty/:departmentID").get(getFaculty);
 
 router.route("/faculty/:facultyID").get(getAFaculty);
 
