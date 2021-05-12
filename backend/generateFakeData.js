@@ -56,7 +56,8 @@ function insertDepartments() {
 // fakeStudents();
 // fakeFacultyVerify();
 // fakeCourseVerify();
-fakeRating();
+// fakeRating();
+fakeComments();
 
 function fakeStudents() {
   const student = [];
@@ -242,28 +243,29 @@ function fakeRating() {
   console.log("fake rating created");
 }
 function fakeComments() {
-  const comment = [];
-
-  for (let i = 1; i < numComments; i++) {
-    comment.push({
-      studentID: faker.random.number({ min: 1, max: numStudents }),
-      facultyID: faker.random.number({ min: 1, max: numFaculties }),
-      comment: faker.lorem.paragraph(),
-      upVoteSum: 0,
-      downVoteSum: 0,
-    });
+  for (let i = 2001; i <= 4000; i++) {
+    for (let j = 27; j <= 33; j++) {
+      var sql = "INSERT INTO comment SET ?";
+      db.query(
+        sql,
+        {
+          studentID: i,
+          facultyID: j,
+          courseID: faker.datatype.number({ min: 1, max: 8 }),
+          commentText: faker.lorem.paragraph(),
+          upVoteSum: faker.datatype.number({ min: 1, max: 100 }),
+          downVoteSum: faker.datatype.number({ min: 1, max: 100 }),
+        },
+        function (error, results, fields) {
+          if (error) {
+            console.log(error);
+          } else {
+            // console.log("success");
+          }
+        }
+      );
+    }
   }
-  comment.forEach((comment) => {
-    var sql = "INSERT INTO comment SET ?";
-
-    db.query(sql, comment, function (error, results, fields) {
-      if (error) {
-        console.log(error);
-      } else {
-        // console.log("success");
-      }
-    });
-  });
   console.log("fake comments created");
 }
 function fakeCommentsRating() {

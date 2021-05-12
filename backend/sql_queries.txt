@@ -1,0 +1,5 @@
+// get all the comments
+Select c.commentID, commentText, upVoteSum, downVoteSum from comment c inner join (SELECT commentID FROM `comment` WHERE facultyID = 27 and courseID = 1 order by upVoteSum limit 20) ids on c.commentID = ids.commentID
+
+
+// 

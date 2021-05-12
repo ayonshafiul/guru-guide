@@ -9,9 +9,10 @@ const {
 module.exports = function (req, res) {
   let comment = validateComment(req.body.comment);
   let facultyID = validateNumber(req.params.facultyID);
+  let courseID = validateNumber(req.params.courseID);
   let studentID = req.user.studentID;
 
-  if (facultyID.error || comment.error) {
+  if (facultyID.error || comment.error || courseID.error) {
     return res.json(createErrorObject("Invalide comment or facultyID"));
   }
 
@@ -31,6 +32,7 @@ module.exports = function (req, res) {
         let commentObj = {
           studentID,
           facultyID: facultyID.value,
+          courseID: courseID.value,
           comment: comment.value,
         };
 

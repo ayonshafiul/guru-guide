@@ -3,7 +3,7 @@ const router = express.Router();
 
 const voteController = require("../controllers/voteController");
 const rateController = require("../controllers/rateController");
-const commentController = require("../controllers/commentController");
+const addComment = require("../controllers/addComment");
 const commentVoteController = require("../controllers/commentVoteController");
 const getCommentController = require("../controllers/getCommentController");
 const getFacultyVerificationController = require("../controllers/getFacultyVerificationController");
@@ -32,8 +32,8 @@ router
 router.route("/facultyrate/:facultyID").post(rateController);
 
 router
-  .route("/comment/:facultyID")
-  .post(commentController)
+  .route("/comment/:facultyID/:courseID")
+  .post(addComment)
   .get(getCommentController);
 
 router.route("/commentvote/:commentID/:voteType").get(commentVoteController);
