@@ -5,9 +5,9 @@ import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import { useState } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useMutation } from "react-query";
 import { useParams } from "react-router-dom";
-import { getAFaculty, getComment } from "../../Queries";
+import { getAFaculty, getComment, postRating } from "../../Queries";
 
 const FacultyDetails = () => {
   const { id } = useParams();
@@ -18,6 +18,14 @@ const FacultyDetails = () => {
     ["/api/faculty", id],
     getAFaculty
   );
+  const
+    {   mutate: ratingMutate,  
+      isError: isRatingError,
+      isSuccess: isRatingSuccess,
+      data: ratingData,
+      error: ratingError,
+    }
+  = useMutation(postRating);
   const {
     isLoading: commentIsLoading,
     isSuccess: commentIsSuccess,
@@ -35,8 +43,10 @@ const FacultyDetails = () => {
     });
   }
 
-  function submitRating() {
-    if (rating["teaching"] && rating["humanity"] && rating["grading"]) {
+  async function submitRating() {
+    if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
+      await ratingMutate({ rating, facultyID: id });
+      console.log(ratingData, ratingError);
     }
   }
 
@@ -60,7 +70,9 @@ const FacultyDetails = () => {
           <div className="faculty-details-overall">
             &#9733;{" "}
             {(
-              (data.data.grading + data.data.teaching + data.data.humanity) /
+              (data.data.grading +
+                data.data.teaching +
+                data.data.friendliness) /
               3
             ).toFixed(1)}
             <div
@@ -70,7 +82,7 @@ const FacultyDetails = () => {
                   (
                     (data.data.grading +
                       data.data.teaching +
-                      data.data.humanity) /
+                      data.data.friendliness) /
                     3
                   ).toFixed(1) *
                     7 +
@@ -93,11 +105,11 @@ const FacultyDetails = () => {
               style={{ width: data.data.teaching * 7 + 31 + "%" }}
             ></div>
           </div>
-          <div className="faculty-details-humanity">
-            Friendliness: {data.data.humanity}
+          <div className="faculty-details-friendliness">
+            Friendliness: {data.data.friendliness}
             <div
               className="faculty-details-overlay"
-              style={{ width: data.data.humanity * 7 + 31 + "%" }}
+              style={{ width: data.data.friendliness * 7 + 31 + "%" }}
             ></div>
           </div>
         </div>
@@ -131,7 +143,7 @@ const FacultyDetails = () => {
         typeof commentData.data != "undefined" &&
         page == "comments" &&
         commentData.data.map((comment) => {
-          return <Comment comment={comment}/>;
+          return <Comment comment={comment} />;
         })}
 
       {page == "rate" && (
@@ -145,7 +157,7 @@ const FacultyDetails = () => {
           />
           <div
             className={
-              (rating["teaching"] && rating["friendliness"] && rating["grading"])
+              rating["teaching"] && rating["friendliness"] && rating["grading"]
                 ? "submit-rating"
                 : "submit-rating-disabled"
             }

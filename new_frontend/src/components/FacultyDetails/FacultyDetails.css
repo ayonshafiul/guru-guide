@@ -23,7 +23,7 @@
     color:black !important;
 }
 
-.faculty-details-grading, .faculty-details-teaching , .faculty-details-humanity, .faculty-details-overall{
+.faculty-details-grading, .faculty-details-teaching , .faculty-details-friendliness, .faculty-details-overall{
     position: relative;
     padding: 1em;
     background: #ccc;

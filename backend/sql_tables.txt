@@ -21,7 +21,7 @@ CREATE TABLE faculty(
     approved boolean,
     teaching double not null default '0.00',
     grading double not null default '0.00',
-    humanity double not null default '0.00',
+    friendliness double not null default '0.00',
     voteCount int not null default '0',
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -90,7 +90,7 @@ CREATE TABLE rating (
     courseID int,
     teaching double  not null default '0.00',
     grading double not null default '0.00',
-    humanity double not null default '0.00',
+    friendliness double not null default '0.00',
     Primary Key(facultyID,studentID,courseID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE,
