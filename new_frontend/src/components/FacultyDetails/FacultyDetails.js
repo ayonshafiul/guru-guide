@@ -2,6 +2,7 @@ import "./FacultyDetails.css";
 import { motion } from "framer-motion";
 import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
+import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import { useState } from "react";
 import { useQuery } from "react-query";
@@ -130,7 +131,7 @@ const FacultyDetails = () => {
         typeof commentData.data != "undefined" &&
         page == "comments" &&
         commentData.data.map((comment) => {
-          return <div>{comment.commentText}</div>;
+          return <Comment comment={comment}/>;
         })}
 
       {page == "rate" && (
