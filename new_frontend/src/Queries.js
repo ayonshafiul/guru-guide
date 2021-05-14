@@ -13,8 +13,8 @@ export const getAFaculty = async ({ queryKey }) => {
 }
 
 export const getComment = async ({ queryKey }) => {
-    const [keyName, facultyID, courseID] = queryKey;
-    const res = await axios.get(server.url + "/api/comment/" + facultyID + "/" + courseID, {withCredentials: true});
+    const [keyName, facultyID, courseID, commentPage] = queryKey;
+    const res = await axios.get(server.url + "/api/comment/" + facultyID + "/" + courseID + "?page=" + commentPage, {withCredentials: true});
     return res.data;
 }
 

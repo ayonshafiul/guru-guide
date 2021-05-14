@@ -4,7 +4,7 @@ import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
-import { useState, useEffect } from "react";
+import { useState, useRef } from "react";
 import axios from "axios";
 import server from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
@@ -18,10 +18,12 @@ import {
 
 const FacultyDetails = () => {
   const { id } = useParams();
+  const pageRef = useRef(null);
   const queryClient = useQueryClient();
   const [page, setPage] = useState("");
   const [rating, setRating] = useState({});
   const [courseID, setCourseID] = useState(1);
+  const [commentPage, setCommentPage] = useState(1);
   const { isLoading, isSuccess, isFetching, data, error, isError } = useQuery(
     ["/api/faculty", id],
     getAFaculty
@@ -42,9 +44,14 @@ const FacultyDetails = () => {
     isError: commentIsError,
     refetch: commentRefetch,
     remove: commentRemove,
-  } = useQuery(["/api/comment", String(id), String(courseID)], getComment, {
-    enabled: page === "comments",
-  });
+  } = useQuery(
+    ["/api/comment", String(id), String(courseID), String(commentPage)],
+    getComment,
+    {
+      enabled: page === "comments",
+      keepPreviousData: true,
+    }
+  );
 
   function changeRating(type, buttonNo) {
     setRating({
@@ -70,10 +77,11 @@ const FacultyDetails = () => {
       "/api/comment",
       String(id),
       String(courseID),
+      String(commentPage),
     ]);
     if (cacheExists) {
       queryClient.setQueryData(
-        ["/api/comment", String(id), String(courseID)],
+        ["/api/comment", String(id), String(courseID), String(commentPage)],
         (prevData) => {
           for (let i = 0; i < prevData.data.length; i++) {
             let currentComment = prevData.data[i];
@@ -173,7 +181,7 @@ const FacultyDetails = () => {
       )}
 
       {isSuccess && (
-        <div className="faculty-details-button-wrapper">
+        <div className="faculty-details-button-wrapper" ref={pageRef}>
           <div
             className={
               page == "comments"
@@ -198,16 +206,43 @@ const FacultyDetails = () => {
       )}
       {commentIsSuccess &&
         typeof commentData.data != "undefined" &&
-        page == "comments" &&
-        commentData.data.map((comment) => {
-          return (
-            <Comment
-              key={comment.commentID}
-              comment={comment}
-              submitCommentVote={submitCommentVote}
-            />
-          );
-        })}
+        page == "comments" && (
+          <>
+            {commentData.data.map((comment) => {
+              return (
+                <Comment
+                  key={comment.commentID}
+                  comment={comment}
+                  submitCommentVote={submitCommentVote}
+                />
+              );
+            })}
+            <div className="comment-page-buttons">
+              {commentPage > 1 && (
+                <div
+                  className="comment-prev-btn"
+                  onClick={() => {
+                    pageRef.current.scrollIntoView({ behavior: "smooth" });
+                    setCommentPage((prevPage) => prevPage - 1);
+                  }}
+                >
+                  {`<< Prev`}
+                </div>
+              )}
+              {commentData.data.length > 0 && (
+                <div
+                  className="comment-next-btn"
+                  onClick={() => {
+                    pageRef.current.scrollIntoView({ behavior: "smooth" });
+                    setCommentPage((prevPage) => prevPage + 1);
+                  }}
+                >
+                  {`Next >>`}
+                </div>
+              )}
+            </div>
+          </>
+        )}
 
       {page == "rate" && (
         <>
