@@ -9,6 +9,7 @@ const FacultyListItem = (props) => {
     teaching,
     grading,
     friendliness,
+    voteCount,
   } = props.faculty;
   return (
     <Link style={{ textDecoration: "none" }} to={`/faculty/${facultyID}`}>
@@ -19,21 +20,21 @@ const FacultyListItem = (props) => {
         </div>
         <div className="rating-wrapper">
           <div className="average-rating">
-            {((teaching + grading + friendliness) / 3).toFixed(1)}{" "}
+            {((teaching + grading + friendliness) / (3 * voteCount)).toFixed(1)}{" "}
             <span>&#9733;</span>
           </div>
           <div className="rating-bar-wrapper">
             <div
               className="rating-bar"
-              style={{ height: teaching * 1.8 + 2 }}
+              style={{ height: (teaching / voteCount) * 1.8 + 2 }}
             ></div>
             <div
               className="rating-bar"
-              style={{ height: grading * 1.8 + 2 }}
+              style={{ height: (grading / voteCount) * 1.8 + 2 }}
             ></div>
             <div
               className="rating-bar"
-              style={{ height: friendliness * 1.8 + 2 }}
+              style={{ height: (friendliness / voteCount) * 1.8 + 2 }}
             ></div>
           </div>
         </div>

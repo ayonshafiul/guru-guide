@@ -4,7 +4,7 @@ import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import server from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
@@ -23,6 +23,7 @@ const FacultyDetails = () => {
   const pageRef = useRef(null);
   const queryClient = useQueryClient();
   const [page, setPage] = useState("");
+  const [displayRating, setDisplayRating] = useState({});
   const [rating, setRating] = useState({});
   const [courseID, setCourseID] = useState(1);
   const [commentPage, setCommentPage] = useState(1);
@@ -54,7 +55,27 @@ const FacultyDetails = () => {
       keepPreviousData: true,
     }
   );
+  useEffect(() => {
+    if (isSuccess && typeof data.data !== "undefined") {
+      updateDisplayRating(
+        data.data.teaching,
+        data.data.grading,
+        data.data.friendliness,
+        data.data.voteCount
+      );
+    }
+  }, [isSuccess]);
 
+  function updateDisplayRating(teaching, grading, friendliness, voteCount) {
+    setDisplayRating({
+      overall: ((grading + teaching + friendliness) / (3 * voteCount)).toFixed(
+        1
+      ),
+      teaching: (teaching / voteCount).toFixed(1),
+      grading: (grading / voteCount).toFixed(1),
+      friendliness: (friendliness / voteCount).toFixed(1),
+    });
+  }
   function changeRating(type, buttonNo) {
     setRating({
       ...rating,
@@ -154,48 +175,33 @@ const FacultyDetails = () => {
             {data.data.departmentID}
           </div>
           <div className="faculty-details-overall">
-            &#9733;{" "}
-            {(
-              (data.data.grading +
-                data.data.teaching +
-                data.data.friendliness) /
-              3
-            ).toFixed(1)}
+            &#9733; {displayRating.overall}
             <div
               className="faculty-details-overlay faculty-details-overall-background-overlay"
               style={{
-                width:
-                  (
-                    (data.data.grading +
-                      data.data.teaching +
-                      data.data.friendliness) /
-                    3
-                  ).toFixed(1) *
-                    7 +
-                  31 +
-                  "%",
+                width: displayRating.overall * 7 + 30.2 + "%",
               }}
             ></div>
           </div>
           <div className="faculty-details-grading">
-            Grading: {data.data.grading}
+            Grading: {displayRating.grading}
             <div
               className="faculty-details-overlay"
-              style={{ width: data.data.grading * 7 + 31 + "%" }}
+              style={{ width: displayRating.grading * 7 + 30.2 + "%" }}
             ></div>
           </div>
           <div className="faculty-details-teaching">
-            Teaching: {data.data.teaching}
+            Teaching: {displayRating.teaching}
             <div
               className="faculty-details-overlay"
-              style={{ width: data.data.teaching * 7 + 31 + "%" }}
+              style={{ width: displayRating.teaching * 7 + 30.2 + "%" }}
             ></div>
           </div>
           <div className="faculty-details-friendliness">
-            Friendliness: {data.data.friendliness}
+            Friendliness: {displayRating.friendliness}
             <div
               className="faculty-details-overlay"
-              style={{ width: data.data.friendliness * 7 + 31 + "%" }}
+              style={{ width: displayRating.friendliness * 7 + 30.2 + "%" }}
             ></div>
           </div>
         </div>
