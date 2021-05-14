@@ -9,6 +9,7 @@ import axios from "axios";
 import server from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import {
   getAFaculty,
   getComment,
@@ -18,6 +19,7 @@ import {
 
 const FacultyDetails = () => {
   const { id } = useParams();
+  const { addToast } = useToasts();
   const pageRef = useRef(null);
   const queryClient = useQueryClient();
   const [page, setPage] = useState("");
@@ -63,6 +65,7 @@ const FacultyDetails = () => {
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
       await ratingMutate({ rating, facultyID: id });
+      addToast("Thanks for the feedback!");
     }
   }
 
@@ -102,6 +105,7 @@ const FacultyDetails = () => {
                   currentComment.upVoteSum = currentComment.upVoteSum - 1;
                   break;
                 case "noupdate":
+                  addToast("Thank you. We got your vote!");
                   break;
               }
             }
@@ -111,7 +115,24 @@ const FacultyDetails = () => {
       );
     } else {
       console.log("refetched!");
-      commentRefetch();
+      switch (resData.message) {
+        case "upvoteinsert":
+          addToast("Thanks for the thumbs up!");
+          break;
+        case "downvoteinsert":
+          addToast("Thanks for the thumbs down!");
+          break;
+        case "upvoteupdate":
+          addToast("Thanks for the thumbs up!");
+          break;
+        case "downvoteupdate":
+          addToast("Thanks for the thumbs down!");
+
+          break;
+        case "noupdate":
+          addToast("Thank you. We got your vote!");
+          break;
+      }
     }
   }
 
@@ -263,7 +284,6 @@ const FacultyDetails = () => {
           >
             Rate
           </div>
-          {isRatingSuccess && <div>Successfully updated!</div>}
         </>
       )}
     </motion.div>
