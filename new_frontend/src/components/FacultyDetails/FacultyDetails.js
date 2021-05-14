@@ -5,12 +5,20 @@ import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import { useState } from "react";
-import { useQuery, useMutation } from "react-query";
+import axios from "axios";
+import server from "../../serverDetails";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
-import { getAFaculty, getComment, postRating } from "../../Queries";
+import {
+  getAFaculty,
+  getComment,
+  postRating,
+  postCommentVote,
+} from "../../Queries";
 
 const FacultyDetails = () => {
   const { id } = useParams();
+  const queryClient = useQueryClient();
   const [page, setPage] = useState("");
   const [rating, setRating] = useState({});
   const [courseID, setCourseID] = useState(1);
@@ -18,22 +26,29 @@ const FacultyDetails = () => {
     ["/api/faculty", id],
     getAFaculty
   );
-  const
-    {   mutate: ratingMutate,  
-      isError: isRatingError,
-      isSuccess: isRatingSuccess,
-      data: ratingData,
-      error: ratingError,
-    }
-  = useMutation(postRating);
+  const {
+    mutate: ratingMutate,
+    isError: isRatingError,
+    isSuccess: isRatingSuccess,
+    data: ratingData,
+    error: ratingError,
+  } = useMutation(postRating);
+
+  const {
+    mutate: commentVoteMutate,
+    isError: isCommentVoteError,
+    isSuccess: isCommentVoteSuccess,
+    data: commentVoteData,
+    error: commentVoteError,
+  } = useMutation(postCommentVote);
   const {
     isLoading: commentIsLoading,
     isSuccess: commentIsSuccess,
     data: commentData,
     error: commentError,
     isError: commentIsError,
-  } = useQuery(["/api/comment", id, courseID], getComment, {
-    enabled: !!data && page == "comments",
+  } = useQuery(["/api/comment", String(id), String(courseID)], getComment, {
+    enabled: page === "comments",
   });
 
   function changeRating(type, buttonNo) {
@@ -46,8 +61,46 @@ const FacultyDetails = () => {
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
       await ratingMutate({ rating, facultyID: id });
-      console.log(ratingData, ratingError);
     }
+  }
+
+  async function submitCommentVote(commentID, voteType) {
+    // await commentVoteMutate({ commentID, voteType });
+    const res = await axios.post(
+      server.url + "/api/commentVote/" + commentID,
+      { voteType },
+      { withCredentials: true }
+    );
+    const resData = res.data;
+    const old = queryClient.setQueryData(
+      ["/api/comment", String(id), String(courseID)],
+      (prevData) => {
+        for (let i = 0; i < prevData.data.length; i++) {
+          let currentComment = prevData.data[i];
+          if (currentComment.commentID == commentID) {
+            switch (resData.message) {
+              case "upvoteinsert":
+                currentComment.upVoteSum = currentComment.upVoteSum + 1;
+                break;
+              case "downvoteinsert":
+                currentComment.downVoteSum = currentComment.downVoteSum + 1;
+                break;
+              case "upvoteupdate":
+                currentComment.upVoteSum = currentComment.upVoteSum + 1;
+                currentComment.downVoteSum = currentComment.downVoteSum - 1;
+                break;
+              case "downvoteupdate":
+                currentComment.downVoteSum = currentComment.downVoteSum + 1;
+                currentComment.upVoteSum = currentComment.upVoteSum - 1;
+                break;
+              case "noupdate":
+                break;
+            }
+          }
+        }
+        return prevData;
+      }
+    );
   }
 
   return (
@@ -143,7 +196,13 @@ const FacultyDetails = () => {
         typeof commentData.data != "undefined" &&
         page == "comments" &&
         commentData.data.map((comment) => {
-          return <Comment comment={comment} />;
+          return (
+            <Comment
+              key={comment.commentID}
+              comment={comment}
+              submitCommentVote={submitCommentVote}
+            />
+          );
         })}
 
       {page == "rate" && (
@@ -165,6 +224,7 @@ const FacultyDetails = () => {
           >
             Rate
           </div>
+          {isRatingSuccess && <div>Successfully updated!</div>}
         </>
       )}
     </motion.div>

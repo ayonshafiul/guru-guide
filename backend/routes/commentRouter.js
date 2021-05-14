@@ -10,6 +10,6 @@ router
   .post(addComment)
   .get(getCommentController);
 
-router.route("/commentvote/:commentID/:voteType").get(commentVoteController);
+router.route("/commentvote/:commentID").post(commentVoteController);
 
 module.exports = router;

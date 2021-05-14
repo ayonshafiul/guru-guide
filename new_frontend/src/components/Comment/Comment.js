@@ -9,13 +9,13 @@ const Comment = (props) => {
       <div className="comment-text">{commentText}</div>
       <div className="comment-buttons">
         <div className="vote">
-          <div className="icon up">
+          <div className="icon up" onClick={ () => props.submitCommentVote(commentID, 1)}>
             <img className="icon-img" src={up} />
           </div>
           <div className="vote-count">{upVoteSum}</div>
         </div>
         <div className="vote">
-          <div className="icon down">
+          <div className="icon down" onClick = { () => props.submitCommentVote(commentID, 0)}>
             <img className="icon-img" src={down} />
           </div>
           <div className="vote-count">{downVoteSum}</div>

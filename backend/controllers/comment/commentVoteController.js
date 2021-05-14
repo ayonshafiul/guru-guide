@@ -6,8 +6,8 @@ const {
 } = require("../../utils");
 
 module.exports = function (req, res) {
-  let voteType = validateNumber(req.params.voteType);
-  let studentID = 1; //req.user.studentID;
+  let voteType = validateNumber(req.body.voteType);
+  let studentID = req.user.studentID;
   let commentID = validateNumber(req.params.commentID);
 
   if (voteType.error || commentID.error) {
@@ -24,7 +24,7 @@ module.exports = function (req, res) {
   //************************************************** */
 
   let sql =
-    "SELECT commentID, studentID from commentvote where commentID = ? AND studentID = ?";
+    "SELECT upVote, downVote from commentvote where commentID = ? AND studentID = ?";
   db.query(sql, [commentID.value, studentID], function (error, results) {
     if (error) {
       console.log(error);
@@ -33,6 +33,7 @@ module.exports = function (req, res) {
       if (results.length == 0) {
         let commentratingObj;
         let secondsql;
+        let msg = "";
         sql = "INSERT into commentvote set ?";
 
         if (voteType.value == 1) {
@@ -44,6 +45,7 @@ module.exports = function (req, res) {
           };
           secondsql =
             "Update comment set upVoteSum = upVoteSum + 1 where commentID = ? ";
+          msg = "upvoteinsert";
         } else {
           commentratingObj = {
             commentID: commentID.value,
@@ -53,6 +55,8 @@ module.exports = function (req, res) {
           };
           secondsql =
             "Update comment set downVoteSum = downVoteSum + 1 where commentID = ? ";
+          4;
+          msg = "downvoteinsert";
         }
         db.query(sql, commentratingObj, function (error, results) {
           if (error) {
@@ -64,7 +68,7 @@ module.exports = function (req, res) {
                 console.log(error);
                 res.json(createErrorObject("vote not inserted"));
               } else {
-                res.json(createSuccessObject("vote inserted successfully"));
+                res.json(createSuccessObject(msg));
               }
             });
           }
@@ -72,6 +76,7 @@ module.exports = function (req, res) {
       } else {
         let firstSql;
         let secondSql;
+        let msg = "";
         if (
           results[0].upVote == 1 &&
           results[0].downVote == 0 &&
@@ -82,6 +87,7 @@ module.exports = function (req, res) {
             "UPDATE commentvote set upVote=0 , downVote = 1 where commentID =? and studentID =?";
           secondSql =
             "UPDATE comment set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where commentID =?";
+          msg = "downvoteupdate";
         } else if (
           results[0].upVote == 0 &&
           results[0].downVote == 1 &&
@@ -92,8 +98,9 @@ module.exports = function (req, res) {
             "UPDATE commentvote set upVote=1 , downVote = 0 where commentID =? and studentID =?";
           secondSql =
             "UPDATE comment set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where commentID =?";
+          msg = "upvoteupdate";
         } else {
-          return res.json(createSuccessObject("No need to update"));
+          return res.json(createSuccessObject("noupdate"));
         }
 
         db.query(
@@ -110,9 +117,7 @@ module.exports = function (req, res) {
                   console.log(error);
                   res.json(createErrorObject("voteSum not updated"));
                 } else {
-                  res.json(
-                    createSuccessObject("voteSum is updated successfully")
-                  );
+                  res.json(createSuccessObject(msg));
                 }
               });
             }

@@ -24,7 +24,6 @@ const FacultyList = () => {
       {isError ? <div>Error Fetching data...</div> : null}
       {isSuccess &&
         data.data.map((faculty) => {
-          console.log(faculty);
           return <FacultyListItem faculty={faculty} key={faculty.facultyID} />;
         })}
     </motion.div>

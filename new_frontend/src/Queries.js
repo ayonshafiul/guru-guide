@@ -23,3 +23,8 @@ export const postRating = async ({ rating, facultyID }) => {
     const res = await axios.post(server.url + "/api/facultyrate/" + facultyID, {...rating, courseID: 1}, {withCredentials: true});
     return res.data;
 }
+
+export const postCommentVote = async ({ voteType, commentID }) => {
+    const res = await axios.post(server.url + "/api/commentVote/" + commentID, { voteType }, {withCredentials: true});
+    return res.data;
+}
