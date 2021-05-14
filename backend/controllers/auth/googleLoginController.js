@@ -58,7 +58,8 @@ module.exports = function login(req, res) {
     console.log("The token is" + token);
     res.cookie("jwt", token, {
       expires: new Date(
-        Date.now() + Number(process.env.JWT_COOKIE_EXPIRES) * 86400
+        Date.now() +
+          Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000
       ),
       httpOnly: true,
     });

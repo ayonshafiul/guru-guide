@@ -4,7 +4,7 @@ import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import server from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
@@ -35,18 +35,13 @@ const FacultyDetails = () => {
   } = useMutation(postRating);
 
   const {
-    mutate: commentVoteMutate,
-    isError: isCommentVoteError,
-    isSuccess: isCommentVoteSuccess,
-    data: commentVoteData,
-    error: commentVoteError,
-  } = useMutation(postCommentVote);
-  const {
     isLoading: commentIsLoading,
     isSuccess: commentIsSuccess,
     data: commentData,
     error: commentError,
     isError: commentIsError,
+    refetch: commentRefetch,
+    remove: commentRemove,
   } = useQuery(["/api/comment", String(id), String(courseID)], getComment, {
     enabled: page === "comments",
   });
@@ -65,42 +60,51 @@ const FacultyDetails = () => {
   }
 
   async function submitCommentVote(commentID, voteType) {
-    // await commentVoteMutate({ commentID, voteType });
     const res = await axios.post(
       server.url + "/api/commentVote/" + commentID,
       { voteType },
       { withCredentials: true }
     );
     const resData = res.data;
-    const old = queryClient.setQueryData(
-      ["/api/comment", String(id), String(courseID)],
-      (prevData) => {
-        for (let i = 0; i < prevData.data.length; i++) {
-          let currentComment = prevData.data[i];
-          if (currentComment.commentID == commentID) {
-            switch (resData.message) {
-              case "upvoteinsert":
-                currentComment.upVoteSum = currentComment.upVoteSum + 1;
-                break;
-              case "downvoteinsert":
-                currentComment.downVoteSum = currentComment.downVoteSum + 1;
-                break;
-              case "upvoteupdate":
-                currentComment.upVoteSum = currentComment.upVoteSum + 1;
-                currentComment.downVoteSum = currentComment.downVoteSum - 1;
-                break;
-              case "downvoteupdate":
-                currentComment.downVoteSum = currentComment.downVoteSum + 1;
-                currentComment.upVoteSum = currentComment.upVoteSum - 1;
-                break;
-              case "noupdate":
-                break;
+    const cacheExists = queryClient.getQueryData([
+      "/api/comment",
+      String(id),
+      String(courseID),
+    ]);
+    if (cacheExists) {
+      queryClient.setQueryData(
+        ["/api/comment", String(id), String(courseID)],
+        (prevData) => {
+          for (let i = 0; i < prevData.data.length; i++) {
+            let currentComment = prevData.data[i];
+            if (currentComment.commentID == commentID) {
+              switch (resData.message) {
+                case "upvoteinsert":
+                  currentComment.upVoteSum = currentComment.upVoteSum + 1;
+                  break;
+                case "downvoteinsert":
+                  currentComment.downVoteSum = currentComment.downVoteSum + 1;
+                  break;
+                case "upvoteupdate":
+                  currentComment.upVoteSum = currentComment.upVoteSum + 1;
+                  currentComment.downVoteSum = currentComment.downVoteSum - 1;
+                  break;
+                case "downvoteupdate":
+                  currentComment.downVoteSum = currentComment.downVoteSum + 1;
+                  currentComment.upVoteSum = currentComment.upVoteSum - 1;
+                  break;
+                case "noupdate":
+                  break;
+              }
             }
           }
+          return prevData;
         }
-        return prevData;
-      }
-    );
+      );
+    } else {
+      console.log("refetched!");
+      commentRefetch();
+    }
   }
 
   return (
