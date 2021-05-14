@@ -37,83 +37,88 @@ module.exports = function (req, res) {
     return res.json(createErrorObject("Invalid rating"));
   }
 
-  let sql = "SELECT * from rating where studentID = ? and facultyID = ?";
-  db.query(sql, [studentID, facultyID.value], (error, results, fields) => {
-    if (error) {
-      console.log(error);
-      return res.json(
-        createErrorObject("Something went wrong while querying!")
-      );
-    } else {
-      if (results.length == 0) {
-        // no rating exists
-        // create new rating instead
-
-        insertRating(req, res, {
-          studentID,
-          facultyID: facultyID.value,
-          courseID: courseID.value,
-          teaching: teaching.value,
-          grading: grading.value,
-          friendliness: friendliness.value,
-        });
-      } else {
-        // rating already exists
-        let oldTeaching = results[0].teaching;
-        let oldGrading = results[0].grading;
-        let oldfriendliness = results[0].friendliness;
-
-        let sql =
-          "UPDATE rating set teaching = ?, grading = ?, friendliness = ? where facultyID = ? and courseID = ? and studentID = ?";
-        db.query(
-          sql,
-          [
-            teaching.value,
-            grading.value,
-            friendliness.value,
-            facultyID.value,
-            courseID.value,
-            studentID,
-          ],
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              return res.json(
-                createErrorObject("Updating failed with new rating!")
-              );
-            } else {
-              // successfully updated
-              // update the faculty table accordingly
-              let newTeaching = -1 * oldTeaching + teaching.value;
-              let newGrading = -1 * oldGrading + grading.value;
-              let newfriendliness = -1 * oldfriendliness + friendliness.value;
-
-              let sqlSecond =
-                "UPDATE faculty set teaching = teaching + ?, grading = grading + ?, friendliness = friendliness + ? where facultyID = ?";
-
-              db.query(
-                sqlSecond,
-                [newTeaching, newGrading, newfriendliness, facultyID.value],
-                (error, results, fields) => {
-                  if (error) {
-                    console.log(error);
-                    return res.json(
-                      createErrorObject("Updating voteCount field")
-                    );
-                  } else {
-                    //successfully updated the voteCount field
-                    return res.json(
-                      createSuccessObject("Updated new rating!")
-                    );
-                  }
-                }
-              );
-            }
-          }
+  let sql =
+    "SELECT * from rating where facultyID = ? and courseID = ? and studentID = ?";
+  db.query(
+    sql,
+    [facultyID.value, courseID.value, studentID],
+    (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        return res.json(
+          createErrorObject("Something went wrong while querying!")
         );
+      } else {
+        if (results.length == 0) {
+          // no rating exists
+          // create new rating instead
+
+          insertRating(req, res, {
+            studentID,
+            facultyID: facultyID.value,
+            courseID: courseID.value,
+            teaching: teaching.value,
+            grading: grading.value,
+            friendliness: friendliness.value,
+          });
+        } else {
+          // rating already exists
+          let oldTeaching = results[0].teaching;
+          let oldGrading = results[0].grading;
+          let oldfriendliness = results[0].friendliness;
+
+          let sql =
+            "UPDATE rating set teaching = ?, grading = ?, friendliness = ? where facultyID = ? and courseID = ? and studentID = ?";
+          db.query(
+            sql,
+            [
+              teaching.value,
+              grading.value,
+              friendliness.value,
+              facultyID.value,
+              courseID.value,
+              studentID,
+            ],
+            (error, results, fields) => {
+              if (error) {
+                console.log(error);
+                return res.json(
+                  createErrorObject("Updating failed with new rating!")
+                );
+              } else {
+                // successfully updated
+                // update the faculty table accordingly
+                let newTeaching = -1 * oldTeaching + teaching.value;
+                let newGrading = -1 * oldGrading + grading.value;
+                let newfriendliness = -1 * oldfriendliness + friendliness.value;
+
+                let sqlSecond =
+                  "UPDATE faculty set teaching = teaching + ?, grading = grading + ?, friendliness = friendliness + ? where facultyID = ?";
+
+                db.query(
+                  sqlSecond,
+                  [newTeaching, newGrading, newfriendliness, facultyID.value],
+                  (error, results, fields) => {
+                    if (error) {
+                      console.log(error);
+                      return res.json(
+                        createErrorObject("Updating voteCount field")
+                      );
+                    } else {
+                      //successfully updated the voteCount field
+                      return res.json(
+                        createSuccessObject("Updated new rating!")
+                      );
+                    }
+                  }
+                );
+              }
+            }
+          );
+        }
       }
     }
-  });
+  );
 
   function insertRating(req, res, rateObj) {
     let sql = "INSERT INTO rating SET ?";

@@ -1,12 +1,11 @@
 import "./FacultyDetails.css";
 import { motion } from "framer-motion";
 import pageAnimationVariant from "../../AnimationData";
-import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import server from "../../serverDetails";
+import server, { departments } from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
@@ -15,8 +14,8 @@ import {
   getComment,
   postRating,
   postCommentVote,
+  getCourse,
 } from "../../Queries";
-
 const FacultyDetails = () => {
   const { id } = useParams();
   const { addToast } = useToasts();
@@ -25,7 +24,9 @@ const FacultyDetails = () => {
   const [page, setPage] = useState("");
   const [displayRating, setDisplayRating] = useState({});
   const [rating, setRating] = useState({});
-  const [courseID, setCourseID] = useState(1);
+  const [departmentID, setDepartmentID] = useState(0);
+  const [courseID, setCourseID] = useState(0);
+  const [courseCode, setCourseCode] = useState(undefined);
   const [commentPage, setCommentPage] = useState(1);
   const { isLoading, isSuccess, isFetching, data, error, isError } = useQuery(
     ["/api/faculty", id],
@@ -37,7 +38,9 @@ const FacultyDetails = () => {
     isSuccess: isRatingSuccess,
     data: ratingData,
     error: ratingError,
-  } = useMutation(postRating);
+  } = useMutation(postRating, {
+    enabled: courseID != 0,
+  });
 
   const {
     isLoading: commentIsLoading,
@@ -51,12 +54,22 @@ const FacultyDetails = () => {
     ["/api/comment", String(id), String(courseID), String(commentPage)],
     getComment,
     {
-      enabled: page === "comments",
+      enabled: page === "comments" && courseID != 0,
       keepPreviousData: true,
     }
   );
+  const {
+    isLoading: courseIsLoading,
+    isSuccess: courseIsSuccess,
+    isFetching: courseIsFetching,
+    data: courseData,
+    error: courseError,
+    isError: courseIsError,
+  } = useQuery(["/api/course", departmentID], getCourse, {
+    enabled: departmentID != 0,
+  });
   useEffect(() => {
-    if (isSuccess && typeof data.data !== "undefined") {
+    if (isSuccess && typeof data != "undefined") {
       updateDisplayRating(
         data.data.teaching,
         data.data.grading,
@@ -85,7 +98,7 @@ const FacultyDetails = () => {
 
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
-      await ratingMutate({ rating, facultyID: id });
+      await ratingMutate({ rating, facultyID: id, courseID });
       addToast("Thanks for the feedback!");
     }
   }
@@ -172,7 +185,7 @@ const FacultyDetails = () => {
             {data.data.facultyInitials}
           </div>
           <div className="faculty-details-department">
-            {data.data.departmentID}
+            {departments[data.data.departmentID]}
           </div>
           <div className="faculty-details-overall">
             &#9733; {displayRating.overall}
@@ -206,7 +219,45 @@ const FacultyDetails = () => {
           </div>
         </div>
       )}
-
+      <div className="course-wrapper">
+        <select
+          className="select-css"
+          value={departmentID}
+          onChange={(e) => {
+            setDepartmentID(e.target.value);
+            setCourseID(0);
+          }}
+        >
+          {departments.map((department, index) => {
+            if (index != 8) {
+              return (
+                <option key={department} value={index}>
+                  {department}
+                </option>
+              );
+            }
+          })}
+        </select>
+        {departmentID != 0 && typeof courseData != "undefined" && (
+          <select
+            className="select-css"
+            value={courseID}
+            onChange={(e) => {
+              setCourseCode(e.target.options[e.target.selectedIndex].text);
+              setCourseID(e.target.value);
+            }}
+          >
+            <option value="0">SELECT COURSE</option>
+            {courseData.data.map((course) => {
+              return (
+                <option key={course.courseID} value={course.courseID}>
+                  {course.courseCode}
+                </option>
+              );
+            })}
+          </select>
+        )}
+      </div>
       {isSuccess && (
         <div className="faculty-details-button-wrapper" ref={pageRef}>
           <div
@@ -215,7 +266,10 @@ const FacultyDetails = () => {
                 ? "faculty-details-comments faculty-details-active"
                 : "faculty-details-comments"
             }
-            onClick={() => setPage("comments")}
+            onClick={() => {
+              if (courseID != 0) setPage("comments");
+              else addToast("Please select a course!", { appearance: "error" });
+            }}
           >
             Comments
           </div>
@@ -225,16 +279,25 @@ const FacultyDetails = () => {
                 ? "faculty-details-rate faculty-details-active"
                 : "faculty-details-rate"
             }
-            onClick={() => setPage("rate")}
+            onClick={() => {
+              if (courseID != 0) setPage("rate");
+              else addToast("Please select a course!", { appearance: "error" });
+            }}
           >
             Rate
           </div>
         </div>
       )}
       {commentIsSuccess &&
-        typeof commentData.data != "undefined" &&
-        page == "comments" && (
+        typeof commentData != "undefined" &&
+        page == "comments" &&
+        courseID != 0 && (
           <>
+            {courseCode && (
+              <div className="info-header">
+                Showing comments for: {courseCode}{" "}
+              </div>
+            )}
             {commentData.data.map((comment) => {
               return (
                 <Comment
@@ -271,8 +334,13 @@ const FacultyDetails = () => {
           </>
         )}
 
-      {page == "rate" && (
+      {page == "rate" && courseID != 0 && (
         <>
+          {courseCode && (
+            <div className="info-header">
+              You are giving feedback for {courseCode}.{" "}
+            </div>
+          )}
           <Rating type="teaching" rating={rating} changeRating={changeRating} />
           <Rating type="grading" rating={rating} changeRating={changeRating} />
           <Rating

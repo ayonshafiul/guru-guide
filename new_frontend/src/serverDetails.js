@@ -1,9 +1,14 @@
 
-const departments = [
+export const departments = [
+    "SELECT DEPARTMENT",
     "CSE",
     "EEE",
-    "PHARMACY",
-    
+    "ESS",
+    "ARC",
+    "MNS",
+    "BBS",
+    "PHR",
+    "TBA"
 ]
 
 const server  = {
