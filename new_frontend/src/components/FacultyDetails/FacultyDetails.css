@@ -100,7 +100,23 @@
 .select-css option {
   font-weight: normal;
 }
+.wrapper-general {
+  width: 90%;
+  margin: 1em auto;
+}
 
+.submit-comment-btn {
+  width: 40%;
+  padding: 1em;
+  margin: 0 auto;
+  background: #61dafb;
+  color: #1f1f1f;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+}
 .faculty-details-button-wrapper {
   display: flex;
   width: 90%;
@@ -126,10 +142,10 @@
 }
 
 .info-header {
-    width: 90%;
-    margin: 1em auto;
-    font-weight: bold;
-    color: #61dafb;
+  width: 90%;
+  margin: 1em auto;
+  font-weight: bold;
+  color: #61dafb;
 }
 
 .comment-page-buttons {

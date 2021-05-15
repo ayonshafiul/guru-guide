@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import pageAnimationVariant from "../../AnimationData";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
+import TextInput from "../TextInput/TextInput";
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import server, { departments } from "../../serverDetails";
@@ -28,6 +29,7 @@ const FacultyDetails = () => {
   const [courseID, setCourseID] = useState(0);
   const [courseCode, setCourseCode] = useState(undefined);
   const [commentPage, setCommentPage] = useState(1);
+  const [comment, setComment] = useState("");
   const { isLoading, isSuccess, isFetching, data, error, isError } = useQuery(
     ["/api/faculty", id],
     getAFaculty
@@ -94,6 +96,10 @@ const FacultyDetails = () => {
       ...rating,
       [type]: buttonNo,
     });
+  }
+
+  function postComment() {
+
   }
 
   async function submitRating() {
@@ -258,6 +264,7 @@ const FacultyDetails = () => {
           </select>
         )}
       </div>
+
       {isSuccess && (
         <div className="faculty-details-button-wrapper" ref={pageRef}>
           <div
@@ -293,6 +300,19 @@ const FacultyDetails = () => {
         page == "comments" &&
         courseID != 0 && (
           <>
+            <div className="wrapper-general">
+              <TextInput
+                value={comment}
+                type={"textarea"}
+                setValue={setComment}
+                limit={300}
+                finalRegex={/^[a-zA-Z ,.()']{1,500}$/}
+                allowedRegex={/^[a-zA-Z ,.()']*$/}
+                errorMsg={`Uh oh you shouldn't have typed that!.`}
+                placeholder={`Type a cool comment :)`}
+              />
+              <div className="submit-comment-btn" onClick={postComment}>Post comment for {courseCode}</div>
+            </div>
             {courseCode && (
               <div className="info-header">
                 Showing comments for: {courseCode}{" "}
