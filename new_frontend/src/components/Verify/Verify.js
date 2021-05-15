@@ -8,9 +8,10 @@ import "./Verify.css";
 
 const Verify = () => {
   const [tab, setTab] = useState("");
-  const [departmentID, setDepartmentID] = useState(1);
+  const [departmentID, setDepartmentID] = useState(0);
+  const [courseDepartmentID, setCourseDepartmentID] = useState(0);
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/facultyverify", departmentID],
+    ["/api/facultyverify", String(departmentID)],
     getFacultyVerification,
     {
       enabled: departmentID != 0 && tab === "faculty",
@@ -24,9 +25,13 @@ const Verify = () => {
     error: courseError,
     data: courseData,
     isFetching: isCourseFetching,
-  } = useQuery(["/api/courseverify", departmentID], getCourseVerification, {
-    enabled: departmentID != 0 && tab === "course",
-  });
+  } = useQuery(
+    ["/api/courseverify", String(courseDepartmentID)],
+    getCourseVerification,
+    {
+      enabled: departmentID != 0 && tab === "course",
+    }
+  );
   return (
     <motion.div
       className="help"
@@ -54,7 +59,7 @@ const Verify = () => {
             className="select-css select-full"
             value={departmentID}
             onChange={(e) => {
-              setDepartmentID(e.target.value);
+              setDepartmentID(parseInt(e.target.value));
             }}
           >
             {departments.map((department, index) => {
@@ -88,9 +93,9 @@ const Verify = () => {
         <div className="verify-wrapper">
           <select
             className="select-css select-full"
-            value={departmentID}
+            value={courseDepartmentID}
             onChange={(e) => {
-              setDepartmentID(e.target.value);
+              setCourseDepartmentID(parseInt(e.target.value));
             }}
           >
             {departments.map((department, index) => {
@@ -107,7 +112,6 @@ const Verify = () => {
             {isSuccess &&
               typeof courseData !== "undefined" &&
               courseData.data.map((course) => {
-                console.log(course);
                 return (
                   <div key={course.courseCode} className="verify-list-item">
                     {course.courseCode}
