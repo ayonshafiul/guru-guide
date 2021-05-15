@@ -9,6 +9,23 @@ export const getFaculty = async ({ queryKey }) => {
   );
   return res.data;
 };
+export const getFacultyVerification = async ({ queryKey }) => {
+  const [key, departmentID] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/facultyverify/" + departmentID,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const getCourseVerification = async ({ queryKey }) => {
+  const [key, departmentID] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/courseverify/" + departmentID,
+    { withCredentials: true }
+  );
+  return res.data;
+};
 
 export const getCourse = async ({ queryKey }) => {
   const [key, departmentID] = queryKey;

@@ -1,0 +1,34 @@
+.verify-wrapper {
+  width: 90%;
+  margin: 1em auto;
+}
+
+.verify-list-wrapper {
+  width: 100%;
+  margin: 1em auto;
+}
+
+/* .verify-list-item {
+  width: 100%;
+  margin: 10px auto;
+  padding: 10px;
+  color: #1f1f1f;
+  background-color: #ccc;
+} */
+
+.verify-list-item {
+  background: #ccc;
+  color: #1f1f1f;
+  font-weight: bold;
+  border-radius: 10px;
+  padding: 1em;
+  margin: 1em auto;
+  border-left: 2px solid #ccc;
+  border-right: 2px solid #ccc;
+}
+.verify-list-item:hover {
+  background: #202124;
+  color: #61DAFB;
+  border-left: 2px solid #61DAFB;
+  border-right: 2px solid #61DAFB;
+}
