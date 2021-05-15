@@ -1,0 +1,19 @@
+.verify-wrapper {
+  width: 90%;
+  margin: 1em auto;
+}
+.section-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 1.5em;
+  color: #61dafb;
+  font-weight: bold;
+  margin: 1em auto;
+}
+.select-full {
+  width: 100%;
+}
+
+.input {
+  margin: 1em auto;
+}

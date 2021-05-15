@@ -80,6 +80,25 @@ export const postComment = async ({ comment, facultyID, courseID }) => {
   return res.data;
 };
 
+export const postFaculty = async ({ departmentID, facultyInitials, facultyName }) => {
+  
+  const res = await axios.post(
+    server.url + "/api/faculty/",
+    { departmentID, facultyInitials, facultyName },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const postCourse = async ({ departmentID, courseCode, courseTitle }) => {
+  const res = await axios.post(
+    server.url + "/api/course/",
+    { departmentID, courseCode, courseTitle },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
 export const postCommentVote = async ({ voteType, commentID }) => {
   const res = await axios.post(
     server.url + "/api/commentVote/" + commentID,
