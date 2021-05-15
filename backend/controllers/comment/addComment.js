@@ -17,10 +17,10 @@ module.exports = function (req, res) {
   }
 
   let sql =
-    "UPDATE comment SET commentText = ? where studentID = ? and facultyID = ?";
+    "UPDATE comment SET commentText = ? where facultyID = ? and courseID = ? and studentID = ?";
   db.query(
     sql,
-    [comment.value, studentID, facultyID.value],
+    [comment.value, facultyID.value, courseID.value, studentID],
     (error, results, fields) => {
       if (error) {
         console.log(error);
