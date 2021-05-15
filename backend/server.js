@@ -11,6 +11,7 @@ const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
 const courseRouter = require("./routes/courseRouter");
 const commentRouter = require("./routes/commentRouter");
+const ratingRouter = require("./routes/ratingRouter");
 
 const authMiddleware = require("./middlewares/authentication");
 const facultyVerify = require("./facultyVerify");
@@ -44,6 +45,7 @@ server.use("/api", authRouter);
 server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", commentRouter);
+server.use("/api", ratingRouter);
 
 let interval = 3 * 60 * 60 * 1000;
 setInterval(facultyVerify, interval);

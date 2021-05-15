@@ -5,7 +5,6 @@ const addFaculty = require("../controllers/faculty/addFaculty");
 const getFaculty = require("../controllers/faculty/getFacultyController");
 const getAFaculty = require("../controllers/faculty/getAFacultyController");
 const facultyVoteController = require("../controllers/faculty/facultyVoteController");
-const rateController = require("../controllers/faculty/rateController");
 const getFacultyVerificationController = require("../controllers/faculty/getFacultyVerificationController");
 const getAFacultyVerificationController = require("../controllers/faculty/getAFacultyVerificationController");
 
@@ -25,6 +24,5 @@ router
   .route("/facultyverify/:departmentID/:facultyInitials")
   .get(getAFacultyVerificationController);
 
-router.route("/facultyrate/:facultyID").post(rateController);
 
 module.exports = router;

@@ -18,6 +18,7 @@ import {
   getCourse,
   postComment,
   getUserComment,
+  getUserRating,
 } from "../../Queries";
 const FacultyDetails = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const FacultyDetails = () => {
   const [courseCode, setCourseCode] = useState(undefined);
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
+  const [userRating, setUserRating] = useState({});
   const { isLoading, isSuccess, isFetching, data, error, isError } = useQuery(
     ["/api/faculty", id],
     getAFaculty
@@ -73,15 +75,6 @@ const FacultyDetails = () => {
   );
 
   const {
-    isLoading: isuserCommentLoading,
-    isSuccess: isuserCommentSuccess,
-    data: userCommentData,
-    error: userCommentError,
-    isError: isuserCommentError,
-  } = useQuery(["/api/usercomment", String(id), courseID], getUserComment, {
-    enabled: page === "comments" && courseID != 0,
-  });
-  const {
     isLoading: courseIsLoading,
     isSuccess: courseIsSuccess,
     isFetching: courseIsFetching,
@@ -91,11 +84,11 @@ const FacultyDetails = () => {
   } = useQuery(["/api/course", departmentID], getCourse, {
     enabled: departmentID != 0,
   });
-  useEffect(() => {
+  
+  useEffect(async () => {
     setComment("");
-    console.log("UseEffect!");
+    setRating({});
     if (isSuccess && typeof data != "undefined") {
-      console.log("updatedisplay");
       updateDisplayRating(
         data.data.teaching,
         data.data.grading,
@@ -103,13 +96,20 @@ const FacultyDetails = () => {
         data.data.voteCount
       );
     }
-    if (isuserCommentSuccess && typeof userCommentData != "undefined") {
-      if (userCommentData.data.length > 0) {
-        setComment(userCommentData.data[0].commentText);
-        console.log("updateComment");
-      }
+    if (page == "comments" && courseID != 0) {
+      const res = await getUserComment({
+        queryKey: ["/api/usercomment", id, courseID],
+      });
+      setComment(res.data[0].commentText);
+      
     }
-  }, [isSuccess, isuserCommentSuccess, courseID]);
+    if (page == "rate" && courseID != 0) {
+      const res = await getUserRating({
+        queryKey: ["/api/userrating", id, courseID],
+      });
+      setRating(res.data[0]);
+    }
+  }, [isSuccess, courseID, page]);
 
   function updateDisplayRating(teaching, grading, friendliness, voteCount) {
     setDisplayRating({

@@ -50,6 +50,15 @@ export const getUserComment = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getUserRating = async ({ queryKey }) => {
+  const [keyName, facultyID, courseID] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/userrating/" + facultyID + "/" + courseID,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
 export const postRating = async ({ rating, facultyID, courseID }) => {
   const res = await axios.post(
     server.url + "/api/facultyrate/" + facultyID,
