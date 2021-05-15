@@ -51,6 +51,17 @@ export const postRating = async ({ rating, facultyID, courseID }) => {
   return res.data;
 };
 
+export const postComment = async ({ comment, facultyID, courseID }) => {
+  console.log(comment, facultyID, courseID);
+  const res = await axios.post(
+    server.url + "/api/comment/" + facultyID + "/" + courseID,
+    { comment },
+    { withCredentials: true }
+  );
+  console.log(res.data);
+  return res.data;
+};
+
 export const postCommentVote = async ({ voteType, commentID }) => {
   const res = await axios.post(
     server.url + "/api/commentVote/" + commentID,

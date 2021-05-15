@@ -19,6 +19,7 @@ module.exports = function (req, res, next) {
       return res.json(createErrorObject("token invalid"));
     }
   } catch (error) {
+    res.clearCookie("jwt");
     res.json(createErrorObject("Error in the token"));
   }
 };

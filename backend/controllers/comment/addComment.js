@@ -17,7 +17,7 @@ module.exports = function (req, res) {
   }
 
   let sql =
-    "UPDATE comment SET comment=? where studentID = ? and facultyID = ?";
+    "UPDATE comment SET commentText = ? where studentID = ? and facultyID = ?";
   db.query(
     sql,
     [comment.value, studentID, facultyID.value],
@@ -33,7 +33,7 @@ module.exports = function (req, res) {
           studentID,
           facultyID: facultyID.value,
           courseID: courseID.value,
-          comment: comment.value,
+          commentText: comment.value,
         };
 
         db.query(sql, commentObj, (error, results, fields) => {

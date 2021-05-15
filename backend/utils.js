@@ -1,9 +1,5 @@
 const Joi = require("joi");
 
-const commenValidatorSchema = Joi.object({
-  comment: Joi.string().regex(/^[a-zA-Z0-9 ,().]{1,500}$/),
-});
-
 const userLoginValidatorSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(4).max(32).required(),
@@ -43,9 +39,9 @@ module.exports.createErrorObject = (msg) => {
 };
 
 module.exports.validateComment = (cmnt) => {
-  return commenValidatorSchema.validate({
-    comment: cmnt,
-  });
+  return Joi.string()
+    .regex(/^[a-zA-Z0-9 ,().]{1,500}$/)
+    .validate(cmnt);
 };
 
 module.exports.validateNumber = (num) => {
@@ -57,7 +53,6 @@ module.exports.validateCharactersOnly = (str) => {
     .regex(/^[a-zA-Z]*$/)
     .validate(str);
 };
-
 
 module.exports.validateCharactersOnlyWithSpaces = (str) => {
   return Joi.string()

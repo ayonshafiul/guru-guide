@@ -23,6 +23,7 @@ const FacultyList = () => {
       <h1 className="header"> Faculty List</h1>
       {isError ? <div>Error Fetching data...</div> : null}
       {isSuccess &&
+        typeof data != undefined &&
         data.data.map((faculty) => {
           return <FacultyListItem faculty={faculty} key={faculty.facultyID} />;
         })}

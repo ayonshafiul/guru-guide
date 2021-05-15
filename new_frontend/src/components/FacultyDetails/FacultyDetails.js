@@ -16,6 +16,7 @@ import {
   postRating,
   postCommentVote,
   getCourse,
+  postComment,
 } from "../../Queries";
 const FacultyDetails = () => {
   const { id } = useParams();
@@ -41,6 +42,15 @@ const FacultyDetails = () => {
     data: ratingData,
     error: ratingError,
   } = useMutation(postRating, {
+    enabled: courseID != 0,
+  });
+  const {
+    mutate: commentMutate,
+    isError: isCommentPostError,
+    isSuccess: isCommentPostSuccess,
+    data: commentPostData,
+    error: commentPostError,
+  } = useMutation(postComment, {
     enabled: courseID != 0,
   });
 
@@ -98,8 +108,9 @@ const FacultyDetails = () => {
     });
   }
 
-  function postComment() {
-
+  async function submitComment() {
+    await commentMutate({ comment, facultyID: id, courseID });
+    if (isCommentPostSuccess) addToast("Thanks for the feedback");
   }
 
   async function submitRating() {
@@ -300,19 +311,23 @@ const FacultyDetails = () => {
         page == "comments" &&
         courseID != 0 && (
           <>
-            <div className="wrapper-general">
-              <TextInput
-                value={comment}
-                type={"textarea"}
-                setValue={setComment}
-                limit={300}
-                finalRegex={/^[a-zA-Z ,.()']{1,500}$/}
-                allowedRegex={/^[a-zA-Z ,.()']*$/}
-                errorMsg={`Uh oh you shouldn't have typed that!.`}
-                placeholder={`Type a cool comment :)`}
-              />
-              <div className="submit-comment-btn" onClick={postComment}>Post comment for {courseCode}</div>
-            </div>
+            {commentPage == 1 && (
+              <div className="wrapper-general">
+                <TextInput
+                  value={comment}
+                  type={"textarea"}
+                  setValue={setComment}
+                  limit={300}
+                  finalRegex={/^[a-zA-Z ,.()']{1,500}$/}
+                  allowedRegex={/^[a-zA-Z ,.()']*$/}
+                  errorMsg={`Uh oh you shouldn't have typed that!.`}
+                  placeholder={`Type a cool comment :)`}
+                />
+                <div className="submit-comment-btn" onClick={submitComment}>
+                  Post comment for {courseCode}
+                </div>
+              </div>
+            )}
             {courseCode && (
               <div className="info-header">
                 Showing comments for: {courseCode}{" "}
