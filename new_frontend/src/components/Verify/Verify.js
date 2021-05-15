@@ -4,6 +4,7 @@ import { useState } from "react";
 import { departments } from "../../serverDetails";
 import { getFacultyVerification, getCourseVerification } from "../../Queries";
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import "./Verify.css";
 
 const Verify = () => {
@@ -29,7 +30,7 @@ const Verify = () => {
     ["/api/courseverify", String(courseDepartmentID)],
     getCourseVerification,
     {
-      enabled: departmentID != 0 && tab === "course",
+      enabled: courseDepartmentID != 0 && tab === "course",
     }
   );
   return (
@@ -77,12 +78,17 @@ const Verify = () => {
               typeof data !== "undefined" &&
               data.data.map((faculty) => {
                 return (
-                  <div
-                    key={faculty.facultyInitials}
-                    className="verify-list-item"
+                  <Link
+                    to={`/verify/faculty/${departmentID}/${faculty.facultyInitials}`}
+                    style={{ textDecoration: "none" }}
                   >
-                    {faculty.facultyInitials}
-                  </div>
+                    <div
+                      key={faculty.facultyInitials}
+                      className="verify-list-item"
+                    >
+                      {faculty.facultyInitials}
+                    </div>
+                  </Link>
                 );
               })}
           </div>
@@ -109,13 +115,18 @@ const Verify = () => {
             })}
           </select>
           <div className="verify-list-wrapper">
-            {isSuccess &&
+            {isCourseSuccess &&
               typeof courseData !== "undefined" &&
               courseData.data.map((course) => {
                 return (
-                  <div key={course.courseCode} className="verify-list-item">
-                    {course.courseCode}
-                  </div>
+                  <Link
+                    to={`/verify/course/${courseDepartmentID}/${course.courseCode}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <div key={course.courseCode} className="verify-list-item">
+                      {course.courseCode}
+                    </div>
+                  </Link>
                 );
               })}
           </div>

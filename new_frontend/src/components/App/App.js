@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import server from "../../serverDetails";
 import axios from "axios";
 import FacultyList from "../FacultyList/FacultyList";
+import FacultyVerify from "../FacultyVerify/FacultyVerify";
 import Login from "../Login/Login";
 import Page404 from "../Page404/Page404";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
@@ -21,6 +22,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import { ReactQueryDevtools } from "react-query/devtools";
 import FacultyDetails from "../FacultyDetails/FacultyDetails";
+import CourseVerify from "../CourseVerify/CourseVerify";
 
 function App() {
   const [isAuth, setIsAuth] = useState("false");
@@ -77,6 +79,12 @@ function App() {
               </Route>
               <Route exact path="/faculty/:id">
                 {isAuth ? <FacultyDetails /> : <Redirect to="/login" />}
+              </Route>
+              <Route exact path="/verify/faculty/:departmentID/:initials">
+                {isAuth ? <FacultyVerify /> : <Redirect to="/login" />}
+              </Route>
+              <Route exact path="/verify/course/:departmentID/:code">
+                {isAuth ? <CourseVerify /> : <Redirect to="/login" />}
               </Route>
               <Route exact path="/login">
                 <Login isAuth={isAuth} setIsAuth={setIsAuth} />

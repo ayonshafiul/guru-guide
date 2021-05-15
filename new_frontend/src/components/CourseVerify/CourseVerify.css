@@ -1,0 +1,41 @@
+.course-verify-wrapper {
+  width: 90%;
+  margin: 1em auto;
+}
+
+.course-verify-list-wrapper {
+  margin: 1em auto;
+  padding: .5em;
+  background: #ccc;
+  color: #1f1f1f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.course-verify-list-vote {
+  flex: 1 0 0;
+}
+.course-verify-title {
+  flex: 10;
+  margin-left: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.course-verify-code {
+  flex: 2;
+  text-align: right;
+  font-weight: bold;
+}
+
+.course-verify-vote {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.course-verify-vote-count {
+  margin-left: 5px;
+}

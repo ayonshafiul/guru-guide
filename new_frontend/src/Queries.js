@@ -18,10 +18,28 @@ export const getFacultyVerification = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getAFacultyVerification = async ({ queryKey }) => {
+  const [key, departmentID, facultyInitials] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/facultyverify/" + departmentID+ "/" + facultyInitials,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
 export const getCourseVerification = async ({ queryKey }) => {
   const [key, departmentID] = queryKey;
   const res = await axios.get(
     server.url + "/api/courseverify/" + departmentID,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const getACourseVerification = async ({ queryKey }) => {
+  const [key, departmentID, courseCode] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/courseverify/" + departmentID+ "/" + courseCode,
     { withCredentials: true }
   );
   return res.data;

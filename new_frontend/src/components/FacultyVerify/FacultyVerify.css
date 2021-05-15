@@ -1,0 +1,41 @@
+.faculty-verify-wrapper {
+  width: 90%;
+  margin: 1em auto;
+}
+
+.faculty-verify-list-wrapper {
+  margin: 1em auto;
+  padding: .5em;
+  background: #ccc;
+  color: #1f1f1f;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.faculty-verify-list-vote {
+  flex: 1 0 0;
+}
+.faculty-verify-name {
+  flex: 10;
+  margin-left: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.faculty-verify-initials {
+  flex: 2;
+  text-align: right;
+  font-weight: bold;
+}
+
+.faculty-verify-vote {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.faculty-verify-vote-count {
+  margin-left: 5px;
+}
