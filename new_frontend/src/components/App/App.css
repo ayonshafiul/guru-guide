@@ -1,8 +1,33 @@
+.title {
+  text-align: center;
+  border-bottom: 3px solid #61dafb;
+  padding: 0.5em;
+  text-transform: uppercase;
+  width: 100%;
+}
+
 .App {
-    padding: 1em 0;
-    margin-left: 25%;
-    margin-left: max(25%, 220px);
-    width: 75%;
-    background:#202124;
-    color: white;
+  margin: 0 auto;
+  width: 80%;
+  max-width: 768px;
+  background: #202124;
+  color: white;
+  min-height: 120vh;
+}
+
+.menu-btn {
+  width: 30%;
+  margin: 1em auto;
+  color: #1f1f1f;
+  background-color: #61dafb;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 10px;
+  text-align: center;
+  padding: 1em;
+}
+
+.menu-btn:hover {
+  color: #61dafb;
+  background-color: #1f1f1f;
 }

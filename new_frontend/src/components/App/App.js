@@ -23,9 +23,11 @@ import { ToastProvider, useToasts } from "react-toast-notifications";
 import { ReactQueryDevtools } from "react-query/devtools";
 import FacultyDetails from "../FacultyDetails/FacultyDetails";
 import CourseVerify from "../CourseVerify/CourseVerify";
+import menu from "../../assets/img/menu.png";
 
 function App() {
   const [isAuth, setIsAuth] = useState("false");
+  const [navStyle, setNavStyle] = useState({});
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -59,8 +61,21 @@ function App() {
         placement="top-right"
       >
         <Router>
-          <Navbar></Navbar>
+          <Navbar navStyle={navStyle} setNavStyle={setNavStyle}></Navbar>
           <div className="App">
+          <h1 className="title">Guruguide</h1>
+          <div
+          className="menu-btn"
+          onClick={() => {
+            setNavStyle((prevStyle) => {
+              return prevStyle.visibility === "hidden"
+                ? { visibility: "visible" }
+                : { visibility: "hidden" };
+            });
+          }}
+        >
+          Menu
+        </div>
             <Switch>
               <Route exact path="/contribute">
                 {isAuth ? <Contribute /> : <Redirect to="/login" />}
