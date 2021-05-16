@@ -11,7 +11,7 @@ const Login = ({isAuth, setIsAuth}) => {
     
       const responseGoogle = (googleUser) => {
         var id_token = googleUser.getAuthResponse().id_token;
-        axios.get("http://localhost:8080/api/googlelogin", {
+        axios.get(server.url+"/api/googlelogin", {
           headers: {
             auth: id_token
           },
@@ -30,7 +30,7 @@ const Login = ({isAuth, setIsAuth}) => {
         <div className="login">
             {!isAuth ?
             <GoogleLogin
-                clientId="187042784096-npj4khs2vuamrgch4odu4fmoboiv8f7v.apps.googleusercontent.com"
+                clientId={server.clientID}
                 buttonText="Login with your BRAC GSUITE ID to continue..."
                 prompt="consent"
                 onSuccess={responseGoogle}

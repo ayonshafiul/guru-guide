@@ -47,9 +47,11 @@ server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
 server.use("/api", authMiddleware, ratingRouter);
 
-let interval = 3 * 60 * 60 * 1000;
-setInterval(facultyVerify, interval);
-setInterval(courseVerify, interval);
+server.get("/forceupdate", (req, res) => {
+  facultyVerify();
+  courseVerify();
+  res.json(createSuccessObject("Updated!"));
+});
 
 server.listen(process.env.PORT, function () {
   console.log(`Server is running on ${process.env.PORT}`);
