@@ -84,10 +84,9 @@ const FacultyDetails = () => {
   } = useQuery(["/api/course", departmentID], getCourse, {
     enabled: departmentID != 0,
   });
-  
+
   useEffect(async () => {
     setComment("");
-    setRating({});
     if (isSuccess && typeof data != "undefined") {
       updateDisplayRating(
         data.data.teaching,
@@ -96,20 +95,19 @@ const FacultyDetails = () => {
         data.data.voteCount
       );
     }
-    if (page == "comments" && courseID != 0) {
-      const res = await getUserComment({
-        queryKey: ["/api/usercomment", id, courseID],
-      });
-      setComment(res.data[0].commentText);
-      
-    }
-    if (page == "rate" && courseID != 0) {
-      const res = await getUserRating({
-        queryKey: ["/api/userrating", id, courseID],
-      });
-      setRating(res.data[0]);
-    }
-  }, [isSuccess, courseID, page]);
+    // if (page == "comments" && courseID != 0) {
+    //   const res = await getUserComment({
+    //     queryKey: ["/api/usercomment", id, courseID],
+    //   });
+    //   setComment(res.data[0].commentText);
+    // }
+    // if (page == "rate" && courseID != 0) {
+    //   const res = await getUserRating({
+    //     queryKey: ["/api/userrating", id, courseID],
+    //   });
+    //   setRating(res.data[0]);
+    // }
+  }, [isSuccess]);
 
   function updateDisplayRating(teaching, grading, friendliness, voteCount) {
     setDisplayRating({
@@ -130,7 +128,11 @@ const FacultyDetails = () => {
 
   async function submitComment() {
     await commentMutate({ comment, facultyID: id, courseID });
-    if (isCommentPostSuccess) addToast("Thanks for the feedback");
+
+    if (isCommentPostSuccess) {
+      setComment("");
+      addToast("Thanks for the feedback");
+    }
   }
 
   async function submitRating() {
