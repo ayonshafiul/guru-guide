@@ -16,6 +16,7 @@ const ratingRouter = require("./routes/ratingRouter");
 const authMiddleware = require("./middlewares/authentication");
 const facultyVerify = require("./facultyVerify");
 const courseVerify = require("./courseVerify");
+const { createSuccessObject } = require("./utils.js");
 
 const server = express();
 server.use(bodyParser.urlencoded({ extended: false }));
@@ -51,6 +52,10 @@ server.get("/forceupdate", (req, res) => {
   facultyVerify();
   courseVerify();
   res.json(createSuccessObject("Updated!"));
+});
+
+server.get("/ping", (req, res) => {
+  res.json(createSuccessObject("pong!"));
 });
 
 server.listen(process.env.PORT, function () {
