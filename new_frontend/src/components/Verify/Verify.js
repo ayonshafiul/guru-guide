@@ -79,13 +79,11 @@ const Verify = () => {
               data.data.map((faculty) => {
                 return (
                   <Link
+                    key={faculty.facultyInitials}
                     to={`/verify/faculty/${departmentID}/${faculty.facultyInitials}`}
                     style={{ textDecoration: "none" }}
                   >
-                    <div
-                      key={faculty.facultyInitials}
-                      className="verify-list-item"
-                    >
+                    <div className="verify-list-item">
                       {faculty.facultyInitials}
                     </div>
                   </Link>
@@ -120,12 +118,11 @@ const Verify = () => {
               courseData.data.map((course) => {
                 return (
                   <Link
+                    key={course.courseCode}
                     to={`/verify/course/${courseDepartmentID}/${course.courseCode}`}
                     style={{ textDecoration: "none" }}
                   >
-                    <div key={course.courseCode} className="verify-list-item">
-                      {course.courseCode}
-                    </div>
+                    <div className="verify-list-item">{course.courseCode}</div>
                   </Link>
                 );
               })}

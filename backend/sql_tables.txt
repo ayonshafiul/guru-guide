@@ -81,7 +81,7 @@ CREATE TABLE coursevote (
     downVote int,
     Primary Key(studentID, courseID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(courseID) references courseverify(courseID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE rating (

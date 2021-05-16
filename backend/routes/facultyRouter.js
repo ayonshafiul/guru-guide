@@ -14,7 +14,7 @@ router.route("/faculty/department/:departmentID").get(getFaculty);
 
 router.route("/faculty/:facultyID").get(getAFaculty);
 
-router.route("/facultyvote/:facultyID/:voteType").get(facultyVoteController);
+router.route("/facultyvote/:facultyID").post(facultyVoteController);
 
 router
   .route("/facultyverify/:departmentID")

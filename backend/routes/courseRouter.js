@@ -5,6 +5,7 @@ const getCourseVerificationController = require("../controllers/course/getCourse
 const getACourseVerificationController = require("../controllers/course/getACourseVerificationController");
 const addCourse = require("../controllers/course/addCourse");
 const getCourseController = require("../controllers/course/getCourseController");
+const courseVoteController = require("../controllers/course/courseVoteController");
 
 router.route("/course").post(addCourse);
 
@@ -17,5 +18,7 @@ router
 router
   .route("/courseverify/:departmentID/:courseCode")
   .get(getACourseVerificationController);
+
+router.route("/coursevote/:courseID").post(courseVoteController);
 
 module.exports = router;

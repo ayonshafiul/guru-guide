@@ -142,3 +142,23 @@ export const postCommentVote = async ({ voteType, commentID }) => {
   );
   return res.data;
 };
+
+
+export const postFacultyVote = async ({ voteType, facultyID }) => {
+  const res = await axios.post(
+    server.url + "/api/facultyvote/" + facultyID,
+    { voteType },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+
+export const postCourseVote = async ({ voteType, courseID }) => {
+  const res = await axios.post(
+    server.url + "/api/coursevote/" + courseID,
+    { voteType },
+    { withCredentials: true }
+  );
+  return res.data;
+};

@@ -8,10 +8,11 @@ const {
 module.exports = function (req, res) {
   let voteType = validateNumber(req.body.voteType);
   let studentID = req.user.studentID;
-  let facultyID = validateNumber(req.params.facultyID);
+  let courseID = validateNumber(req.params.courseID);
 
-  if (voteType.error || facultyID.error) {
-    return res.json(createErrorObject("Invalid studentID or facultyID"));
+  if (voteType.error || courseID.error) {
+    console.log(voteType, courseID);
+    return res.json(createErrorObject("Invalid studentID or courseID"));
   }
 
   if (voteType.value != 1 && voteType.value != 0) {
@@ -24,8 +25,8 @@ module.exports = function (req, res) {
   //************************************************** */
 
   let sql =
-    "SELECT facultyID, studentID, upVote, downVote from vote where facultyID = ? AND studentID = ?";
-  db.query(sql, [facultyID.value, studentID], function (error, results) {
+    "SELECT courseID, studentID, upVote, downVote from coursevote where courseID = ? AND studentID = ?";
+  db.query(sql, [courseID.value, studentID], function (error, results) {
     if (error) {
       console.log(error);
       return res.json(createErrorObject("comment voting failed"));
@@ -33,27 +34,27 @@ module.exports = function (req, res) {
       if (results.length == 0) {
         let commentratingObj;
         let secondsql;
-        sql = "INSERT into vote set ?";
+        sql = "INSERT into coursevote set ?";
         let msg = "";
         if (voteType.value == 1) {
           commentratingObj = {
-            facultyID: facultyID.value,
+            courseID: courseID.value,
             studentID: studentID,
             upVote: 1,
             downVote: 0,
           };
           secondsql =
-            "Update facultyverify set upVoteSum = upVoteSum + 1 where facultyID = ? ";
+            "Update courseverify set upVoteSum = upVoteSum + 1 where courseID = ? ";
           msg = "upvoteinsert";
         } else {
           commentratingObj = {
-            facultyID: facultyID.value,
+            courseID: courseID.value,
             studentID: studentID,
             upVote: 0,
             downVote: 1,
           };
           secondsql =
-            "Update facultyverify set downVoteSum = downVoteSum + 1 where facultyID = ? ";
+            "Update courseverify set downVoteSum = downVoteSum + 1 where courseID = ? ";
           msg = "downvoteinsert";
         }
         db.query(sql, commentratingObj, function (error, results) {
@@ -61,7 +62,7 @@ module.exports = function (req, res) {
             console.log(error);
             res.json(createErrorObject("Voting error"));
           } else {
-            db.query(secondsql, [facultyID.value], function (error, results) {
+            db.query(secondsql, [courseID.value], function (error, results) {
               if (error) {
                 console.log(error);
                 res.json(createErrorObject("vote not inserted"));
@@ -74,7 +75,7 @@ module.exports = function (req, res) {
       } else {
         let firstSql;
         let secondSql;
-        let msg="";
+        let msg = "";
         if (
           results[0].upVote == 1 &&
           results[0].downVote == 0 &&
@@ -82,9 +83,9 @@ module.exports = function (req, res) {
         ) {
           //when vote is changed from upVote to downVote
           firstSql =
-            "UPDATE vote set upVote=0 , downVote = 1 where facultyID =? and studentID =?";
+            "UPDATE coursevote set upVote=0 , downVote = 1 where courseID =? and studentID =?";
           secondSql =
-            "UPDATE facultyverify set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where facultyID =?";
+            "UPDATE courseverify set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where courseID =?";
           msg = "downvoteupdate";
         } else if (
           results[0].upVote == 0 &&
@@ -93,9 +94,9 @@ module.exports = function (req, res) {
         ) {
           //when vote is changed from downVote to upVote
           firstSql =
-            "UPDATE vote set upVote=1 , downVote = 0 where facultyID =? and studentID =?";
+            "UPDATE coursevote set upVote=1 , downVote = 0 where courseID =? and studentID =?";
           secondSql =
-            "UPDATE facultyverify set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where facultyID =?";
+            "UPDATE courseverify set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where courseID =?";
           msg = "upvoteupdate";
         } else {
           return res.json(createSuccessObject("noupdate"));
@@ -103,21 +104,19 @@ module.exports = function (req, res) {
 
         db.query(
           firstSql,
-          [facultyID.value, studentID],
+          [courseID.value, studentID],
           function (error, results) {
             if (error) {
               console.log(error);
               res.json(createErrorObject("vote not updated"));
             } else {
               //run second sql here
-              db.query(secondSql, facultyID.value, function (error, results) {
+              db.query(secondSql, courseID.value, function (error, results) {
                 if (error) {
                   console.log(error);
                   res.json(createErrorObject("voteSum not updated"));
                 } else {
-                  res.json(
-                    createSuccessObject(msg)
-                  );
+                  res.json(createSuccessObject(msg));
                 }
               });
             }

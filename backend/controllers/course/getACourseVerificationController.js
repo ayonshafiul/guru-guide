@@ -14,7 +14,7 @@ module.exports = function (req, res) {
   }
 
   let sql =
-    "SELECT courseTitle, courseCode, departmentID, upVoteSum, downVoteSum from courseverify where courseCode = ? and departmentID = ?";
+    "SELECT courseID, courseTitle, courseCode, departmentID, upVoteSum, downVoteSum from courseverify where courseCode = ? and departmentID = ?";
   db.query(sql, [courseCode.value, departmentID.value], (error, results) => {
     if (error) {
       console.log(error);
