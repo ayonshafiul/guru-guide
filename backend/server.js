@@ -48,13 +48,13 @@ server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
 server.use("/api", authMiddleware, ratingRouter);
 
-server.get("/forceupdate", (req, res) => {
+server.get("/api/forceupdate", (req, res) => {
   facultyVerify();
   courseVerify();
   res.json(createSuccessObject("Updated!"));
 });
 
-server.get("/ping", (req, res) => {
+server.get("/api/ping", (req, res) => {
   res.json(createSuccessObject("pong!"));
 });
 

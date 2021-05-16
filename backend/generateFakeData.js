@@ -52,12 +52,12 @@ function insertDepartments() {
 // setTimeout(fakeRating, timeBetweenEntry);
 // setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
 // setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
-// insertDepartments();
+insertDepartments();
 // fakeStudents();
 // fakeFacultyVerify();
 // fakeCourseVerify();
 // fakeRating();
-fakeComments();
+// fakeComments();
 
 function fakeStudents() {
   const student = [];

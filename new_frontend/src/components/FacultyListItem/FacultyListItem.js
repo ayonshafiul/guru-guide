@@ -2,7 +2,7 @@ import "./FacultyListItem.css";
 import { Link } from "react-router-dom";
 
 const FacultyListItem = (props) => {
-  const {
+  let {
     facultyName,
     facultyID,
     facultyInitials,
@@ -11,6 +11,9 @@ const FacultyListItem = (props) => {
     friendliness,
     voteCount,
   } = props.faculty;
+  if (voteCount === 0) {
+    voteCount = 0.1;
+  }
   return (
     <Link style={{ textDecoration: "none" }} to={`/faculty/${facultyID}`}>
       <div className="faculty-wrapper">
@@ -20,7 +23,7 @@ const FacultyListItem = (props) => {
         </div>
         <div className="rating-wrapper">
           <div className="average-rating">
-            {((teaching + grading + friendliness) / (3 * voteCount)).toFixed(1)}{" "}
+            {((teaching + grading + friendliness) / (3 * voteCount)).toFixed(1)}
             <span>&#9733;</span>
           </div>
           <div className="rating-bar-wrapper">

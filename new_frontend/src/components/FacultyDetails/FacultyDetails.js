@@ -30,14 +30,10 @@ const FacultyDetails = () => {
   const [rating, setRating] = useState({});
   const [departmentID, setDepartmentID] = useState(0);
   const [courseID, setCourseID] = useState(0);
-  const [courseCode, setCourseCode] = useState(undefined);
+  const [courseCode, setCourseCode] = useState("");
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
-  const [userRating, setUserRating] = useState({});
-  const { isLoading, isSuccess, isFetching, data, error, isError } = useQuery(
-    ["/api/faculty", id],
-    getAFaculty
-  );
+  const [currentFaculty, setCurrentFaculty] = useState({});
   const {
     mutate: ratingMutate,
     isError: isRatingError,
@@ -86,38 +82,45 @@ const FacultyDetails = () => {
   });
 
   useEffect(async () => {
-    setComment("");
-    if (isSuccess && typeof data != "undefined") {
-      updateDisplayRating(
-        data.data.teaching,
-        data.data.grading,
-        data.data.friendliness,
-        data.data.voteCount
-      );
+    const data = await getAFaculty({ queryKey: ["/api/faculty", id] });
+    const {
+      facultyName,
+      facultyInitials,
+      departmentID,
+      teaching,
+      grading,
+      friendliness,
+      voteCount,
+    } = data.data;
+    if (data.success) {
+      setCurrentFaculty({
+        facultyName,
+        facultyInitials,
+        departmentID,
+      });
+      updateDisplayRating(teaching, grading, friendliness, voteCount);
     }
-    // if (page == "comments" && courseID != 0) {
-    //   const res = await getUserComment({
-    //     queryKey: ["/api/usercomment", id, courseID],
-    //   });
-    //   setComment(res.data[0].commentText);
-    // }
-    // if (page == "rate" && courseID != 0) {
-    //   const res = await getUserRating({
-    //     queryKey: ["/api/userrating", id, courseID],
-    //   });
-    //   setRating(res.data[0]);
-    // }
-  }, [isSuccess]);
+  }, []);
 
   function updateDisplayRating(teaching, grading, friendliness, voteCount) {
-    setDisplayRating({
-      overall: ((grading + teaching + friendliness) / (3 * voteCount)).toFixed(
-        1
-      ),
-      teaching: (teaching / voteCount).toFixed(1),
-      grading: (grading / voteCount).toFixed(1),
-      friendliness: (friendliness / voteCount).toFixed(1),
-    });
+    if (voteCount === 0) {
+      setDisplayRating({
+        overall: 0,
+        grading: 0,
+        teaching: 0,
+        friendliness: 0,
+      });
+    } else {
+      setDisplayRating({
+        overall: (
+          (grading + teaching + friendliness) /
+          (3 * voteCount)
+        ).toFixed(1),
+        teaching: (teaching / voteCount).toFixed(1),
+        grading: (grading / voteCount).toFixed(1),
+        friendliness: (friendliness / voteCount).toFixed(1),
+      });
+    }
   }
   function changeRating(type, buttonNo) {
     setRating({
@@ -187,7 +190,6 @@ const FacultyDetails = () => {
         }
       );
     } else {
-      console.log("refetched!");
       switch (resData.message) {
         case "upvoteinsert":
           addToast("Thanks for the thumbs up!");
@@ -216,48 +218,46 @@ const FacultyDetails = () => {
       initial="initial"
       animate="animate"
     >
-      {isError && <div className="faculty-details-wrapper">Error....</div>}
-      {isSuccess && typeof data.data != "undefined" && (
-        <div className="faculty-details-wrapper">
-          <div className="faculty-details-name">{data.data.facultyName}</div>
-          <div className="faculty-details-initials">
-            {data.data.facultyInitials}
-          </div>
-          <div className="faculty-details-department">
-            {departments[data.data.departmentID]}
-          </div>
-          <div className="faculty-details-overall">
-            &#9733; {displayRating.overall}
-            <div
-              className="faculty-details-overlay faculty-details-overall-background-overlay"
-              style={{
-                width: displayRating.overall * 7 + 30.2 + "%",
-              }}
-            ></div>
-          </div>
-          <div className="faculty-details-grading">
-            Grading: {displayRating.grading}
-            <div
-              className="faculty-details-overlay"
-              style={{ width: displayRating.grading * 7 + 30.2 + "%" }}
-            ></div>
-          </div>
-          <div className="faculty-details-teaching">
-            Teaching: {displayRating.teaching}
-            <div
-              className="faculty-details-overlay"
-              style={{ width: displayRating.teaching * 7 + 30.2 + "%" }}
-            ></div>
-          </div>
-          <div className="faculty-details-friendliness">
-            Friendliness: {displayRating.friendliness}
-            <div
-              className="faculty-details-overlay"
-              style={{ width: displayRating.friendliness * 7 + 30.2 + "%" }}
-            ></div>
-          </div>
+      <div className="faculty-details-wrapper">
+        <div className="faculty-details-name">{currentFaculty.facultyName}</div>
+        <div className="faculty-details-initials">
+          {currentFaculty.facultyInitials}
         </div>
-      )}
+        <div className="faculty-details-department">
+          {departments[currentFaculty.departmentID]}
+        </div>
+        <div className="faculty-details-overall">
+          &#9733; {displayRating.overall}
+          <div
+            className="faculty-details-overlay faculty-details-overall-background-overlay"
+            style={{
+              width: displayRating.overall * 7 + 30.2 + "%",
+            }}
+          ></div>
+        </div>
+        <div className="faculty-details-grading">
+          Grading: {displayRating.grading}
+          <div
+            className="faculty-details-overlay"
+            style={{ width: displayRating.grading * 7 + 30.2 + "%" }}
+          ></div>
+        </div>
+        <div className="faculty-details-teaching">
+          Teaching: {displayRating.teaching}
+          <div
+            className="faculty-details-overlay"
+            style={{ width: displayRating.teaching * 7 + 30.2 + "%" }}
+          ></div>
+        </div>
+        <div className="faculty-details-friendliness">
+          Friendliness: {displayRating.friendliness}
+          <div
+            className="faculty-details-overlay"
+            style={{ width: displayRating.friendliness * 7 + 30.2 + "%" }}
+          ></div>
+        </div>
+      </div>
+
       <div className="course-wrapper">
         <select
           className="select-css"
@@ -298,36 +298,34 @@ const FacultyDetails = () => {
         )}
       </div>
 
-      {isSuccess && (
-        <div className="faculty-details-button-wrapper" ref={pageRef}>
-          <div
-            className={
-              page == "comments"
-                ? "faculty-details-comments faculty-details-active"
-                : "faculty-details-comments"
-            }
-            onClick={() => {
-              if (courseID != 0) setPage("comments");
-              else addToast("Please select a course!", { appearance: "error" });
-            }}
-          >
-            Comments
-          </div>
-          <div
-            className={
-              page == "rate"
-                ? "faculty-details-rate faculty-details-active"
-                : "faculty-details-rate"
-            }
-            onClick={() => {
-              if (courseID != 0) setPage("rate");
-              else addToast("Please select a course!", { appearance: "error" });
-            }}
-          >
-            Rate
-          </div>
+      <div className="faculty-details-button-wrapper" ref={pageRef}>
+        <div
+          className={
+            page == "comments"
+              ? "faculty-details-comments faculty-details-active"
+              : "faculty-details-comments"
+          }
+          onClick={() => {
+            if (courseID != 0) setPage("comments");
+            else addToast("Please select a course!", { appearance: "error" });
+          }}
+        >
+          Comments
         </div>
-      )}
+        <div
+          className={
+            page == "rate"
+              ? "faculty-details-rate faculty-details-active"
+              : "faculty-details-rate"
+          }
+          onClick={() => {
+            if (courseID != 0) setPage("rate");
+            else addToast("Please select a course!", { appearance: "error" });
+          }}
+        >
+          Rate
+        </div>
+      </div>
       {commentIsSuccess &&
         typeof commentData != "undefined" &&
         page == "comments" &&

@@ -10,7 +10,7 @@ import { departments } from "../../serverDetails";
 const FacultyList = () => {
   const [departmentID, setDepartmentID] = useState(0);
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/faculty", departmentID],
+    ["/api/faculty", String(departmentID)],
     getFaculty
   );
 
