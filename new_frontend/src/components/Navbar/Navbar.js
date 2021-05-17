@@ -39,15 +39,6 @@ const Navbar = (props) => {
               <img src={grid} style={{ height: "50px" }} />
             </div>
           ) : null}
-          <div
-            className="menu-close-btn"
-            onClick={() => {
-              console.log("Setting to true");
-              props.setNavStyle(false);
-            }}
-          >
-            Close
-          </div>
         </div>
       </nav>
     </motion.div>

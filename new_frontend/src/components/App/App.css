@@ -13,25 +13,31 @@
 .title {
   text-align: center;
   color: white;
-  padding: 0.5em;
+  font-size: 30px;
+  padding: 8px;
   text-transform: uppercase;
   width: 100%;
 }
 
 .App {
-  margin: 6em auto;
-  width: 80%;
-  max-width: 768px;
+  margin-top: 65px;
+  margin-left: 25%;
+  width: 75%;
   background: #202124;
   color: white;
   min-height: 120vh;
 }
 
+.margin-auto {
+  width: 80%;
+  margin: 0px auto;
+  max-width: 768px;
+}
+
 .menu-btn {
   position: absolute;
-  top: 0px;
+  top: 7px;
   left: 10px;
-  margin: 1em auto;
   color: #1f1f1f;
   background-color: #61dafb;
   text-transform: uppercase;
@@ -40,6 +46,7 @@
   width: 40px;
   height: 40px;
   border-radius: 5px;
+  visibility: hidden;
 }
 
 .menu-btn:hover {
@@ -48,6 +55,16 @@
 
 @media screen and (max-width: 768px) {
   .App {
+    width: 100%;
+    margin-top: 65px;
+    margin-left: 0px;
+    padding: 0;
+  }
+  .menu-btn {
+    visibility: visible;
+  }
+  .margin-auto {
     width: 95%;
+    margin: 0 auto;
   }
 }

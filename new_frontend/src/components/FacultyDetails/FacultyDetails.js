@@ -210,12 +210,7 @@ const FacultyDetails = (props) => {
       }
     }
   }
-  const hide = {
-    visibility: "hidden",
-  };
-  const show = {
-    visibility: "visible",
-  };
+
   return (
     <motion.div
       className="facultylist"
@@ -223,10 +218,7 @@ const FacultyDetails = (props) => {
       initial="initial"
       animate="animate"
     >
-      <div
-        className="faculty-details-wrapper"
-        style={props.navStyle ? hide : show}
-      >
+      <div className="faculty-details-wrapper">
         <div className="faculty-details-name">{currentFaculty.facultyName}</div>
         <div className="faculty-details-initials">
           {currentFaculty.facultyInitials}

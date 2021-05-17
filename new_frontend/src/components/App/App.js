@@ -77,42 +77,44 @@ function App() {
           </div>
 
           <div className="App">
-            <Switch>
-              <Route exact path="/contribute">
-                {isAuth ? <Contribute /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/verify">
-                {isAuth ? <Verify /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/help">
-                {isAuth ? <Help /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/contact">
-                {isAuth ? <Contact /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/faculty">
-                {isAuth ? <FacultyList /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/faculty/:id">
-                {isAuth ? (
-                  <FacultyDetails navStyle={navStyle} />
-                ) : (
-                  <Redirect to="/login" />
-                )}
-              </Route>
-              <Route exact path="/verify/faculty/:departmentID/:initials">
-                {isAuth ? <FacultyVerify /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/verify/course/:departmentID/:code">
-                {isAuth ? <CourseVerify /> : <Redirect to="/login" />}
-              </Route>
-              <Route exact path="/login">
-                <Login isAuth={isAuth} setIsAuth={setIsAuth} />
-              </Route>
-              <Route path="*">
-                <Page404 />
-              </Route>
-            </Switch>
+            <div className="margin-auto">
+              <Switch>
+                <Route exact path="/contribute">
+                  {isAuth ? <Contribute /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/verify">
+                  {isAuth ? <Verify /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/help">
+                  {isAuth ? <Help /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/contact">
+                  {isAuth ? <Contact /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/faculty">
+                  {isAuth ? <FacultyList /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/faculty/:id">
+                  {isAuth ? (
+                    <FacultyDetails navStyle={navStyle} />
+                  ) : (
+                    <Redirect to="/login" />
+                  )}
+                </Route>
+                <Route exact path="/verify/faculty/:departmentID/:initials">
+                  {isAuth ? <FacultyVerify /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/verify/course/:departmentID/:code">
+                  {isAuth ? <CourseVerify /> : <Redirect to="/login" />}
+                </Route>
+                <Route exact path="/login">
+                  <Login isAuth={isAuth} setIsAuth={setIsAuth} />
+                </Route>
+                <Route path="*">
+                  <Page404 />
+                </Route>
+              </Switch>
+            </div>
           </div>
           <ScrollToTop />
         </Router>
