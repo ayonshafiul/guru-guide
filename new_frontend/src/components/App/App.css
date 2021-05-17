@@ -16,7 +16,7 @@
 }
 
 .menu-btn {
-  width: 30%;
+  width: 25%;
   margin: 1em auto;
   color: #1f1f1f;
   background-color: #61dafb;
@@ -30,4 +30,10 @@
 .menu-btn:hover {
   color: #61dafb;
   background-color: #1f1f1f;
+}
+
+@media screen and (max-width: 768px) {
+    .App {
+        width: 95%;
+    }
 }

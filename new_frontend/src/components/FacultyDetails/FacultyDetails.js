@@ -231,29 +231,29 @@ const FacultyDetails = () => {
           <div
             className="faculty-details-overlay faculty-details-overall-background-overlay"
             style={{
-              width: displayRating.overall * 7 + 30.2 + "%",
+              width: displayRating.overall * 10 + .5 +  "%",
             }}
           ></div>
         </div>
         <div className="faculty-details-grading">
-          Grading: {displayRating.grading}
+          <span className="faculty-details-text-bg">Grading: {displayRating.grading}</span>
           <div
-            className="faculty-details-overlay"
-            style={{ width: displayRating.grading * 7 + 30.2 + "%" }}
+            className="faculty-details-overlay overlay-c3"
+            style={{ width: displayRating.grading * 10 + .5 +  "%" }}
           ></div>
         </div>
         <div className="faculty-details-teaching">
-          Teaching: {displayRating.teaching}
+        <span className="faculty-details-text-bg">Teaching: {displayRating.teaching}</span>
           <div
-            className="faculty-details-overlay"
-            style={{ width: displayRating.teaching * 7 + 30.2 + "%" }}
+            className="faculty-details-overlay overlay-c1"
+            style={{ width: displayRating.teaching * 10 + .5 +  "%" }}
           ></div>
         </div>
         <div className="faculty-details-friendliness">
-          Friendliness: {displayRating.friendliness}
+        <span className="faculty-details-text-bg">Friendliness: {displayRating.friendliness}</span>
           <div
-            className="faculty-details-overlay"
-            style={{ width: displayRating.friendliness * 7 + 30.2 + "%" }}
+            className="faculty-details-overlay overlay-c2"
+            style={{ width: displayRating.friendliness * 10 + .5 +  "%" }}
           ></div>
         </div>
       </div>

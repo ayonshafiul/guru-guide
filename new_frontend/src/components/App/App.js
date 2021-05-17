@@ -27,7 +27,7 @@ import menu from "../../assets/img/menu.png";
 
 function App() {
   const [isAuth, setIsAuth] = useState("false");
-  const [navStyle, setNavStyle] = useState({});
+  const [navStyle, setNavStyle] = useState({ visibility: "hidden" });
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -63,19 +63,19 @@ function App() {
         <Router>
           <Navbar navStyle={navStyle} setNavStyle={setNavStyle}></Navbar>
           <div className="App">
-          <h1 className="title">Guruguide</h1>
-          <div
-          className="menu-btn"
-          onClick={() => {
-            setNavStyle((prevStyle) => {
-              return prevStyle.visibility === "hidden"
-                ? { visibility: "visible" }
-                : { visibility: "hidden" };
-            });
-          }}
-        >
-          Menu
-        </div>
+            <h1 className="title">Guruguide</h1>
+            <div
+              className="menu-btn"
+              onClick={() => {
+                setNavStyle((prevStyle) => {
+                  return prevStyle.visibility === "hidden"
+                    ? { visibility: "visible" }
+                    : { visibility: "hidden" };
+                });
+              }}
+            >
+              Menu
+            </div>
             <Switch>
               <Route exact path="/contribute">
                 {isAuth ? <Contribute /> : <Redirect to="/login" />}

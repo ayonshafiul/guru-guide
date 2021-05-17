@@ -1,9 +1,7 @@
 .faculty-wrapper {
     display: flex;
-    width: 70%;
-    min-width: 550px;
     margin: 20px auto;
-    color: black;
+    color: #1f1f1f;
     justify-content: space-between;
     align-items: center;
     font-weight: bold;
