@@ -20,7 +20,7 @@ import {
   getUserComment,
   getUserRating,
 } from "../../Queries";
-const FacultyDetails = () => {
+const FacultyDetails = (props) => {
   const { id } = useParams();
   const { addToast } = useToasts();
   const pageRef = useRef(null);
@@ -210,7 +210,12 @@ const FacultyDetails = () => {
       }
     }
   }
-
+  const hide = {
+    visibility: "hidden",
+  };
+  const show = {
+    visibility: "visible",
+  };
   return (
     <motion.div
       className="facultylist"
@@ -218,7 +223,10 @@ const FacultyDetails = () => {
       initial="initial"
       animate="animate"
     >
-      <div className="faculty-details-wrapper">
+      <div
+        className="faculty-details-wrapper"
+        style={props.navStyle ? hide : show}
+      >
         <div className="faculty-details-name">{currentFaculty.facultyName}</div>
         <div className="faculty-details-initials">
           {currentFaculty.facultyInitials}
@@ -231,29 +239,35 @@ const FacultyDetails = () => {
           <div
             className="faculty-details-overlay faculty-details-overall-background-overlay"
             style={{
-              width: displayRating.overall * 10 + .5 +  "%",
+              width: displayRating.overall * 10 + 0.5 + "%",
             }}
           ></div>
         </div>
         <div className="faculty-details-grading">
-          <span className="faculty-details-text-bg">Grading: {displayRating.grading}</span>
+          <span className="faculty-details-text-bg">
+            Grading: {displayRating.grading}
+          </span>
           <div
             className="faculty-details-overlay overlay-c3"
-            style={{ width: displayRating.grading * 10 + .5 +  "%" }}
+            style={{ width: displayRating.grading * 10 + 0.5 + "%" }}
           ></div>
         </div>
         <div className="faculty-details-teaching">
-        <span className="faculty-details-text-bg">Teaching: {displayRating.teaching}</span>
+          <span className="faculty-details-text-bg">
+            Teaching: {displayRating.teaching}
+          </span>
           <div
             className="faculty-details-overlay overlay-c1"
-            style={{ width: displayRating.teaching * 10 + .5 +  "%" }}
+            style={{ width: displayRating.teaching * 10 + 0.5 + "%" }}
           ></div>
         </div>
         <div className="faculty-details-friendliness">
-        <span className="faculty-details-text-bg">Friendliness: {displayRating.friendliness}</span>
+          <span className="faculty-details-text-bg">
+            Friendliness: {displayRating.friendliness}
+          </span>
           <div
             className="faculty-details-overlay overlay-c2"
-            style={{ width: displayRating.friendliness * 10 + .5 +  "%" }}
+            style={{ width: displayRating.friendliness * 10 + 0.5 + "%" }}
           ></div>
         </div>
       </div>

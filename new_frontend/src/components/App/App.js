@@ -27,7 +27,7 @@ import menu from "../../assets/img/menu.png";
 
 function App() {
   const [isAuth, setIsAuth] = useState("false");
-  const [navStyle, setNavStyle] = useState({ visibility: "hidden" });
+  const [navStyle, setNavStyle] = useState(false);
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -62,20 +62,21 @@ function App() {
       >
         <Router>
           <Navbar navStyle={navStyle} setNavStyle={setNavStyle}></Navbar>
-          <div className="App">
-            <h1 className="title">Guruguide</h1>
+          <div className="header-top">
             <div
               className="menu-btn"
               onClick={() => {
                 setNavStyle((prevStyle) => {
-                  return prevStyle.visibility === "hidden"
-                    ? { visibility: "visible" }
-                    : { visibility: "hidden" };
+                  return !prevStyle;
                 });
               }}
             >
-              Menu
+              <img src={menu} style={{ width: 40, height: 40 }} />
             </div>
+            <h1 className="title">Guruguide</h1>
+          </div>
+
+          <div className="App">
             <Switch>
               <Route exact path="/contribute">
                 {isAuth ? <Contribute /> : <Redirect to="/login" />}
@@ -93,7 +94,11 @@ function App() {
                 {isAuth ? <FacultyList /> : <Redirect to="/login" />}
               </Route>
               <Route exact path="/faculty/:id">
-                {isAuth ? <FacultyDetails /> : <Redirect to="/login" />}
+                {isAuth ? (
+                  <FacultyDetails navStyle={navStyle} />
+                ) : (
+                  <Redirect to="/login" />
+                )}
               </Route>
               <Route exact path="/verify/faculty/:departmentID/:initials">
                 {isAuth ? <FacultyVerify /> : <Redirect to="/login" />}

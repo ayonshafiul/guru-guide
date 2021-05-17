@@ -1,54 +1,93 @@
 .faculty-wrapper {
-    display: flex;
-    margin: 20px auto;
-    color: #1f1f1f;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: bold;
-    font-size: 1.2em;
+  display: flex;
+  margin: 20px auto;
+  color: #1f1f1f;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  font-size: 1.2em;
 }
 
 .name-wrapper {
-    flex: 10 4 0;
-    display: flex;
-    justify-content: space-between;
-    background: #ccc;
-    border-radius: 10px;
-    padding: 1em;
+  flex: 10 4 0;
+  display: flex;
+  justify-content: space-between;
+  background: #ccc;
+  border-radius: 10px;
+  padding: 1em;
 }
 .name-wrapper:hover {
-    background: #202124;
-    color: #61DAFB;
+  background: #202124;
+  color: #61dafb;
 }
 
 .rating-wrapper {
-    margin-left: 1em;
+  margin-left: 1em;
+  padding: 1em;
+  border-radius: 10px;
+  background: #ccc;
+  flex: 2 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rating-wrapper:hover {
+  background: #202124;
+  color: #61dafb;
+}
+
+.rating-bar-wrapper {
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+.average-rating {
+  flex-shrink: 0;
+}
+.rating-bar {
+  width: 5px;
+  height: 20px;
+  background: red;
+  margin-left: 5px;
+}
+
+@media screen and (max-width: 500px) {
+  .faculty-wrapper {
+    display: block;
+    margin: 20px auto;
+    color: #1f1f1f;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+
+  .name-wrapper {
+    display: flex;
+    justify-content: space-between;
+    background: #ccc;
+    border-radius: 0px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     padding: 1em;
-    border-radius: 10px;
+  }
+  .name-wrapper:hover {
+    background: #202124;
+    color: #61dafb;
+  }
+
+  .rating-wrapper {
+    margin-left: 0;
+    padding: 1em;
+    border-radius: 0px;
     background: #ccc;
     flex: 2 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-.rating-wrapper:hover {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+  .rating-wrapper:hover {
     background: #202124;
-    color: #61DAFB;
+    color: #61dafb;
+  }
 }
-
-.rating-bar-wrapper{
-    display: flex;
-    align-items: flex-end;
-    flex-shrink: 0;
-}
-.average-rating {
-    flex-shrink: 0;
-}
-.rating-bar {
-    width: 5px;
-    height: 20px;
-    background: red;
-    margin-left: 5px;
-}
-
-
