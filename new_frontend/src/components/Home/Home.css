@@ -41,7 +41,8 @@
   border-radius: 5px;
   background: #61dafb;
   color: black;
-  padding: 0 10px;
+  padding: 4px 10px;
+  line-height: 1.1em;
   margin-right: 1em;
 }
 
