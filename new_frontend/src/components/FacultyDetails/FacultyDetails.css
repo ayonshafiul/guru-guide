@@ -20,9 +20,6 @@
   letter-spacing: 10px;
 }
 
-.faculty-details-overall {
-  color: black !important;
-}
 
 .faculty-details-grading,
 .faculty-details-teaching,
@@ -30,7 +27,7 @@
 .faculty-details-overall {
   position: relative;
   padding: 1em;
-  background: #ccc;
+  background: rgb(114, 111, 111);
   margin: 10px auto;
   border-radius: 10px;
   color: #61dafb;
@@ -39,11 +36,16 @@
 }
 .faculty-details-overall {
   text-align: center;
+  color: #61dafb;
 }
 .faculty-details-text-bg {
   background-color: #171717;
+  color: #61dafb;
   border-radius: 5px;
   padding: 5px;
+}
+.yellow-stars {
+  color: #fdcc0d;
 }
 
 .faculty-details-overlay {
@@ -53,7 +55,7 @@
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   height: 100%;
-  background: #171717;
+  background: white;
   z-index: -1;
 }
 .overlay-c1 {

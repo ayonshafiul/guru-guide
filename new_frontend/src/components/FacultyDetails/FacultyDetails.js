@@ -211,6 +211,14 @@ const FacultyDetails = (props) => {
     }
   }
 
+  function calculateStars() {
+    let str = [];
+    for ( let i = 0; i < parseInt(displayRating.overall); i++) {
+      str.push(<>&#9733;</>);
+    }
+    return str;
+  }
+
   return (
     <motion.div
       className="facultylist"
@@ -227,7 +235,9 @@ const FacultyDetails = (props) => {
           {departments[currentFaculty.departmentID]}
         </div>
         <div className="faculty-details-overall">
-          &#9733; {displayRating.overall}
+          <span className="faculty-details-text-bg  yellow-stars">
+           {calculateStars()}
+          </span>
           <div
             className="faculty-details-overlay faculty-details-overall-background-overlay"
             style={{
