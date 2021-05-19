@@ -8,6 +8,7 @@ module.exports = function (req, res, next) {
   }
   const token = req.cookies["jwt"];
   if (!token) {
+    res.clearCookie("jwt");
     return res.json(createErrorObject("No cookies!"));
   }
   try {
@@ -16,6 +17,7 @@ module.exports = function (req, res, next) {
       req.user = { studentID: decode.studentID };
       next();
     } else {
+      res.clearCookie("jwt");
       return res.json(createErrorObject("token invalid"));
     }
   } catch (error) {
