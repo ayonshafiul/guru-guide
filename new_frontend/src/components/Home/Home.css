@@ -8,7 +8,7 @@
 
 .title-text {
   position: relative;
-  top: -52px;
+  top: -48px;
   /* font-size: 2.5vw; */
 }
 
@@ -38,12 +38,11 @@
 }
 
 .bullet {
-  border-radius: 50%;
+  border-radius: 5px;
   background: #61dafb;
   color: black;
   padding: 0 10px;
   margin-right: 1em;
-
 }
 
 .centered {
@@ -54,15 +53,15 @@
 .login-btn-homepage {
   background: #61dafb;
   color: #1f1f1f;
-  width: 30%;
-  border-radius: 10px ;
-  font-weight: bold;
+  width: 40%;
+  border-radius: 10px;
+  font-weight: bolder;
   text-align: center;
   margin: 0 auto;
   padding: 1em;
   margin-bottom: 2em;
   font-size: 1.2em;
-  cursor:pointer;
+  cursor: pointer;
   border: 2px solid #61dafb;
 }
 
