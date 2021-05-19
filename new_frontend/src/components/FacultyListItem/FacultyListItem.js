@@ -18,7 +18,6 @@ const FacultyListItem = (props) => {
   let avgGrading = grading / voteCount;
   let avgFriendliness = friendliness / voteCount;
 
-  
   return (
     <Link style={{ textDecoration: "none" }} to={`/faculty/${facultyID}`}>
       <div className="faculty-wrapper">
@@ -32,23 +31,24 @@ const FacultyListItem = (props) => {
             <span>&#9733;</span>
           </div>
           <div className="faculty-vote-count">
-            T: <span className="red">{avgTeaching}</span> G: <span className="red">{avgGrading}</span> F: <span className="red">{avgFriendliness}</span> <br/> 
-              {voteCount === 0.1 ? '0' : voteCount} vote(s)
-            </div>
+            T: <span className="red">{avgTeaching.toFixed(1)}</span> G:{" "}
+            <span className="red">{avgGrading.toFixed(1)}</span> F:{" "}
+            <span className="red">{avgFriendliness.toFixed(1)}</span> <br />
+            {voteCount === 0.1 ? "0" : voteCount} vote(s)
+          </div>
           <div className="rating-bar-wrapper">
             <div
               className="rating-bar"
-              style={{ height: (avgTeaching) * 1.8 + 2 }}
+              style={{ height: avgTeaching * 1.8 + 2 }}
             ></div>
             <div
               className="rating-bar"
-              style={{ height: (avgGrading) * 1.8 + 2 }}
+              style={{ height: avgGrading * 1.8 + 2 }}
             ></div>
             <div
               className="rating-bar"
-              style={{ height: (avgFriendliness) * 1.8 + 2 }}
+              style={{ height: avgFriendliness * 1.8 + 2 }}
             ></div>
-            
           </div>
         </div>
       </div>
