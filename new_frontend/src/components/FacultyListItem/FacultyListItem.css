@@ -11,6 +11,7 @@
 .name-wrapper {
   flex: 10 4 0;
   display: flex;
+  text-transform: uppercase;
   justify-content: space-between;
   background: #ccc;
   border-radius: 10px;
@@ -26,7 +27,7 @@
   padding: 1em;
   border-radius: 10px;
   background: #ccc;
-  flex: 2 0 0;
+  flex: 4 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -51,7 +52,16 @@
   margin-left: 5px;
 }
 
-@media screen and (max-width: 500px) {
+.faculty-vote-count {
+  font-size: 0.6em;
+  text-align: center;
+}
+
+.red {
+  color: red;
+}
+
+@media screen and (max-width: 600px) {
   .faculty-wrapper {
     display: block;
     margin: 20px auto;

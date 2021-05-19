@@ -245,15 +245,7 @@ const FacultyDetails = (props) => {
             }}
           ></div>
         </div>
-        <div className="faculty-details-grading">
-          <span className="faculty-details-text-bg">
-            Grading: {displayRating.grading}
-          </span>
-          <div
-            className="faculty-details-overlay overlay-c3"
-            style={{ width: displayRating.grading * 10 + 0.5 + "%" }}
-          ></div>
-        </div>
+        
         <div className="faculty-details-teaching">
           <span className="faculty-details-text-bg">
             Teaching: {displayRating.teaching}
@@ -261,6 +253,15 @@ const FacultyDetails = (props) => {
           <div
             className="faculty-details-overlay overlay-c1"
             style={{ width: displayRating.teaching * 10 + 0.5 + "%" }}
+          ></div>
+        </div>
+        <div className="faculty-details-grading">
+          <span className="faculty-details-text-bg">
+            Grading: {displayRating.grading}
+          </span>
+          <div
+            className="faculty-details-overlay overlay-c3"
+            style={{ width: displayRating.grading * 10 + 0.5 + "%" }}
           ></div>
         </div>
         <div className="faculty-details-friendliness">

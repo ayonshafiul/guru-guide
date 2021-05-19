@@ -20,18 +20,18 @@ const Home = () => {
           <br />
         </h2>
       </div>
-      <h2>I'm here to guide you through the little secrets of BRACU life!</h2>
+      <h2>I'll be your little buddy in guiding you through your journey in <span className="react-color">BRACU</span> life!</h2>
       <br />
       <div className="centered">
         <h2 className="steps">
-          <span className="bullet">1</span>Tell me your favorite{" "}
-          <span className="react-color">faculties</span> and{" "}
+          <span className="bullet">1</span>Tell me all about your{" "}
+          <span className="react-color">faculties</span> and {" "}
           <span className="react-color">courses</span>
         </h2>
 
         <h2 className="steps">
-          <span className="bullet">2</span>Check for spelling mistakes,{" "}
-          <span className="react-color">yuck!</span>
+          <span className="bullet">2</span>Make sure that the info is{" "}
+          <span className="react-color">correct!</span>
         </h2>
         <h2 className="steps">
           <span className="bullet">3</span>Give your faculties many many{" "}
