@@ -1,0 +1,73 @@
+@import url("https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap");
+
+.container {
+  font-family: "Tajawal" !important;
+  text-align: center;
+  font-size: 1.1em;
+}
+
+.title-text {
+  position: relative;
+  top: -52px;
+  /* font-size: 2.5vw; */
+}
+
+.cat {
+  width: 90%;
+}
+
+.react-color {
+  color: #61dafb;
+}
+
+.cat2-left {
+  display: flex;
+  align-items: flex-end;
+  text-align: left;
+  font-size: 1.1em;
+  /* justify-cont.ent: space-between; */
+}
+.cat2 {
+  width: 30%;
+}
+
+.steps {
+  text-align: left;
+  margin: 2em 0em;
+  font-size: 1.3em;
+}
+
+.bullet {
+  border-radius: 50%;
+  background: #61dafb;
+  color: black;
+  padding: 0 10px;
+  margin-right: 1em;
+
+}
+
+.centered {
+  width: 95%;
+  margin: 0 auto;
+}
+
+.login-btn-homepage {
+  background: #61dafb;
+  color: #1f1f1f;
+  width: 30%;
+  border-radius: 10px ;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 auto;
+  padding: 1em;
+  margin-bottom: 2em;
+  font-size: 1.2em;
+  cursor:pointer;
+  border: 2px solid #61dafb;
+}
+
+.login-btn-homepage:hover {
+  background: #1f1f1f;
+  color: #61dafb;
+  border: 2px solid #61dafb;
+}
