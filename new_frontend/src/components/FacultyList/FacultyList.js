@@ -16,27 +16,32 @@ const FacultyList = () => {
   );
 
   function sortFunction(a, b) {
+    let sortValue = 0;
     switch (sort) {
       case "rating":
-        let avgA = a.teaching + a.grading + a.friendliness;
-        let avgB = b.teaching + b.grading + b.friendliness;
-        return avgB >= avgA ? 1 : -1;
+        let avgA = (a.teaching + a.grading + a.friendliness) / a.voteCount;
+        let avgB = (b.teaching + b.grading + b.friendliness) / b.voteCount;
+        sortValue = avgB >= avgA ? 1 : -1;
         break;
       case "alphabetical":
-        return a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
+        sortValue = a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
         break;
       case "teaching":
-        return b.teaching >= a.teaching ? 1 : -1;
+        console.log(a.teaching, b.teaching);
+        sortValue = b.teaching >= a.teaching ? 1 : -1;
         break;
       case "grading":
-        return b.grading >= a.grading ? 1 : -1;
+        sortValue = b.grading >= a.grading ? 1 : -1;
         break;
       case "friendliness":
-        return b.friendliness >= a.friendliness ? 1 : -1;
+        sortValue = b.friendliness >= a.friendliness ? 1 : -1;
         break;
       case "vote":
-        return b.voteCount >= a.voteCount ? 1 : -1;
+        console.log(a.voteCount, b.voteCount);
+        sortValue = b.voteCount >= a.voteCount ? 1 : -1;
+        break;
     }
+    return sortValue;
   }
   return (
     <motion.div
