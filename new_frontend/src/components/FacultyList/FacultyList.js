@@ -20,20 +20,22 @@ const FacultyList = () => {
       case "rating":
         let avgA = a.teaching + a.grading + a.friendliness;
         let avgB = b.teaching + b.grading + b.friendliness;
-        return avgB - avgA;
+        return avgB >= avgA ? 1 : -1;
         break;
       case "alphabetical":
         return a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
         break;
       case "teaching":
-        return b.teaching - a.teaching;
+        return b.teaching >= a.teaching ? 1 : -1;
         break;
       case "grading":
-        return b.grading - a.grading;
+        return b.grading >= a.grading ? 1 : -1;
         break;
       case "friendliness":
-        return b.friendliness - a.friendliness;
+        return b.friendliness >= a.friendliness ? 1 : -1;
         break;
+      case "vote":
+        return b.voteCount >= a.voteCount ? 1 : -1;
     }
   }
   return (
@@ -76,6 +78,7 @@ const FacultyList = () => {
             <option value="teaching">Teaching</option>
             <option value="grading">Grading</option>
             <option value="friendliness">Friendliness</option>
+            <option value="vote">Number of votes</option>
           </select>
         )}
         {isError ? <div>Error Fetching data...</div> : null}
