@@ -27,17 +27,15 @@ const FacultyList = () => {
         sortValue = a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
         break;
       case "teaching":
-        console.log(a.teaching, b.teaching);
-        sortValue = b.teaching >= a.teaching ? 1 : -1;
+        sortValue = b.teaching / b.voteCount >= a.teaching / a.voteCount ? 1 : -1;
         break;
       case "grading":
-        sortValue = b.grading >= a.grading ? 1 : -1;
+        sortValue = b.grading / b.voteCount >= a.grading / a.voteCount ? 1 : -1;
         break;
       case "friendliness":
-        sortValue = b.friendliness >= a.friendliness ? 1 : -1;
+        sortValue = b.friendliness / b.voteCount >= a.friendliness / a.voteCount ? 1 : -1;
         break;
       case "vote":
-        console.log(a.voteCount, b.voteCount);
         sortValue = b.voteCount >= a.voteCount ? 1 : -1;
         break;
     }
