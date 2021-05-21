@@ -42,7 +42,7 @@ db.connect((err) => {
   }
 });
 
-server.use("/api", authRouter);
+server.use("/api", authMiddleware, authRouter);
 server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
