@@ -34,12 +34,6 @@ const Contribute = () => {
         enabled: departmentID !== 0 && initials.length == 3,
       }
     );
-  useEffect(() => {
-    if (initials.length === 3) {
-      console.log("renewed");
-      refetch();
-    }
-  }, [initials]);
   async function submitFaculty() {
     const inRegex = /^[a-zA-Z]{3}$/;
     const nameRegex = /^$/;
