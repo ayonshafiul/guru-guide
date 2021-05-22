@@ -26,13 +26,14 @@ const Contribute = () => {
   const [name, setName] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
   const [courseCode, setCourseCode] = useState("");
-  const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/facultyverify", String(departmentID), String(initials)],
-    getAFacultyVerification,
-    {
-      enabled: departmentID !== 0 && showFacultyVerification && initials.length == 3,
-    }
-  );
+  const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
+    useQuery(
+      ["/api/facultyverify", String(departmentID), String(initials)],
+      getAFacultyVerification,
+      {
+        enabled: departmentID !== 0 && initials.length == 3,
+      }
+    );
   async function submitFaculty() {
     const inRegex = /^[a-zA-Z]{3}$/;
     const nameRegex = /^$/;
@@ -48,6 +49,10 @@ const Contribute = () => {
         facultyName: name,
       });
       if (data.success) {
+        refetch();
+        setName("");
+        setInitials("");
+        setShowName(false);
         addToast("Thanks for your contribution!");
       }
     }
@@ -82,21 +87,31 @@ const Contribute = () => {
             if (currentFaculty.facultyID == facultyID) {
               switch (data.message) {
                 case "upvoteinsert":
+                  setShowName(false);
                   currentFaculty.upVoteSum = currentFaculty.upVoteSum + 1;
+                  addToast("Thanks for your contribution!");
+                  setInitials("");
                   break;
                 case "downvoteinsert":
+                  setShowName(true);
                   currentFaculty.downVoteSum = currentFaculty.downVoteSum + 1;
                   break;
                 case "upvoteupdate":
+                  setShowName(false);
                   currentFaculty.upVoteSum = currentFaculty.upVoteSum + 1;
                   currentFaculty.downVoteSum = currentFaculty.downVoteSum - 1;
+                  addToast("Thanks for your contribution!");
+                  setInitials("");
                   break;
                 case "downvoteupdate":
+                  setShowName(true);
                   currentFaculty.downVoteSum = currentFaculty.downVoteSum + 1;
                   currentFaculty.upVoteSum = currentFaculty.upVoteSum - 1;
                   break;
                 case "noupdate":
-                  addToast("Thank you. We got your vote!");
+                  addToast("Thanks for your contribution!");
+                  setInitials("");
+                  setShowName(false);
                   break;
               }
             }
@@ -105,23 +120,27 @@ const Contribute = () => {
         }
       );
     } else {
-      console.log("refetched!");
       switch (data.message) {
         case "upvoteinsert":
-          addToast("Thanks for the thumbs up!");
+          setShowName(false);
+          addToast("Thanks for your contribution!");
+          setInitials("");
           break;
         case "downvoteinsert":
-          addToast("Thanks for the thumbs down!");
+          setShowName(true);
           break;
         case "upvoteupdate":
-          addToast("Thanks for the thumbs up!");
+          setShowName(false);
+          addToast("Thanks for your contribution!");
+          setInitials("");
           break;
         case "downvoteupdate":
-          addToast("Thanks for the thumbs down!");
-
+          setShowName(true);
           break;
         case "noupdate":
-          addToast("Thank you. We got your vote!");
+          addToast("Thanks for your contribution!");
+          setInitials("");
+          setShowName(false);
           break;
       }
     }
@@ -147,7 +166,6 @@ const Contribute = () => {
           Add Course
         </div>
       </div>
-      {String(showFacultyVerification)}
       {tab === "faculty" && (
         <>
           <div className="verify-wrapper">
@@ -180,70 +198,95 @@ const Contribute = () => {
                 placeholder={`Type the initials of the faculty you would like to add to the database`}
               />
             </div>
-            <div
-              className="submit-btn"
-              onClick={() => {
-                setShowFacultyVerification(true);
-              }}
-            >
-              Search
-            </div>
-            {showFacultyVerification && initials.length == 3 && (
-              <div className="faculty-verify-wrapper">
-                {isSuccess &&
-                  typeof data != undefined &&
-                  data.data
-                    .sort((f1, f2) => {
-                      return f2.upVoteSum - f1.upVoteSum;
-                    })
-                    .map((faculty) => {
+            {initials.length == 3 && (
+              <>
+                {isSuccess && typeof data != undefined ? (
+                  data.data.length > 0 ? (
+                    <>
+                      <div>
+                        We already have some info about {initials}. Please
+                        verify whether the info is right or wrong.
+                      </div>
+                      {data.data
+                        .sort((f1, f2) => {
+                          return f2.upVoteSum - f1.upVoteSum;
+                        })
+                        .map((faculty) => {
+                          return (
+                            <div
+                              key={faculty.facultyID}
+                              className="faculty-verify-list-wrapper"
+                            >
+                              <div className="faculty-verify-list-vote">
+                                <div className="faculty-verify-vote">
+                                  <div
+                                    className="icon up"
+                                    onClick={() => {
+                                      submitVote(faculty.facultyID, 1);
+                                    }}
+                                  >
+                                    <img className="icon-img" src={up} />
+                                  </div>
+                                  <div className="faculty-verify-vote-count">
+                                    {faculty.upVoteSum}
+                                  </div>
+                                </div>
+                                <div className="faculty-verify-vote">
+                                  <div
+                                    className="icon down"
+                                    onClick={() => {
+                                      submitVote(faculty.facultyID, 0);
+                                    }}
+                                  >
+                                    <img className="icon-img" src={down} />
+                                  </div>
+                                  <div className="faculty-verify-vote-count">
+                                    {faculty.downVoteSum}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="faculty-verify-name">
+                                {faculty.facultyName}{" "}
+                              </div>
+                              <div className="faculty-verify-initials">
+                                {faculty.facultyInitials}{" "}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </>
+                  ) : (
+                    (() => {
                       return (
-                        <div
-                          key={faculty.facultyID}
-                          className="faculty-verify-list-wrapper"
-                        >
-                          <div className="faculty-verify-list-vote">
-                            <div className="faculty-verify-vote">
-                              <div
-                                className="icon up"
-                                onClick={() => {
-                                  submitVote(faculty.facultyID, 1);
-                                }}
-                              >
-                                <img className="icon-img" src={up} />
-                              </div>
-                              <div className="faculty-verify-vote-count">
-                                {faculty.upVoteSum}
-                              </div>
-                            </div>
-                            <div className="faculty-verify-vote">
-                              <div
-                                className="icon down"
-                                onClick={() => {
-                                  submitVote(faculty.facultyID, 0);
-                                }}
-                              >
-                                <img className="icon-img" src={down} />
-                              </div>
-                              <div className="faculty-verify-vote-count">
-                                {faculty.downVoteSum}
-                              </div>
-                            </div>
+                        <>
+                          <div className="input">
+                            <TextInput
+                              value={name}
+                              setValue={setName}
+                              limit={50}
+                              finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                              allowedRegex={/^[a-zA-Z ]*$/}
+                              errorMsg={`Type something like "To Be Announced" :)`}
+                              placeholder={`Type the full name of the faculty you would like to add to the database`}
+                            />
                           </div>
-                          <div className="faculty-verify-name">
-                            {faculty.facultyName}{" "}
-                          </div>
-                          <div className="faculty-verify-initials">
-                            {faculty.facultyInitials}{" "}
-                          </div>
-                        </div>
+                          <div className="submit-btn" onClick={submitFaculty}>
+                            Add Faculty
+                          </div>{" "}
+                        </>
                       );
-                    })}
-              </div>
+                    })()
+                  )
+                ) : null}
+              </>
             )}
 
             {showName && (
               <>
+                <div>
+                  Since you think that the info is wrong, please feel free to
+                  add the correct info about {initials}.
+                </div>
                 <div className="input">
                   <TextInput
                     value={name}
