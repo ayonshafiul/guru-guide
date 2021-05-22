@@ -193,17 +193,19 @@ const Contribute = () => {
                 }
               })}
             </select>
-            <div className="input">
-              <TextInput
-                value={initials}
-                setValue={setInitials}
-                limit={3}
-                finalRegex={/^[a-zA-Z]{3}$/}
-                allowedRegex={/^[a-zA-Z]*$/}
-                errorMsg={`Type something like "TBA" :)`}
-                placeholder={`Type the initials of the faculty you would like to add to the database`}
-              />
-            </div>
+            {departmentID !== 0 && (
+              <div className="input">
+                <TextInput
+                  value={initials}
+                  setValue={setInitials}
+                  limit={3}
+                  finalRegex={/^[a-zA-Z]{3}$/}
+                  allowedRegex={/^[a-zA-Z]*$/}
+                  errorMsg={`Type something like "TBA" :)`}
+                  placeholder={`Type the initials of the faculty you would like to add to the database`}
+                />
+              </div>
+            )}
             {initials.length == 3 && (
               <>
                 {isSuccess && typeof data != undefined ? (
