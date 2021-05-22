@@ -180,7 +180,7 @@ const Contribute = () => {
               className="select-css select-full"
               value={departmentID}
               onChange={(e) => {
-                setDepartmentID(e.target.value);
+                setDepartmentID(parseInt(e.target.value));
               }}
             >
               {departments.map((department, index) => {
