@@ -27,7 +27,7 @@ const TextInput = (props) => {
               e.target.value.length <= limit &&
               e.target.value.match(allowedRegex)
             )
-              setValue(e.target.value);
+              setValue(e.target.value.toUpperCase());
           }}
         />
       ) : (
@@ -41,7 +41,7 @@ const TextInput = (props) => {
               e.target.value.length <= limit &&
               e.target.value.match(allowedRegex)
             )
-              setValue(e.target.value);
+              setValue(e.target.value.toUpperCase());
           }}
         />
       )}

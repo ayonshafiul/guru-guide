@@ -10,7 +10,9 @@ import {
   postCourse,
   postFaculty,
   getAFacultyVerification,
+  getACourseVerification,
   postFacultyVote,
+  postCourseVote,
 } from "../../Queries";
 import up from "../../assets/img/up.png";
 import down from "../../assets/img/down.png";
@@ -23,6 +25,7 @@ const Contribute = () => {
   const [initials, setInitials] = useState("");
   const [showFacultyVerification, setShowFacultyVerification] = useState(false);
   const [showName, setShowName] = useState(false);
+  const [showTitle, setShowTitle] = useState(false);
   const [name, setName] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
   const [courseCode, setCourseCode] = useState("");
@@ -34,6 +37,18 @@ const Contribute = () => {
         enabled: departmentID !== 0 && initials.length == 3,
       }
     );
+  const {
+    isSuccess: isCourseSuccess,
+    error: courseError,
+    data: courseData,
+    refetch: courseRefetch,
+  } = useQuery(
+    ["/api/courseverify", String(departmentID), String(courseCode)],
+    getACourseVerification,
+    {
+      enabled: departmentID !== 0 && courseCode.length == 6,
+    }
+  );
   async function submitFaculty() {
     const inRegex = /^[a-zA-Z]{3}$/;
     const nameRegex = /^$/;
@@ -67,80 +82,111 @@ const Contribute = () => {
     ) {
       const data = await postCourse({ departmentID, courseCode, courseTitle });
       if (data.success) {
+        courseRefetch();
+        setCourseCode("");
+        setCourseTitle("");
+        setShowTitle(false);
         addToast("Thanks for your contribution!");
       }
     }
   }
-  async function submitVote(facultyID, voteType) {
-    const data = await postFacultyVote({ voteType, facultyID });
-    const cacheExists = queryClient.getQueryData([
-      "/api/facultyverify",
-      String(departmentID),
-      String(initials),
-    ]);
+  async function submitVote(type, id, voteType) {
+    let data = null;
+    let key = [];
+    if (type === "faculty") {
+      data = await postFacultyVote({ voteType, facultyID: id });
+      key = ["/api/facultyverify", String(departmentID), String(initials)];
+    } else {
+      data = await postCourseVote({ voteType, courseID: id });
+      key = ["/api/courseverify", String(departmentID), String(courseCode)];
+    }
+    const cacheExists = queryClient.getQueryData(key);
     if (cacheExists) {
-      queryClient.setQueryData(
-        ["/api/facultyverify", String(departmentID), String(initials)],
-        (prevData) => {
-          for (let i = 0; i < prevData.data.length; i++) {
-            let currentFaculty = prevData.data[i];
-            if (currentFaculty.facultyID == facultyID) {
-              switch (data.message) {
-                case "upvoteinsert":
-                  setShowName(false);
-                  currentFaculty.upVoteSum = currentFaculty.upVoteSum + 1;
-                  addToast("Thanks for your contribution!");
+      queryClient.setQueryData(key, (prevData) => {
+        for (let i = 0; i < prevData.data.length; i++) {
+          let currentItem = prevData.data[i];
+
+          if (
+            (type === "faculty" && currentItem.facultyID == id) ||
+            (type === "course" && currentItem.courseID == id)
+          ) {
+            switch (data.message) {
+              case "upvoteinsert":
+                if (type === "faculty") setShowName(false);
+                else setShowTitle(false);
+                currentItem.upVoteSum = currentItem.upVoteSum + 1;
+                addToast("Thanks for your contribution!");
+                if (type === "faculty") setInitials("");
+                else setCourseCode("");
+                break;
+              case "downvoteinsert":
+                if (type === "faculty") setShowName(true);
+                else setShowTitle(true);
+                currentItem.downVoteSum = currentItem.downVoteSum + 1;
+                break;
+              case "upvoteupdate":
+                if (type === "faculty") setShowName(false);
+                else setShowTitle(false);
+                currentItem.upVoteSum = currentItem.upVoteSum + 1;
+                currentItem.downVoteSum = currentItem.downVoteSum - 1;
+                addToast("Thanks for your contribution!");
+                if (type === "faculty") setInitials("");
+                else setCourseCode("");
+                break;
+              case "downvoteupdate":
+                if (type === "faculty") setShowName(true);
+                else setShowTitle(true);
+                currentItem.downVoteSum = currentItem.downVoteSum + 1;
+                currentItem.upVoteSum = currentItem.upVoteSum - 1;
+                break;
+              case "noupdate":
+                addToast("Thanks for your contribution!");
+                if (type === "faculty") {
                   setInitials("");
-                  break;
-                case "downvoteinsert":
-                  setShowName(true);
-                  currentFaculty.downVoteSum = currentFaculty.downVoteSum + 1;
-                  break;
-                case "upvoteupdate":
                   setShowName(false);
-                  currentFaculty.upVoteSum = currentFaculty.upVoteSum + 1;
-                  currentFaculty.downVoteSum = currentFaculty.downVoteSum - 1;
-                  addToast("Thanks for your contribution!");
-                  setInitials("");
-                  break;
-                case "downvoteupdate":
-                  setShowName(true);
-                  currentFaculty.downVoteSum = currentFaculty.downVoteSum + 1;
-                  currentFaculty.upVoteSum = currentFaculty.upVoteSum - 1;
-                  break;
-                case "noupdate":
-                  addToast("Thanks for your contribution!");
-                  setInitials("");
-                  setShowName(false);
-                  break;
-              }
+                } else {
+                  setCourseCode("");
+                  setShowTitle(false);
+                }
+                break;
             }
           }
-          return prevData;
         }
-      );
+        return prevData;
+      });
     } else {
       switch (data.message) {
         case "upvoteinsert":
-          setShowName(false);
+          if (type === "faculty") setShowName(false);
+          else setShowTitle(false);
           addToast("Thanks for your contribution!");
-          setInitials("");
+          if (type === "faculty") setInitials("");
+          else setCourseCode("");
           break;
         case "downvoteinsert":
-          setShowName(true);
+          if (type === "faculty") setShowName(true);
+          else setShowTitle(true);
           break;
         case "upvoteupdate":
-          setShowName(false);
+          if (type === "faculty") setShowName(false);
+          else setShowTitle(false);
           addToast("Thanks for your contribution!");
-          setInitials("");
+          if (type === "faculty") setInitials("");
+          else setCourseCode("");
           break;
         case "downvoteupdate":
-          setShowName(true);
+          if (type === "faculty") setShowName(true);
+          else setShowTitle(true);
           break;
         case "noupdate":
           addToast("Thanks for your contribution!");
-          setInitials("");
-          setShowName(false);
+          if (type === "faculty") {
+            setInitials("");
+            setShowName(false);
+          } else {
+            setCourseCode("");
+            setShowTitle(false);
+          }
           break;
       }
     }
@@ -157,19 +203,19 @@ const Contribute = () => {
           className={tab === "faculty" ? "tab-btn tab-btn-active" : "tab-btn"}
           onClick={(e) => setTab("faculty")}
         >
-          Add Faculty
+          Faculty
         </div>
         <div
           className={tab === "course" ? "tab-btn tab-btn-active" : "tab-btn"}
           onClick={(e) => setTab("course")}
         >
-          Add Course
+          Course
         </div>
       </div>
       {tab === "faculty" && (
         <>
           <div className="verify-wrapper">
-            <div className="section-title">Faculty Add</div>
+            <div className="section-title">Contribute Faculty</div>
             <select
               className="select-css select-full"
               value={departmentID}
@@ -224,7 +270,11 @@ const Contribute = () => {
                                   <div
                                     className="icon up"
                                     onClick={() => {
-                                      submitVote(faculty.facultyID, 1);
+                                      submitVote(
+                                        "faculty",
+                                        faculty.facultyID,
+                                        1
+                                      );
                                     }}
                                   >
                                     <img className="icon-img" src={up} />
@@ -237,7 +287,11 @@ const Contribute = () => {
                                   <div
                                     className="icon down"
                                     onClick={() => {
-                                      submitVote(faculty.facultyID, 0);
+                                      submitVote(
+                                        "faculty",
+                                        faculty.facultyID,
+                                        0
+                                      );
                                     }}
                                   >
                                     <img className="icon-img" src={down} />
@@ -283,7 +337,7 @@ const Contribute = () => {
               </>
             )}
 
-            {showName && (
+            {showName && initials.length === 3 && departmentID !== 0 && (
               <>
                 <div>
                   Since you think that the info is wrong, please feel free to
@@ -302,7 +356,7 @@ const Contribute = () => {
                 </div>
                 <div className="submit-btn" onClick={submitFaculty}>
                   Add Faculty
-                </div>{" "}
+                </div>
               </>
             )}
           </div>
@@ -312,12 +366,12 @@ const Contribute = () => {
       {tab === "course" && (
         <>
           <div className="verify-wrapper">
-            <div className="section-title">Course Add</div>
+            <div className="section-title">Contribute Course</div>
             <select
               className="select-css select-full"
               value={departmentID}
               onChange={(e) => {
-                setDepartmentID(e.target.value);
+                setDepartmentID(parseInt(e.target.value));
               }}
             >
               {departments.map((department, index) => {
@@ -330,33 +384,127 @@ const Contribute = () => {
                 }
               })}
             </select>
-            <div className="input">
-              <TextInput
-                value={courseCode}
-                setValue={setCourseCode}
-                limit={6}
-                type=""
-                finalRegex={/^[a-zA-Z]{3}[0-9]{3}$/}
-                allowedRegex={/^[a-zA-Z0-9]*$/}
-                errorMsg={`Type something like "CSE420" :)`}
-                placeholder={`Type the course code of the course you would like to add to the database`}
-              />
-            </div>
-            <div className="input">
-              <TextInput
-                value={courseTitle}
-                setValue={setCourseTitle}
-                limit={50}
-                type=""
-                finalRegex={/^[a-zA-Z ]{3, 50}$/}
-                allowedRegex={/^[a-zA-Z ]*$/}
-                errorMsg={`Type something like "Introduction to microfinance" :)`}
-                placeholder={`Type the full title of the course you would like to add to the database`}
-              />
-            </div>
-            <div className="submit-btn" onClick={submitCourse}>
-              Add Course
-            </div>
+            {departmentID !== 0 && (
+              <div className="input">
+                <TextInput
+                  value={courseCode}
+                  setValue={setCourseCode}
+                  limit={6}
+                  type=""
+                  finalRegex={/^[a-zA-Z]{3}[0-9]{3}$/}
+                  allowedRegex={/^[a-zA-Z0-9]*$/}
+                  errorMsg={`Type something like "CSE420" :)`}
+                  placeholder={`Type the course code of the course you would like to add to the database`}
+                />
+              </div>
+            )}
+
+            {courseCode.length === 6 && (
+              <>
+                {isCourseSuccess && typeof courseData != undefined ? (
+                  courseData.data.length > 0 ? (
+                    <>
+                      <div>
+                        We already have some info about {courseCode}. Please
+                        verify whether the info is right or wrong.
+                      </div>
+                      {courseData.data
+                        .sort((c1, c2) => {
+                          return c2.upVoteSum - c1.upVoteSum;
+                        })
+                        .map((course) => {
+                          return (
+                            <div
+                              key={course.courseID}
+                              className="course-verify-list-wrapper"
+                            >
+                              <div className="course-verify-list-vote">
+                                <div className="course-verify-vote">
+                                  <div
+                                    className="icon up"
+                                    onClick={() => {
+                                      submitVote("course", course.courseID, 1);
+                                    }}
+                                  >
+                                    <img className="icon-img" src={up} />
+                                  </div>
+                                  <div className="course-verify-vote-count">
+                                    {course.upVoteSum}
+                                  </div>
+                                </div>
+                                <div className="course-verify-vote">
+                                  <div
+                                    className="icon down"
+                                    onClick={() => {
+                                      submitVote("course", course.courseID, 0);
+                                    }}
+                                  >
+                                    <img className="icon-img" src={down} />
+                                  </div>
+                                  <div className="course-verify-vote-count">
+                                    {course.downVoteSum}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="course-verify-title">
+                                {course.courseTitle}{" "}
+                              </div>
+                              <div className="course-verify-code">
+                                {course.courseCode}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </>
+                  ) : (
+                    (() => {
+                      return (
+                        <>
+                          <div className="input">
+                            <TextInput
+                              value={courseTitle}
+                              setValue={setCourseTitle}
+                              limit={50}
+                              type=""
+                              finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                              allowedRegex={/^[a-zA-Z ]*$/}
+                              errorMsg={`Type something like "Introduction to microfinance" :)`}
+                              placeholder={`Type the full title of the course you would like to add to the database`}
+                            />
+                          </div>
+                          <div className="submit-btn" onClick={submitCourse}>
+                            Add Course
+                          </div>
+                        </>
+                      );
+                    })()
+                  )
+                ) : null}
+              </>
+            )}
+            {showTitle && courseCode.length == 6 && departmentID !== 0 && (
+              <>
+                <div>
+                  Since you think that the info is wrong, please feel free to
+                  add the correct info about {courseCode}.
+                </div>
+                <div className="input">
+                  <TextInput
+                    value={courseTitle}
+                    setValue={setCourseTitle}
+                    limit={50}
+                    type=""
+                    finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                    allowedRegex={/^[a-zA-Z ]*$/}
+                    errorMsg={`Type something like "Introduction to microfinance" :)`}
+                    placeholder={`Type the full title of the course you would like to add to the database`}
+                  />
+                </div>
+                <div className="submit-btn" onClick={submitCourse}>
+                  Add Course
+                </div>
+              </>
+            )}
           </div>
         </>
       )}
