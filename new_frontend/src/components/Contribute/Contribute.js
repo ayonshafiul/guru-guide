@@ -4,7 +4,7 @@ import "../FacultyDetails/FacultyDetails.css";
 import "./Contribute.css";
 import { departments } from "../../serverDetails";
 import TextInput from "../TextInput/TextInput";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import {
   postCourse,
@@ -34,6 +34,12 @@ const Contribute = () => {
         enabled: departmentID !== 0 && initials.length == 3,
       }
     );
+  useEffect(() => {
+    if (initials.length === 3) {
+      console.log("renewed");
+      refetch();
+    }
+  }, [initials]);
   async function submitFaculty() {
     const inRegex = /^[a-zA-Z]{3}$/;
     const nameRegex = /^$/;
