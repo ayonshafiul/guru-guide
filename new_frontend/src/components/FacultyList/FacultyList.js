@@ -6,10 +6,11 @@ import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import { useQuery } from "react-query";
 import { getFaculty } from "../../Queries";
 import { departments } from "../../serverDetails";
+import useLocalStorage from "../../useLocalStorage";
 
 const FacultyList = () => {
   const [departmentID, setDepartmentID] = useState(0);
-  const [sort, setSort] = useState("");
+  const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
     ["/api/faculty", String(departmentID)],
     getFaculty
@@ -24,16 +25,19 @@ const FacultyList = () => {
         sortValue = avgB >= avgA ? 1 : -1;
         break;
       case "alphabetical":
-        sortValue = a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
+        sortValue =
+          a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
         break;
       case "teaching":
-        sortValue = b.teaching / b.voteCount >= a.teaching / a.voteCount ? 1 : -1;
+        sortValue =
+          b.teaching / b.voteCount >= a.teaching / a.voteCount ? 1 : -1;
         break;
       case "grading":
         sortValue = b.grading / b.voteCount >= a.grading / a.voteCount ? 1 : -1;
         break;
       case "friendliness":
-        sortValue = b.friendliness / b.voteCount >= a.friendliness / a.voteCount ? 1 : -1;
+        sortValue =
+          b.friendliness / b.voteCount >= a.friendliness / a.voteCount ? 1 : -1;
         break;
       case "vote":
         sortValue = b.voteCount >= a.voteCount ? 1 : -1;
