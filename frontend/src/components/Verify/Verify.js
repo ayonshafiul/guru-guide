@@ -4,12 +4,13 @@ import { useState, useContext } from "react";
 import { departments } from "../../serverDetails";
 import { getFacultyVerification, getCourseVerification } from "../../Queries";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Verify.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect } from "react-router-dom";
 
 const Verify = () => {
+  const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [tab, setTab] = useState("");
   const [departmentID, setDepartmentID] = useState(0);
@@ -36,7 +37,15 @@ const Verify = () => {
       enabled: courseDepartmentID != 0 && tab === "course",
     }
   );
-  if (!isAuth) return <Redirect to="/login"></Redirect>;
+  if (!isAuth)
+  return (
+    <Redirect
+      to={{
+        pathname: "/login",
+        state: { from: location },
+      }}
+    ></Redirect>
+  );
   return (
     <motion.div
       className="help"

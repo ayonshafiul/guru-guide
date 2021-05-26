@@ -8,10 +8,11 @@ import { getFaculty } from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
-import {Redirect} from 'react-router-dom';
+import { Redirect, useLocation } from "react-router-dom";
 
 const FacultyList = () => {
-  const {isAuth} = useContext(AuthContext);
+  const location = useLocation();
+  const { isAuth } = useContext(AuthContext);
   const [departmentID, setDepartmentID] = useState(0);
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
@@ -48,7 +49,15 @@ const FacultyList = () => {
     }
     return sortValue;
   }
-  if (!isAuth) return <Redirect to="/login"></Redirect>;
+  if (!isAuth)
+    return (
+      <Redirect
+        to={{
+          pathname: "/login",
+          state: { from: location },
+        }}
+      ></Redirect>
+    );
   return (
     <motion.div
       className="facultylist"

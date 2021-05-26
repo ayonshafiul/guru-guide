@@ -2,14 +2,13 @@ import axios from "axios";
 import { useHistory, Redirect } from "react-router-dom";
 import server from "../../serverDetails";
 import GoogleLogin from "react-google-login";
-import {useContext} from 'react';
-import {AuthContext} from '../../contexts/AuthContext';
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 import "./Login.css";
-
 
 const Login = () => {
   const history = useHistory();
-  const {isAuth, setIsAuth} = useContext(AuthContext);
+  const { isAuth, setIsAuth } = useContext(AuthContext);
   const responseGoogle = (googleUser) => {
     var id_token = googleUser.getAuthResponse().id_token;
     axios
@@ -20,7 +19,8 @@ const Login = () => {
         withCredentials: true,
       })
       .then((res) => {
-        history.push("/faculty");
+        console.log(history);
+        history.go(-1);
         setIsAuth(true);
       })
       .catch((err) => {
@@ -36,6 +36,9 @@ const Login = () => {
         "Something Bad happened. Please Make sure you are not in incognito mode!"
       );
   };
+  if (isAuth) {
+    console.log(history);
+  }
   return (
     <div className="login">
       {!isAuth ? (
@@ -47,7 +50,7 @@ const Login = () => {
           onFailure={handleFailure}
         />
       ) : (
-        <Redirect to="/faculty" />
+        <Redirect to={typeof history.location.state !== "undefined" ? history.location.state.from.pathname : "/faculty"} />
       )}
     </div>
   );

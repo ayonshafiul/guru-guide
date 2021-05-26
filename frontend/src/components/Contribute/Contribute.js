@@ -18,9 +18,10 @@ import up from "../../assets/img/up.png";
 import down from "../../assets/img/down.png";
 import { useToasts } from "react-toast-notifications";
 import { AuthContext } from "../../contexts/AuthContext";
-import {Redirect} from 'react-router-dom';
+import { Redirect, useLocation } from "react-router-dom";
 const Contribute = () => {
-  const {isAuth} = useContext(AuthContext);
+  const location = useLocation();
+  const { isAuth } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const { addToast } = useToasts();
   const [tab, setTab] = useState("");
@@ -194,7 +195,15 @@ const Contribute = () => {
       }
     }
   }
-  if (!isAuth) return <Redirect to="/login"></Redirect>;
+  if (!isAuth)
+    return (
+      <Redirect
+        to={{
+          pathname: "/login",
+          state: { from: location },
+        }}
+      ></Redirect>
+    );
   return (
     <motion.div
       className="verify"

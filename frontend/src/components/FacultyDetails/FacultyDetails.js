@@ -8,7 +8,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import server, { departments } from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Redirect, useParams } from "react-router-dom";
+import { Redirect, useLocation, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { AuthContext } from "../../contexts/AuthContext";
 import {
@@ -22,6 +22,7 @@ import {
   getUserRating,
 } from "../../Queries";
 const FacultyDetails = (props) => {
+  const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const { id } = useParams();
   const { addToast } = useToasts();
@@ -222,7 +223,15 @@ const FacultyDetails = (props) => {
     }
     return str;
   }
-  if (!isAuth) return <Redirect to="/login"></Redirect>;
+  if (!isAuth)
+    return (
+      <Redirect
+        to={{
+          pathname: "/login",
+          state: { from: location },
+        }}
+      ></Redirect>
+    );
   return (
     <motion.div
       className="facultylist"

@@ -1,7 +1,7 @@
 import "./CourseVerify.css";
 import { useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect, useLocation } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getACourseVerification, postCourseVote } from "../../Queries";
 import up from "../../assets/img/up.png";
@@ -9,6 +9,7 @@ import down from "../../assets/img/down.png";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const CourseVerify = () => {
+  const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const { departmentID, code } = useParams();
   const queryClient = useQueryClient();
@@ -81,7 +82,15 @@ const CourseVerify = () => {
       }
     }
   }
-  if (!isAuth) return <Redirect to="/login"></Redirect>;
+  if (!isAuth)
+  return (
+    <Redirect
+      to={{
+        pathname: "/login",
+        state: { from: location },
+      }}
+    ></Redirect>
+  );
   return (
     <div className="course-verify-wrapper">
       {isSuccess &&

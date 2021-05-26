@@ -1,7 +1,7 @@
 import "./FacultyVerify.css";
 import { useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Redirect, useLocation } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getAFacultyVerification, postFacultyVote } from "../../Queries";
 import up from "../../assets/img/up.png";
@@ -9,6 +9,7 @@ import down from "../../assets/img/down.png";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const FacultyVerify = () => {
+  const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const { departmentID, initials } = useParams();
   const queryClient = useQueryClient();
@@ -80,7 +81,15 @@ const FacultyVerify = () => {
       }
     }
   }
-  if (!isAuth) return <Redirect to="/login"></Redirect>;
+  if (!isAuth)
+    return (
+      <Redirect
+        to={{
+          pathname: "/login",
+          state: { from: location },
+        }}
+      ></Redirect>
+    );
   return (
     <div className="faculty-verify-wrapper">
       {isSuccess &&
