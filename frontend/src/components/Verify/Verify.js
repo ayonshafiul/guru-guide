@@ -1,13 +1,16 @@
 import { motion } from "framer-motion";
 import pageAnimationVariant from "../../AnimationData";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { departments } from "../../serverDetails";
 import { getFacultyVerification, getCourseVerification } from "../../Queries";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import "./Verify.css";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Redirect } from "react-router-dom";
 
 const Verify = () => {
+  const { isAuth } = useContext(AuthContext);
   const [tab, setTab] = useState("");
   const [departmentID, setDepartmentID] = useState(0);
   const [courseDepartmentID, setCourseDepartmentID] = useState(0);
@@ -33,6 +36,7 @@ const Verify = () => {
       enabled: courseDepartmentID != 0 && tab === "course",
     }
   );
+  if (!isAuth) return <Redirect to="/login"></Redirect>;
   return (
     <motion.div
       className="help"

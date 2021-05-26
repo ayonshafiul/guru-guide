@@ -1,17 +1,15 @@
-import { motion } from "framer-motion";
-import pageAnimationVariant from "../../AnimationData";
 import "./FacultyVerify.css";
-import { useState, useRef, useEffect } from "react";
-import axios from "axios";
-import server, { departments } from "../../serverDetails";
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useContext } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import { useParams, Redirect } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getAFacultyVerification, postFacultyVote } from "../../Queries";
 import up from "../../assets/img/up.png";
 import down from "../../assets/img/down.png";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const FacultyVerify = () => {
+  const { isAuth } = useContext(AuthContext);
   const { departmentID, initials } = useParams();
   const queryClient = useQueryClient();
   const { addToast } = useToasts();
@@ -19,7 +17,7 @@ const FacultyVerify = () => {
     ["/api/facultyverify", String(departmentID), String(initials)],
     getAFacultyVerification,
     {
-      enabled: departmentID != 0,
+      enabled: departmentID !== 0,
     }
   );
   async function submitVote(facultyID, voteType) {
@@ -82,6 +80,7 @@ const FacultyVerify = () => {
       }
     }
   }
+  if (!isAuth) return <Redirect to="/login"></Redirect>;
   return (
     <div className="faculty-verify-wrapper">
       {isSuccess &&

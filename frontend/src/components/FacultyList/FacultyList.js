@@ -1,14 +1,17 @@
 import "./FacultyList.css";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import { useQuery } from "react-query";
 import { getFaculty } from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
+import { AuthContext } from "../../contexts/AuthContext";
+import {Redirect} from 'react-router-dom';
 
 const FacultyList = () => {
+  const {isAuth} = useContext(AuthContext);
   const [departmentID, setDepartmentID] = useState(0);
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
@@ -45,6 +48,7 @@ const FacultyList = () => {
     }
     return sortValue;
   }
+  if (!isAuth) return <Redirect to="/login"></Redirect>;
   return (
     <motion.div
       className="facultylist"
@@ -90,7 +94,7 @@ const FacultyList = () => {
         )}
         {isError ? <div>Error Fetching data...</div> : null}
         {isSuccess &&
-          typeof data != undefined &&
+          typeof data.data !== undefined &&
           data.data.sort(sortFunction).map((faculty) => {
             return (
               <FacultyListItem faculty={faculty} key={faculty.facultyID} />
