@@ -4,12 +4,13 @@ import pageAnimationVariant from "../../AnimationData";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import TextInput from "../TextInput/TextInput";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import server, { departments } from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
+import { AuthContext } from "../../contexts/AuthContext";
 import {
   getAFaculty,
   getComment,
@@ -21,6 +22,7 @@ import {
   getUserRating,
 } from "../../Queries";
 const FacultyDetails = (props) => {
+  const { isAuth } = useContext(AuthContext);
   const { id } = useParams();
   const { addToast } = useToasts();
   const pageRef = useRef(null);
@@ -83,22 +85,24 @@ const FacultyDetails = (props) => {
 
   useEffect(async () => {
     const data = await getAFaculty({ queryKey: ["/api/faculty", id] });
-    const {
-      facultyName,
-      facultyInitials,
-      departmentID,
-      teaching,
-      grading,
-      friendliness,
-      voteCount,
-    } = data.data;
-    if (data.success) {
-      setCurrentFaculty({
+    if (typeof data.data !== "undefined") {
+      const {
         facultyName,
         facultyInitials,
         departmentID,
-      });
-      updateDisplayRating(teaching, grading, friendliness, voteCount);
+        teaching,
+        grading,
+        friendliness,
+        voteCount,
+      } = data.data;
+      if (data.success) {
+        setCurrentFaculty({
+          facultyName,
+          facultyInitials,
+          departmentID,
+        });
+        updateDisplayRating(teaching, grading, friendliness, voteCount);
+      }
     }
   }, []);
 
@@ -213,12 +217,12 @@ const FacultyDetails = (props) => {
 
   function calculateStars() {
     let str = [];
-    for ( let i = 0; i < parseInt(displayRating.overall); i++) {
+    for (let i = 0; i < parseInt(displayRating.overall); i++) {
       str.push(<>&#9733;</>);
     }
     return str;
   }
-
+  if (!isAuth) return <Redirect to="/login"></Redirect>;
   return (
     <motion.div
       className="facultylist"
@@ -236,7 +240,7 @@ const FacultyDetails = (props) => {
         </div>
         <div className="faculty-details-overall">
           <span className="faculty-details-text-bg  yellow-stars">
-           {calculateStars()}
+            {calculateStars()}
           </span>
           <div
             className="faculty-details-overlay faculty-details-overall-background-overlay"
@@ -245,7 +249,7 @@ const FacultyDetails = (props) => {
             }}
           ></div>
         </div>
-        
+
         <div className="faculty-details-teaching">
           <span className="faculty-details-text-bg">
             Teaching: {displayRating.teaching}

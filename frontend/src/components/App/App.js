@@ -10,9 +10,7 @@ import Verify from "../Verify/Verify";
 import Contribute from "../Contribute/Contribute";
 import Help from "../Help/Help";
 import Contact from "../Contact/Contact";
-import { useState, useEffect } from "react";
-import server from "../../serverDetails";
-import axios from "axios";
+import { useState, useContext } from "react";
 import FacultyList from "../FacultyList/FacultyList";
 import FacultyVerify from "../FacultyVerify/FacultyVerify";
 import Login from "../Login/Login";
@@ -25,9 +23,9 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import FacultyDetails from "../FacultyDetails/FacultyDetails";
 import CourseVerify from "../CourseVerify/CourseVerify";
 import menu from "../../assets/img/menu.png";
+import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
 
-function App() {
-  const [isAuth, setIsAuth] = useState("false");
+function App() { 
   const [navStyle, setNavStyle] = useState(false);
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -40,20 +38,6 @@ function App() {
     },
   });
 
-  useEffect(() => {
-    axios
-      .get(server.url + "/api/isauth", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        if (res.data.success) {
-          setIsAuth(true);
-        } else {
-          setIsAuth(false);
-        }
-      });
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider
@@ -61,68 +45,65 @@ function App() {
         autoDismiss="true"
         placement="top-right"
       >
-        <Router>
-          <Navbar navStyle={navStyle} setNavStyle={setNavStyle}></Navbar>
-          <div className="header-top">
-            <div
-              className="menu-btn"
-              onClick={() => {
-                setNavStyle((prevStyle) => {
-                  return !prevStyle;
-                });
-              }}
-            >
-              <img src={menu} style={{ width: 40, height: 40 }} />
+        <AuthContextProvider>
+          <Router>
+            <Navbar navStyle={navStyle} setNavStyle={setNavStyle}></Navbar>
+            <div className="header-top">
+              <div
+                className="menu-btn"
+                onClick={() => {
+                  setNavStyle((prevStyle) => {
+                    return !prevStyle;
+                  });
+                }}
+              >
+                <img src={menu} style={{ width: 40, height: 40 }} />
+              </div>
+              <h1 className="title">Guruguide</h1>
             </div>
-            <h1 className="title">Guruguide</h1>
-          </div>
 
-          <div className="App">
-            <div className="margin-auto">
-              <Switch>
-                <Route exact path="/contribute">
-                  {isAuth ? <Contribute /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/verify">
-                  {isAuth ? <Verify /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/help">
-                  {isAuth ? <Help /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/contact">
-                  {isAuth ? <Contact /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/faculty">
-                  {isAuth ? <FacultyList /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/faculty/:id">
-                  {isAuth ? (
-                    <FacultyDetails navStyle={navStyle} />
-                  ) : (
-                    <Redirect to="/login" />
-                  )}
-                </Route>
-                <Route exact path="/verify/faculty/:departmentID/:initials">
-                  {isAuth ? <FacultyVerify /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/verify/course/:departmentID/:code">
-                  {isAuth ? <CourseVerify /> : <Redirect to="/login" />}
-                </Route>
-                <Route exact path="/login">
-                  <Login isAuth={isAuth} setIsAuth={setIsAuth} />
-                </Route>
-
-                <Route exact path="/">
-                  <Home></Home>
-                </Route>
-                <Route path="*">
-                  <Page404 />
-                </Route>
-              </Switch>
+            <div className="App">
+              <div className="margin-auto">
+                <Switch>
+                  <Route exact path="/contribute">
+                    <Contribute />
+                  </Route>
+                  <Route exact path="/verify">
+                    <Verify />
+                  </Route>
+                  <Route exact path="/help">
+                    <Help />
+                  </Route>
+                  <Route exact path="/contact">
+                    <Contact />
+                  </Route>
+                  <Route exact path="/faculty">
+                    <FacultyList />
+                  </Route>
+                  <Route exact path="/faculty/:id">
+                      <FacultyDetails navStyle={navStyle} />
+                  </Route>
+                  <Route exact path="/verify/faculty/:departmentID/:initials">
+                    <FacultyVerify />
+                  </Route>
+                  <Route exact path="/verify/course/:departmentID/:code">
+                    <CourseVerify />
+                  </Route>
+                  <Route exact path="/login">
+                    <Login/>
+                  </Route>
+                  <Route exact path="/">
+                    <Home></Home>
+                  </Route>
+                  <Route path="*">
+                    <Page404 />
+                  </Route>
+                </Switch>
+              </div>
             </div>
-          </div>
-          <ScrollToTop />
-        </Router>
+            <ScrollToTop />
+          </Router>
+        </AuthContextProvider>
       </ToastProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>

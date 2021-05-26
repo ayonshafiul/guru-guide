@@ -1,13 +1,15 @@
 import axios from "axios";
-import { useEffect } from "react";
 import { useHistory, Redirect } from "react-router-dom";
 import server from "../../serverDetails";
 import GoogleLogin from "react-google-login";
+import {useContext} from 'react';
+import {AuthContext} from '../../contexts/AuthContext';
 import "./Login.css";
 
-const Login = ({ isAuth, setIsAuth }) => {
-  const history = useHistory();
 
+const Login = () => {
+  const history = useHistory();
+  const {isAuth, setIsAuth} = useContext(AuthContext);
   const responseGoogle = (googleUser) => {
     var id_token = googleUser.getAuthResponse().id_token;
     axios
