@@ -36,9 +36,6 @@ const Login = () => {
         "Something Bad happened. Please Make sure you are not in incognito mode!"
       );
   };
-  if (isAuth) {
-    console.log(history);
-  }
   return (
     <div className="login">
       {!isAuth ? (
@@ -50,7 +47,13 @@ const Login = () => {
           onFailure={handleFailure}
         />
       ) : (
-        <Redirect to={typeof history.location.state !== "undefined" ? history.location.state.from.pathname : "/faculty"} />
+        <Redirect
+          to={
+            typeof history.location.state !== "undefined"
+              ? history.location.state.from.pathname
+              : "/faculty"
+          }
+        />
       )}
     </div>
   );
