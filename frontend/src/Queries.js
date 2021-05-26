@@ -3,10 +3,12 @@ import server from "./serverDetails";
 
 export const getFaculty = async ({ queryKey }) => {
   const [key, departmentID] = queryKey;
+  console.log(departmentID);
   const res = await axios.get(
     server.url + "/api/faculty/department/" + departmentID,
     { withCredentials: true }
   );
+  console.log(res.data);
   return res.data;
 };
 export const getFacultyVerification = async ({ queryKey }) => {
@@ -21,7 +23,7 @@ export const getFacultyVerification = async ({ queryKey }) => {
 export const getAFacultyVerification = async ({ queryKey }) => {
   const [key, departmentID, facultyInitials] = queryKey;
   const res = await axios.get(
-    server.url + "/api/facultyverify/" + departmentID+ "/" + facultyInitials,
+    server.url + "/api/facultyverify/" + departmentID + "/" + facultyInitials,
     { withCredentials: true }
   );
   return res.data;
@@ -39,7 +41,7 @@ export const getCourseVerification = async ({ queryKey }) => {
 export const getACourseVerification = async ({ queryKey }) => {
   const [key, departmentID, courseCode] = queryKey;
   const res = await axios.get(
-    server.url + "/api/courseverify/" + departmentID+ "/" + courseCode,
+    server.url + "/api/courseverify/" + departmentID + "/" + courseCode,
     { withCredentials: true }
   );
   return res.data;
@@ -115,8 +117,11 @@ export const postComment = async ({ comment, facultyID, courseID }) => {
   return res.data;
 };
 
-export const postFaculty = async ({ departmentID, facultyInitials, facultyName }) => {
-  
+export const postFaculty = async ({
+  departmentID,
+  facultyInitials,
+  facultyName,
+}) => {
   const res = await axios.post(
     server.url + "/api/faculty/",
     { departmentID, facultyInitials, facultyName },
@@ -143,7 +148,6 @@ export const postCommentVote = async ({ voteType, commentID }) => {
   return res.data;
 };
 
-
 export const postFacultyVote = async ({ voteType, facultyID }) => {
   const res = await axios.post(
     server.url + "/api/facultyvote/" + facultyID,
@@ -152,7 +156,6 @@ export const postFacultyVote = async ({ voteType, facultyID }) => {
   );
   return res.data;
 };
-
 
 export const postCourseVote = async ({ voteType, courseID }) => {
   const res = await axios.post(

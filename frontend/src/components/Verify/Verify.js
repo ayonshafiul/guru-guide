@@ -8,18 +8,18 @@ import { Link, useLocation } from "react-router-dom";
 import "./Verify.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect } from "react-router-dom";
+import useLocalStorage from "../../useLocalStorage";
 
 const Verify = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [tab, setTab] = useState("");
-  const [departmentID, setDepartmentID] = useState(0);
-  const [courseDepartmentID, setCourseDepartmentID] = useState(0);
+  const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
     ["/api/facultyverify", String(departmentID)],
     getFacultyVerification,
     {
-      enabled: departmentID != 0 && tab === "faculty",
+      enabled: parseInt(departmentID) !== 0 && tab === "faculty",
     }
   );
 
@@ -31,10 +31,10 @@ const Verify = () => {
     data: courseData,
     isFetching: isCourseFetching,
   } = useQuery(
-    ["/api/courseverify", String(courseDepartmentID)],
+    ["/api/courseverify", departmentID],
     getCourseVerification,
     {
-      enabled: courseDepartmentID != 0 && tab === "course",
+      enabled: parseInt(departmentID) !== 0 && tab === "course",
     }
   );
   if (!isAuth)
@@ -73,7 +73,7 @@ const Verify = () => {
             className="select-css select-full"
             value={departmentID}
             onChange={(e) => {
-              setDepartmentID(parseInt(e.target.value));
+              setDepartmentID(String(e.target.value));
             }}
           >
             {departments.map((department, index) => {
@@ -110,9 +110,9 @@ const Verify = () => {
         <div className="verify-wrapper">
           <select
             className="select-css select-full"
-            value={courseDepartmentID}
+            value={departmentID}
             onChange={(e) => {
-              setCourseDepartmentID(parseInt(e.target.value));
+              setDepartmentID(String(e.target.value));
             }}
           >
             {departments.map((department, index) => {
@@ -132,7 +132,7 @@ const Verify = () => {
                 return (
                   <Link
                     key={course.courseCode}
-                    to={`/verify/course/${courseDepartmentID}/${course.courseCode}`}
+                    to={`/verify/course/${departmentID}/${course.courseCode}`}
                     style={{ textDecoration: "none" }}
                   >
                     <div className="verify-list-item">{course.courseCode}</div>

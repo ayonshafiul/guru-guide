@@ -13,7 +13,7 @@ import { Redirect, useLocation } from "react-router-dom";
 const FacultyList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
-  const [departmentID, setDepartmentID] = useState(0);
+  const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
     ["/api/faculty", String(departmentID)],

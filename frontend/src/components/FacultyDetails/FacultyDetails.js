@@ -21,6 +21,7 @@ import {
   getUserComment,
   getUserRating,
 } from "../../Queries";
+import useLocalStorage from "../../useLocalStorage";
 const FacultyDetails = (props) => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
@@ -31,8 +32,8 @@ const FacultyDetails = (props) => {
   const [page, setPage] = useState("");
   const [displayRating, setDisplayRating] = useState({});
   const [rating, setRating] = useState({});
-  const [departmentID, setDepartmentID] = useState(0);
-  const [courseID, setCourseID] = useState(0);
+  const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
+  const [courseID, setCourseID] = useState("0");
   const [courseCode, setCourseCode] = useState("");
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
@@ -44,7 +45,7 @@ const FacultyDetails = (props) => {
     data: ratingData,
     error: ratingError,
   } = useMutation(postRating, {
-    enabled: courseID != 0,
+    enabled: parseInt(courseID) !== 0,
   });
   const {
     mutate: commentMutate,
@@ -53,7 +54,7 @@ const FacultyDetails = (props) => {
     data: commentPostData,
     error: commentPostError,
   } = useMutation(postComment, {
-    enabled: courseID != 0,
+    enabled: parseInt(courseID) !== 0,
   });
 
   const {
@@ -68,7 +69,7 @@ const FacultyDetails = (props) => {
     ["/api/comment", String(id), String(courseID), String(commentPage)],
     getComment,
     {
-      enabled: page === "comments" && courseID != 0,
+      enabled: page === "comments" && parseInt(courseID) !== 0,
       keepPreviousData: true,
     }
   );
@@ -81,7 +82,7 @@ const FacultyDetails = (props) => {
     error: courseError,
     isError: courseIsError,
   } = useQuery(["/api/course", departmentID], getCourse, {
-    enabled: departmentID != 0,
+    enabled: parseInt(departmentID) !== 0,
   });
 
   useEffect(async () => {
@@ -293,8 +294,8 @@ const FacultyDetails = (props) => {
           className="select-css"
           value={departmentID}
           onChange={(e) => {
-            setDepartmentID(e.target.value);
-            setCourseID(0);
+            setDepartmentID(String(e.target.value));
+            setCourseID("0");
           }}
         >
           {departments.map((department, index) => {
@@ -307,19 +308,19 @@ const FacultyDetails = (props) => {
             }
           })}
         </select>
-        {departmentID != 0 && typeof courseData != "undefined" && (
+        {parseInt(departmentID) !== 0 && typeof courseData != "undefined" && (
           <select
             className="select-css"
             value={courseID}
             onChange={(e) => {
               setCourseCode(e.target.options[e.target.selectedIndex].text);
-              setCourseID(e.target.value);
+              setCourseID(String(e.target.value));
             }}
           >
             <option value="0">SELECT COURSE</option>
             {courseData.data.map((course) => {
               return (
-                <option key={course.courseID} value={course.courseID}>
+                <option key={course.courseID} value={String(course.courseID)}>
                   {course.courseCode}
                 </option>
               );
@@ -336,7 +337,7 @@ const FacultyDetails = (props) => {
               : "faculty-details-comments"
           }
           onClick={() => {
-            if (courseID != 0) setPage("comments");
+            if (parseInt(courseID) !== 0) setPage("comments");
             else addToast("Please select a course!", { appearance: "error" });
           }}
         >
@@ -349,7 +350,7 @@ const FacultyDetails = (props) => {
               : "faculty-details-rate"
           }
           onClick={() => {
-            if (courseID != 0) setPage("rate");
+            if (parseInt(courseID) !== 0) setPage("rate");
             else addToast("Please select a course!", { appearance: "error" });
           }}
         >
@@ -359,7 +360,7 @@ const FacultyDetails = (props) => {
       {commentIsSuccess &&
         typeof commentData != "undefined" &&
         page == "comments" &&
-        courseID != 0 && (
+        parseInt(courseID) !== 0 && (
           <>
             {commentPage == 1 && (
               <div className="wrapper-general">
@@ -419,7 +420,7 @@ const FacultyDetails = (props) => {
           </>
         )}
 
-      {page == "rate" && courseID != 0 && (
+      {page == "rate" && parseInt(courseID) !== 0 && (
         <>
           {courseCode && (
             <div className="info-header">

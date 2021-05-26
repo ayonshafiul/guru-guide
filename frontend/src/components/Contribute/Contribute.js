@@ -19,13 +19,14 @@ import down from "../../assets/img/down.png";
 import { useToasts } from "react-toast-notifications";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
+import useLocalStorage from "../../useLocalStorage";
 const Contribute = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const { addToast } = useToasts();
   const [tab, setTab] = useState("");
-  const [departmentID, setDepartmentID] = useState(0);
+  const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
   const [initials, setInitials] = useState("");
   const [showFacultyVerification, setShowFacultyVerification] = useState(false);
   const [showName, setShowName] = useState(false);
@@ -35,10 +36,10 @@ const Contribute = () => {
   const [courseCode, setCourseCode] = useState("");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
     useQuery(
-      ["/api/facultyverify", String(departmentID), String(initials)],
+      ["/api/facultyverify", departmentID, String(initials)],
       getAFacultyVerification,
       {
-        enabled: departmentID !== 0 && initials.length == 3,
+        enabled: parseInt(departmentID) !== 0 && initials.length == 3,
       }
     );
   const {
@@ -47,17 +48,17 @@ const Contribute = () => {
     data: courseData,
     refetch: courseRefetch,
   } = useQuery(
-    ["/api/courseverify", String(departmentID), String(courseCode)],
+    ["/api/courseverify", departmentID, String(courseCode)],
     getACourseVerification,
     {
-      enabled: departmentID !== 0 && courseCode.length == 6,
+      enabled: parseInt(departmentID) !== 0 && courseCode.length == 6,
     }
   );
   async function submitFaculty() {
     const inRegex = /^[a-zA-Z]{3}$/;
     const nameRegex = /^$/;
     if (
-      departmentID != 0 &&
+      parseInt(departmentID) !== 0 &&
       initials.match(inRegex) &&
       name.length >= 3 &&
       name.length <= 50
@@ -79,7 +80,7 @@ const Contribute = () => {
   async function submitCourse() {
     const ccRegex = /^[a-zA-Z]{3}[0-9]{3}$/;
     if (
-      departmentID != 0 &&
+      parseInt(departmentID) !== 0 &&
       courseCode.match(ccRegex) &&
       courseTitle.length >= 3 &&
       courseTitle.length <= 50
@@ -99,10 +100,10 @@ const Contribute = () => {
     let key = [];
     if (type === "faculty") {
       data = await postFacultyVote({ voteType, facultyID: id });
-      key = ["/api/facultyverify", String(departmentID), String(initials)];
+      key = ["/api/facultyverify", departmentID, String(initials)];
     } else {
       data = await postCourseVote({ voteType, courseID: id });
-      key = ["/api/courseverify", String(departmentID), String(courseCode)];
+      key = ["/api/courseverify", departmentID, String(courseCode)];
     }
     const cacheExists = queryClient.getQueryData(key);
     if (cacheExists) {
@@ -233,7 +234,7 @@ const Contribute = () => {
               className="select-css select-full"
               value={departmentID}
               onChange={(e) => {
-                setDepartmentID(parseInt(e.target.value));
+                setDepartmentID(String(e.target.value));
               }}
             >
               {departments.map((department, index) => {
@@ -246,7 +247,7 @@ const Contribute = () => {
                 }
               })}
             </select>
-            {departmentID !== 0 && (
+            {parseInt(departmentID) !== 0 && (
               <div className="input">
                 <TextInput
                   value={initials}
@@ -350,7 +351,7 @@ const Contribute = () => {
               </>
             )}
 
-            {showName && initials.length === 3 && departmentID !== 0 && (
+            {showName && initials.length === 3 && parseInt(departmentID) !== 0 && (
               <>
                 <div>
                   Since you think that the info is wrong, please feel free to
@@ -384,7 +385,7 @@ const Contribute = () => {
               className="select-css select-full"
               value={departmentID}
               onChange={(e) => {
-                setDepartmentID(parseInt(e.target.value));
+                setDepartmentID(String(e.target.value));
               }}
             >
               {departments.map((department, index) => {
@@ -397,7 +398,7 @@ const Contribute = () => {
                 }
               })}
             </select>
-            {departmentID !== 0 && (
+            {parseInt(departmentID) !== 0 && (
               <div className="input">
                 <TextInput
                   value={courseCode}
@@ -495,7 +496,7 @@ const Contribute = () => {
                 ) : null}
               </>
             )}
-            {showTitle && courseCode.length == 6 && departmentID !== 0 && (
+            {showTitle && courseCode.length == 6 && parseInt(departmentID) !== 0 && (
               <>
                 <div>
                   Since you think that the info is wrong, please feel free to
