@@ -249,33 +249,29 @@ const FacultyDetails = (props) => {
             }
           })}
         </select>
-        {parseInt(departmentID) !== 0 &&
-          typeof courseData.data !== "undefined" && (
-            <select
-              className="select-css"
-              value={courseID}
-              onChange={(e) => {
-                setCourseCode(e.target.options[e.target.selectedIndex].text);
-                setCourseID(String(e.target.value));
-              }}
-            >
-              <option value="0">SELECT COURSE</option>
-              {courseData.data
-                .sort((c1, c2) => {
-                  return c1.courseCode > c2.courseCode ? 1 : -1;
-                })
-                .map((course) => {
-                  return (
-                    <option
-                      key={course.courseID}
-                      value={String(course.courseID)}
-                    >
-                      {course.courseCode}
-                    </option>
-                  );
-                })}
-            </select>
-          )}
+        {parseInt(departmentID) !== 0 && typeof courseData !== "undefined" && (
+          <select
+            className="select-css"
+            value={courseID}
+            onChange={(e) => {
+              setCourseCode(e.target.options[e.target.selectedIndex].text);
+              setCourseID(String(e.target.value));
+            }}
+          >
+            <option value="0">SELECT COURSE</option>
+            {courseData.data
+              .sort((c1, c2) => {
+                return c1.courseCode > c2.courseCode ? 1 : -1;
+              })
+              .map((course) => {
+                return (
+                  <option key={course.courseID} value={String(course.courseID)}>
+                    {course.courseCode}
+                  </option>
+                );
+              })}
+          </select>
+        )}
       </div>
       {facultyCourseRatingIsSuccess &&
       typeof facultyCourseRatingData.data !== "undefined"
