@@ -1,9 +1,15 @@
+.faculty-verify-header {
+  text-align: center;
+  color: #61dafb;
+  font-weight: bold;
+}
+
 .faculty-verify-wrapper {
   width: 90%;
   margin: 1em auto;
 }
 
-.faculty-verify-list-wrapper {
+.faculty-verify-list-wrapper, .faculty-verify-list-wrapper-selected {
   margin: 1em auto;
   padding: .5em;
   background: #ccc;
@@ -12,6 +18,16 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 10px;
+}
+
+.faculty-verify-list-wrapper-selected {
+  background: greenyellow;
+  color: #1f1f1f;
+  margin-bottom: 0em;
+}
+
+.faculty-verify-info {
+  margin-bottom: 2em;
 }
 
 .faculty-verify-list-vote {

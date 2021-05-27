@@ -1,7 +1,7 @@
 import "./FacultyVerify.css";
 import { useContext } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { useParams, Redirect, useLocation } from "react-router-dom";
+import { useParams, Redirect, useLocation, Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { getAFacultyVerification, postFacultyVote } from "../../Queries";
 import up from "../../assets/img/up.png";
@@ -92,53 +92,67 @@ const FacultyVerify = () => {
     );
   return (
     <div className="faculty-verify-wrapper">
+      <div className="faculty-verify-header">
+        Showing all the entries for {initials}: 
+      </div>
       {isSuccess &&
         typeof data != undefined &&
         data.data
           .sort((f1, f2) => {
             return f2.upVoteSum - f1.upVoteSum;
           })
-          .map((faculty) => {
+          .map((faculty, index) => {
             return (
-              <div
-                key={faculty.facultyID}
-                className="faculty-verify-list-wrapper"
-              >
-                <div className="faculty-verify-list-vote">
-                  <div className="faculty-verify-vote">
-                    <div
-                      className="icon up"
-                      onClick={() => {
-                        submitVote(faculty.facultyID, 1);
-                      }}
-                    >
-                      <img className="icon-img" src={up} />
+              <>
+              
+                <div
+                  key={faculty.facultyID}
+                  className={
+                    index === 0
+                      ? "faculty-verify-list-wrapper-selected"
+                      : "faculty-verify-list-wrapper"
+                  }
+                >
+                  <div className="faculty-verify-list-vote">
+                    <div className="faculty-verify-vote">
+                      <div
+                        className="icon up"
+                        onClick={() => {
+                          submitVote(faculty.facultyID, 1);
+                        }}
+                      >
+                        <img className="icon-img" src={up} />
+                      </div>
+                      <div className="faculty-verify-vote-count">
+                        {faculty.upVoteSum}
+                      </div>
                     </div>
-                    <div className="faculty-verify-vote-count">
-                      {faculty.upVoteSum}
+                    <div className="faculty-verify-vote">
+                      <div
+                        className="icon down"
+                        onClick={() => {
+                          submitVote(faculty.facultyID, 0);
+                        }}
+                      >
+                        <img className="icon-img" src={down} />
+                      </div>
+                      <div className="faculty-verify-vote-count">
+                        {faculty.downVoteSum}
+                      </div>
                     </div>
                   </div>
-                  <div className="faculty-verify-vote">
-                    <div
-                      className="icon down"
-                      onClick={() => {
-                        submitVote(faculty.facultyID, 0);
-                      }}
-                    >
-                      <img className="icon-img" src={down} />
-                    </div>
-                    <div className="faculty-verify-vote-count">
-                      {faculty.downVoteSum}
-                    </div>
+                  <div className="faculty-verify-name">
+                    {faculty.facultyName}{" "}
+                  </div>
+                  <div className="faculty-verify-initials">
+                    {faculty.facultyInitials}{" "}
                   </div>
                 </div>
-                <div className="faculty-verify-name">
-                  {faculty.facultyName}{" "}
-                </div>
-                <div className="faculty-verify-initials">
-                  {faculty.facultyInitials}{" "}
-                </div>
-              </div>
+                {index === 0 && <div className="faculty-verify-info">
+                  This is the entry with the highest number of upvotes and will be included in the verified database during the next update cycle <b>only if it has at least 10 upvotes.</b><br/>
+                  If it gets more downvotes than upvotes then <b>{initials}</b> will be removed from the verified database.
+                  </div>}
+              </>
             );
           })}
     </div>

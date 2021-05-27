@@ -24,8 +24,8 @@ const FacultyList = () => {
     let sortValue = 0;
     switch (sort) {
       case "rating":
-        let avgA = (a.teaching + a.grading + a.friendliness) / a.voteCount;
-        let avgB = (b.teaching + b.grading + b.friendliness) / b.voteCount;
+        let avgA = (a.teaching / a.voteCount + a.grading / a.voteCount + a.friendliness / a.voteCount) / 3;
+        let avgB = (b.teaching / b.voteCount + b.grading / b.voteCount + b.friendliness / b.voteCount) / 3;
         sortValue = avgB >= avgA ? 1 : -1;
         break;
       case "alphabetical":
