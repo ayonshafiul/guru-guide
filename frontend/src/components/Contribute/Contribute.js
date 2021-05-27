@@ -228,7 +228,7 @@ const Contribute = () => {
       </div>
       {tab === "faculty" && (
         <>
-          <div className="verify-wrapper">
+          <div className="contribute-verify-wrapper">
             <div className="section-title">Contribute Faculty</div>
             <select
               className="select-css select-full"
@@ -379,7 +379,7 @@ const Contribute = () => {
 
       {tab === "course" && (
         <>
-          <div className="verify-wrapper">
+          <div className="contribute-verify-wrapper">
             <div className="section-title">Contribute Course</div>
             <select
               className="select-css select-full"
