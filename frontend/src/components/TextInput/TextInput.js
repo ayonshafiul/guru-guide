@@ -12,6 +12,7 @@ const TextInput = (props) => {
     allowedRegex,
     errorMsg,
     placeholder,
+    lowercase
   } = props;
   return (
     <div>
@@ -26,8 +27,15 @@ const TextInput = (props) => {
             if (
               e.target.value.length <= limit &&
               e.target.value.match(allowedRegex)
-            )
-              setValue(e.target.value.toUpperCase());
+            ) {
+              
+              if (lowercase) {
+                setValue(e.target.value);
+              } else {
+                setValue(e.target.value.toUpperCase());
+              }
+            }
+              
           }}
         />
       ) : (

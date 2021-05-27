@@ -40,7 +40,7 @@ module.exports.createErrorObject = (msg) => {
 
 module.exports.validateComment = (cmnt) => {
   return Joi.string()
-    .regex(/^[a-zA-Z0-9 ,().]{1,500}$/)
+    .regex(/^[a-zA-Z0-9 ,.()?:-_'"]{1,500}$/)
     .validate(cmnt);
 };
 

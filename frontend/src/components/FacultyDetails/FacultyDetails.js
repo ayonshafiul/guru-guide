@@ -8,7 +8,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import server, { departments } from "../../serverDetails";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { Redirect, useLocation, useParams } from "react-router-dom";
+import { Redirect, useLocation, useParams, Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import { AuthContext } from "../../contexts/AuthContext";
 import {
@@ -136,18 +136,29 @@ const FacultyDetails = (props) => {
   }
 
   async function submitComment() {
-    await commentMutate({ comment, facultyID: id, courseID });
+    const data = await postComment({ comment, facultyID: id, courseID });
 
-    if (isCommentPostSuccess) {
-      setComment("");
-      addToast("Thanks for the feedback");
+    if (typeof data !== "undefined") {
+      if (data.success) {
+        setComment("");
+        commentRefetch();
+        addToast("Thanks for the feedback");
+      } else {
+        addToast("");
+      }
     }
   }
 
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
-      await ratingMutate({ rating, facultyID: id, courseID });
-      addToast("Thanks for the feedback!");
+      const data = await postRating({ rating, facultyID: id, courseID });
+      // if(isRatingSuccess) {
+
+      // }
+      if (typeof data !== "undefined") {
+        setRating({});
+        addToast("Thanks for the feedback!");
+      }
     }
   }
 
@@ -241,6 +252,9 @@ const FacultyDetails = (props) => {
       animate="animate"
     >
       <div className="faculty-details-wrapper">
+        <Link style={{ textDecoration: "none" }} to="/faculty">
+          <div className="global-back-btn">&lArr;</div>
+        </Link>
         <div className="faculty-details-name">{currentFaculty.facultyName}</div>
         <div className="faculty-details-initials">
           {currentFaculty.facultyInitials}
@@ -318,13 +332,17 @@ const FacultyDetails = (props) => {
             }}
           >
             <option value="0">SELECT COURSE</option>
-            {courseData.data.map((course) => {
-              return (
-                <option key={course.courseID} value={String(course.courseID)}>
-                  {course.courseCode}
-                </option>
-              );
-            })}
+            {courseData.data
+              .sort((c1, c2) => {
+                return c1.courseCode > c2.courseCode ? 1 : -1;
+              })
+              .map((course) => {
+                return (
+                  <option key={course.courseID} value={String(course.courseID)}>
+                    {course.courseCode}
+                  </option>
+                );
+              })}
           </select>
         )}
       </div>
@@ -369,8 +387,9 @@ const FacultyDetails = (props) => {
                   type={"textarea"}
                   setValue={setComment}
                   limit={300}
-                  finalRegex={/^[a-zA-Z ,.()']{1,500}$/}
-                  allowedRegex={/^[a-zA-Z ,.()']*$/}
+                  finalRegex={/^[a-zA-Z ,.()?:-_'"]{1,500}$/}
+                  allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"]*$/}
+                  lowercase={true}
                   errorMsg={`Uh oh you shouldn't have typed that!.`}
                   placeholder={`Type a cool comment :)`}
                 />
@@ -405,7 +424,7 @@ const FacultyDetails = (props) => {
                   {`<< Prev`}
                 </div>
               )}
-              {commentData.data.length > 0 && (
+              {commentData.data.length >= 9 && (
                 <div
                   className="comment-next-btn"
                   onClick={() => {
