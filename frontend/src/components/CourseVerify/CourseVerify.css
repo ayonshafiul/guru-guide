@@ -1,10 +1,6 @@
 .course-verify-wrapper {
-  width: 90%;
   margin: 1em auto;
 }
-
-
-
 .course-verify-list-wrapper, .course-verify-list-wrapper-selected {
   margin: 1em auto;
   padding: .5em;

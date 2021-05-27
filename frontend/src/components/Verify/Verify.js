@@ -87,7 +87,7 @@ const Verify = () => {
               typeof data !== "undefined" &&
               data.data
                 .sort((f1, f2) => {
-                  return f1.initials > f2.initials ? 1 : -1;
+                  return f1.facultyInitials > f2.facultyInitials ? 1 : -1;
                 })
                 .map((faculty) => {
                   return (
