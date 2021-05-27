@@ -1,5 +1,5 @@
 import "./FacultyVerify.css";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useParams, Redirect, useLocation, Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
@@ -12,6 +12,7 @@ const FacultyVerify = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const { departmentID, initials } = useParams();
+  const [nextUpdateRemainingTime, setNextUpdateRemainingTime] = useState(null);
   const queryClient = useQueryClient();
   const { addToast } = useToasts();
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
@@ -21,6 +22,29 @@ const FacultyVerify = () => {
       enabled: departmentID !== 0,
     }
   );
+  let intervalID = 0;
+  const today = new Date();
+  useEffect(() => {
+    intervalID = setInterval(() => {
+      let remaining =
+        new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          3,
+          0,
+          0
+        ) - Date.now();
+        if ( remaining < 0) {
+          remaining += 86400000; // add the next day in milliseconds
+        }
+      setNextUpdateRemainingTime(Math.floor(remaining/1000));
+    }, 1000);
+
+    return function cleanup() {
+      clearInterval(intervalID);
+    };
+  }, []);
   async function submitVote(facultyID, voteType) {
     const data = await postFacultyVote({ voteType, facultyID });
     const cacheExists = queryClient.getQueryData([
@@ -60,7 +84,6 @@ const FacultyVerify = () => {
         }
       );
     } else {
-      console.log("refetched!");
       switch (data.message) {
         case "upvoteinsert":
           addToast("Thanks for the thumbs up!");
@@ -92,8 +115,15 @@ const FacultyVerify = () => {
     );
   return (
     <div className="faculty-verify-wrapper">
+      <Link style ={{textDecoration: "none"}}to="/verify"><div className="global-back-btn">&lArr;</div></Link>
       <div className="faculty-verify-header">
-        Showing all the entries for {initials}: 
+        Next update in {" "} 
+      {Math.floor(nextUpdateRemainingTime / 60 / 60) + "h: "}
+      {Math.floor(nextUpdateRemainingTime / 60) % 60 + "m: "}
+      {nextUpdateRemainingTime % 60 +"s"}
+      </div>
+      <div className="faculty-verify-header">
+        Showing all the entries for "{initials}"
       </div>
       {isSuccess &&
         typeof data != undefined &&
@@ -104,7 +134,6 @@ const FacultyVerify = () => {
           .map((faculty, index) => {
             return (
               <>
-              
                 <div
                   key={faculty.facultyID}
                   className={
@@ -148,10 +177,17 @@ const FacultyVerify = () => {
                     {faculty.facultyInitials}{" "}
                   </div>
                 </div>
-                {index === 0 && <div className="faculty-verify-info">
-                  This is the entry with the highest number of upvotes and will be included in the verified database during the next update cycle <b>only if it has at least 10 upvotes.</b><br/>
-                  If it gets more downvotes than upvotes then <b>{initials}</b> will be removed from the verified database.
-                  </div>}
+                {index === 0 && (
+                  <div className="faculty-verify-info">
+                    This is the entry with the highest number of upvotes and
+                    will be included in the verified database during the next
+                    update cycle <b>only if it has at least 10 upvotes.</b>
+                    <br />
+                    If it gets more downvotes than upvotes then{" "}
+                    <b>{initials}</b> will be removed from the verified
+                    database.
+                  </div>
+                )}
               </>
             );
           })}

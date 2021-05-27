@@ -13,5 +13,20 @@ body {
 }
 
 .global-back-btn {
-  
+  background: #61dafb;
+  color: #1f1f1f;
+  width: 20%;
+  text-transform: uppercase;
+  border-radius: 10px;
+  font-weight: bolder;
+  text-align: center;
+  padding: .5em;
+  font-size: 1.2em;
+  cursor: pointer;
+  border: 2px solid #61dafb;
+}
+.global-back-btn:hover {
+  background: #1f1f1f;
+  color: #61dafb;
+  border: 2px solid #61dafb;
 }
