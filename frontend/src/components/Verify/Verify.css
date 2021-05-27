@@ -3,7 +3,6 @@
 }
 
 .verify-list-wrapper {
-  width: 100%;
   margin: 1em auto;
 }
 .verify-list-item {
@@ -19,7 +18,7 @@
 }
 .verify-list-item:hover {
   background: #202124;
-  color: #61DAFB;
-  border-left: 2px solid #61DAFB;
-  border-right: 2px solid #61DAFB;
+  color: #61dafb;
+  border-left: 2px solid #61dafb;
+  border-right: 2px solid #61dafb;
 }
