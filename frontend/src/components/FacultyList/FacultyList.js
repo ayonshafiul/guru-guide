@@ -16,7 +16,7 @@ const FacultyList = () => {
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/faculty", String(departmentID)],
+    ["/api/faculty/department", String(departmentID)],
     getFaculty
   );
 
@@ -24,8 +24,16 @@ const FacultyList = () => {
     let sortValue = 0;
     switch (sort) {
       case "rating":
-        let avgA = (a.teaching / a.voteCount + a.grading / a.voteCount + a.friendliness / a.voteCount) / 3;
-        let avgB = (b.teaching / b.voteCount + b.grading / b.voteCount + b.friendliness / b.voteCount) / 3;
+        let avgA =
+          (a.teaching / a.voteCount +
+            a.grading / a.voteCount +
+            a.friendliness / a.voteCount) /
+          3;
+        let avgB =
+          (b.teaching / b.voteCount +
+            b.grading / b.voteCount +
+            b.friendliness / b.voteCount) /
+          3;
         sortValue = avgB >= avgA ? 1 : -1;
         break;
       case "alphabetical":

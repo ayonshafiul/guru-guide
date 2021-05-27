@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const numStudents = 5000;
 const numFaculties = 100;
 const numFakeFacultyVerify = 20;
-const numFakeCourseVerify = 20;
+const numFakeCourseVerify = 2;
 const departmentArray = [
   "CSE",
   "EEE",
@@ -52,11 +52,11 @@ function insertDepartments() {
 // setTimeout(fakeRating, timeBetweenEntry);
 // setTimeout(fakeComments,timeBetweenEntry *1000 * 6);
 // setTimeout(fakeCommentsRating,timeBetweenEntry * 1000 * 7);
-insertDepartments();
+// insertDepartments();
 // fakeStudents();
 // fakeFacultyVerify();
 // fakeCourseVerify();
-// fakeRating();
+fakeRating();
 // fakeComments();
 
 function fakeStudents() {
@@ -75,7 +75,7 @@ function fakeStudents() {
           sql,
           {
             email: faker.internet.email(),
-            departmentID: faker.random.number({
+            departmentID: faker.datatype.number({
               min: 1,
               max: departmentArray.length,
             }),
@@ -217,33 +217,31 @@ function fakeVotes() {
 function fakeRating() {
   const rating = [];
 
-  for (let i = 1001; i <= 2000; i++) {
-    for (let j = 27; j <= 33; j++) {
-      var sql = "INSERT INTO rating SET ?";
-      db.query(
-        sql,
-        {
-          studentID: i,
-          facultyID: j,
-          courseID: faker.random.number({ min: 1, max: 8 }),
-          teaching: faker.random.number({ min: 1, max: 10 }),
-          grading: faker.random.number({ min: 1, max: 10 }),
-          humanity: faker.random.number({ min: 1, max: 10 }),
-        },
-        function (error, results, fields) {
-          if (error) {
-            console.log(error);
-          } else {
-            // console.log("success");
-          }
+  for (let i = 1; i <= 5000; i++) {
+    var sql = "INSERT INTO rating SET ?";
+    db.query(
+      sql,
+      {
+        studentID: i,
+        facultyID: 2,
+        courseID: 2,
+        teaching: faker.datatype.number({ min: 1, max: 10 }),
+        grading: faker.datatype.number({ min: 1, max: 10 }),
+        friendliness: faker.datatype.number({ min: 1, max: 10 }),
+      },
+      function (error, results, fields) {
+        if (error) {
+          console.log(error);
+        } else {
+          // console.log("success");
         }
-      );
-    }
+      }
+    );
   }
   console.log("fake rating created");
 }
 function fakeComments() {
-  for (let i = 2001; i <= 4000; i++) {
+  for (let i = 1; i <= 4000; i++) {
     for (let j = 27; j <= 33; j++) {
       var sql = "INSERT INTO comment SET ?";
       db.query(

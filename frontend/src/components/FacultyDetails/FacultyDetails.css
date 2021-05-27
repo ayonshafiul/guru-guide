@@ -6,7 +6,8 @@
 
 .faculty-details-name,
 .faculty-details-initials,
-.faculty-details-department {
+.faculty-details-department,
+.faculty-details-info {
   font-size: 1.5em;
   margin: 1em;
   font-weight: bold;
@@ -19,7 +20,6 @@
 .faculty-details-initials {
   letter-spacing: 10px;
 }
-
 
 .faculty-details-grading,
 .faculty-details-teaching,

@@ -20,6 +20,7 @@ import {
   postComment,
   getUserComment,
   getUserRating,
+  getRatingForACourse,
 } from "../../Queries";
 import useLocalStorage from "../../useLocalStorage";
 const FacultyDetails = (props) => {
@@ -38,24 +39,6 @@ const FacultyDetails = (props) => {
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
   const [currentFaculty, setCurrentFaculty] = useState({});
-  const {
-    mutate: ratingMutate,
-    isError: isRatingError,
-    isSuccess: isRatingSuccess,
-    data: ratingData,
-    error: ratingError,
-  } = useMutation(postRating, {
-    enabled: parseInt(courseID) !== 0,
-  });
-  const {
-    mutate: commentMutate,
-    isError: isCommentPostError,
-    isSuccess: isCommentPostSuccess,
-    data: commentPostData,
-    error: commentPostError,
-  } = useMutation(postComment, {
-    enabled: parseInt(courseID) !== 0,
-  });
 
   const {
     isLoading: commentIsLoading,
@@ -85,49 +68,32 @@ const FacultyDetails = (props) => {
     enabled: parseInt(departmentID) !== 0,
   });
 
-  useEffect(async () => {
-    const data = await getAFaculty({ queryKey: ["/api/faculty", id] });
-    if (typeof data.data !== "undefined") {
-      const {
-        facultyName,
-        facultyInitials,
-        departmentID,
-        teaching,
-        grading,
-        friendliness,
-        voteCount,
-      } = data.data;
-      if (data.success) {
-        setCurrentFaculty({
-          facultyName,
-          facultyInitials,
-          departmentID,
-        });
-        updateDisplayRating(teaching, grading, friendliness, voteCount);
-      }
+  const {
+    isLoading: facultyCourseRatingIsLoading,
+    isSuccess: facultyCourseRatingIsSuccess,
+    isFetching: facultyCourseRatingIsFetching,
+    data: facultyCourseRatingData,
+    error: facultyCourseRatingError,
+    isError: facultyCourseRatingIsError,
+    refetch: facultyCourseRatingRefetch,
+  } = useQuery(
+    ["/api/facultyrating", String(id), String(courseID)],
+    getRatingForACourse,
+    {
+      enabled: parseInt(departmentID) !== 0 && parseInt(courseID) !== 0,
     }
-  }, []);
+  );
 
-  function updateDisplayRating(teaching, grading, friendliness, voteCount) {
-    if (voteCount === 0) {
-      setDisplayRating({
-        overall: 0,
-        grading: 0,
-        teaching: 0,
-        friendliness: 0,
-      });
-    } else {
-      setDisplayRating({
-        overall: (
-          (grading + teaching + friendliness) /
-          (3 * voteCount)
-        ).toFixed(1),
-        teaching: (teaching / voteCount).toFixed(1),
-        grading: (grading / voteCount).toFixed(1),
-        friendliness: (friendliness / voteCount).toFixed(1),
-      });
-    }
-  }
+  const {
+    isLoading: facultyLoading,
+    isSuccess: facultyIsSuccess,
+    isFetching: facultyIsFetching,
+    data: facultyData,
+    error: facultyError,
+    isError: facultyIsError,
+    refetch: facultyRefetch,
+  } = useQuery(["/api/faculty", String(id)], getAFaculty);
+
   function changeRating(type, buttonNo) {
     setRating({
       ...rating,
@@ -152,12 +118,11 @@ const FacultyDetails = (props) => {
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
       const data = await postRating({ rating, facultyID: id, courseID });
-      // if(isRatingSuccess) {
-
-      // }
       if (typeof data !== "undefined") {
         setRating({});
         addToast("Thanks for the feedback!");
+        facultyRefetch();
+        facultyCourseRatingRefetch();
       }
     }
   }
@@ -227,14 +192,6 @@ const FacultyDetails = (props) => {
       }
     }
   }
-
-  function calculateStars() {
-    let str = [];
-    for (let i = 0; i < parseInt(displayRating.overall); i++) {
-      str.push(<>&#9733;</>);
-    }
-    return str;
-  }
   if (!isAuth)
     return (
       <Redirect
@@ -255,52 +212,22 @@ const FacultyDetails = (props) => {
         <Link style={{ textDecoration: "none" }} to="/faculty">
           <div className="global-back-btn">&lArr;</div>
         </Link>
-        <div className="faculty-details-name">{currentFaculty.facultyName}</div>
-        <div className="faculty-details-initials">
-          {currentFaculty.facultyInitials}
-        </div>
-        <div className="faculty-details-department">
-          {departments[currentFaculty.departmentID]}
-        </div>
-        <div className="faculty-details-overall">
-          <span className="faculty-details-text-bg  yellow-stars">
-            {calculateStars()}
-          </span>
-          <div
-            className="faculty-details-overlay faculty-details-overall-background-overlay"
-            style={{
-              width: displayRating.overall * 10 + 0.5 + "%",
-            }}
-          ></div>
-        </div>
-
-        <div className="faculty-details-teaching">
-          <span className="faculty-details-text-bg">
-            Teaching: {displayRating.teaching}
-          </span>
-          <div
-            className="faculty-details-overlay overlay-c1"
-            style={{ width: displayRating.teaching * 10 + 0.5 + "%" }}
-          ></div>
-        </div>
-        <div className="faculty-details-grading">
-          <span className="faculty-details-text-bg">
-            Grading: {displayRating.grading}
-          </span>
-          <div
-            className="faculty-details-overlay overlay-c3"
-            style={{ width: displayRating.grading * 10 + 0.5 + "%" }}
-          ></div>
-        </div>
-        <div className="faculty-details-friendliness">
-          <span className="faculty-details-text-bg">
-            Friendliness: {displayRating.friendliness}
-          </span>
-          <div
-            className="faculty-details-overlay overlay-c2"
-            style={{ width: displayRating.friendliness * 10 + 0.5 + "%" }}
-          ></div>
-        </div>
+        {facultyIsSuccess && typeof facultyData.data !== "undefined"
+          ? showFacultyDetailsSection(
+              facultyData.data.facultyInitials,
+              facultyData.data.facultyName,
+              facultyData.data.departmentID
+            )
+          : ""}
+        {facultyIsSuccess && typeof facultyData.data !== "undefined"
+          ? showFacultyRatingSection(
+              "Overall rating",
+              facultyData.data.teaching,
+              facultyData.data.grading,
+              facultyData.data.friendliness,
+              facultyData.data.voteCount
+            )
+          : ""}
       </div>
 
       <div className="course-wrapper">
@@ -322,31 +249,44 @@ const FacultyDetails = (props) => {
             }
           })}
         </select>
-        {parseInt(departmentID) !== 0 && typeof courseData != "undefined" && (
-          <select
-            className="select-css"
-            value={courseID}
-            onChange={(e) => {
-              setCourseCode(e.target.options[e.target.selectedIndex].text);
-              setCourseID(String(e.target.value));
-            }}
-          >
-            <option value="0">SELECT COURSE</option>
-            {courseData.data
-              .sort((c1, c2) => {
-                return c1.courseCode > c2.courseCode ? 1 : -1;
-              })
-              .map((course) => {
-                return (
-                  <option key={course.courseID} value={String(course.courseID)}>
-                    {course.courseCode}
-                  </option>
-                );
-              })}
-          </select>
-        )}
+        {parseInt(departmentID) !== 0 &&
+          typeof courseData.data !== "undefined" && (
+            <select
+              className="select-css"
+              value={courseID}
+              onChange={(e) => {
+                setCourseCode(e.target.options[e.target.selectedIndex].text);
+                setCourseID(String(e.target.value));
+              }}
+            >
+              <option value="0">SELECT COURSE</option>
+              {courseData.data
+                .sort((c1, c2) => {
+                  return c1.courseCode > c2.courseCode ? 1 : -1;
+                })
+                .map((course) => {
+                  return (
+                    <option
+                      key={course.courseID}
+                      value={String(course.courseID)}
+                    >
+                      {course.courseCode}
+                    </option>
+                  );
+                })}
+            </select>
+          )}
       </div>
-
+      {facultyCourseRatingIsSuccess &&
+      typeof facultyCourseRatingData.data !== "undefined"
+        ? showFacultyRatingSection(
+            "Rating for " + courseCode,
+            facultyCourseRatingData.data.teaching,
+            facultyCourseRatingData.data.grading,
+            facultyCourseRatingData.data.friendliness,
+            facultyCourseRatingData.data.voteCount
+          )
+        : ""}
       <div className="faculty-details-button-wrapper" ref={pageRef}>
         <div
           className={
@@ -398,11 +338,11 @@ const FacultyDetails = (props) => {
                 </div>
               </div>
             )}
-            {courseCode && (
+            {courseCode && commentData.data.length > 0 ? (
               <div className="info-header">
                 Showing comments for: {courseCode}{" "}
               </div>
-            )}
+            ) : null}
             {commentData.data.map((comment) => {
               return (
                 <Comment
@@ -468,5 +408,86 @@ const FacultyDetails = (props) => {
     </motion.div>
   );
 };
+function showFacultyDetailsSection(facultyInitials, facultyName, departmentID) {
+  return (
+    <>
+      <div className="faculty-details-name">{facultyName}</div>
+      <div className="faculty-details-initials">{facultyInitials}</div>
+      <div className="faculty-details-department">
+        {departments[departmentID]}
+      </div>
+    </>
+  );
+}
+
+function showFacultyRatingSection(
+  title,
+  teaching,
+  grading,
+  friendliness,
+  voteCount
+) {
+  let overall = 0;
+  if (parseInt(voteCount) !== 0) {
+    overall = ((teaching + grading + friendliness) / (3 * voteCount)).toFixed(
+      1
+    );
+    grading = (grading / voteCount).toFixed(1);
+    friendliness = (friendliness / voteCount).toFixed(1);
+    teaching = (teaching / voteCount).toFixed(1);
+  } else {
+    teaching = 0;
+    friendliness = 0;
+    grading = 0;
+  }
+
+  return (
+    <>
+      <div className="faculty-details-info">{title}</div>
+      <div className="faculty-details-overall">
+        <span className="faculty-details-text-bg  yellow-stars">
+          {calculateStars(overall)}
+        </span>
+        <div
+          className="faculty-details-overlay faculty-details-overall-background-overlay"
+          style={{
+            width: overall * 10 + 0.5 + "%",
+          }}
+        ></div>
+      </div>
+      <div className="faculty-details-teaching">
+        <span className="faculty-details-text-bg">Teaching: {teaching}</span>
+        <div
+          className="faculty-details-overlay overlay-c1"
+          style={{ width: teaching * 10 + 0.5 + "%" }}
+        ></div>
+      </div>
+      <div className="faculty-details-grading">
+        <span className="faculty-details-text-bg">Grading: {grading}</span>
+        <div
+          className="faculty-details-overlay overlay-c3"
+          style={{ width: grading * 10 + 0.5 + "%" }}
+        ></div>
+      </div>
+      <div className="faculty-details-friendliness">
+        <span className="faculty-details-text-bg">
+          Friendliness: {friendliness}
+        </span>
+        <div
+          className="faculty-details-overlay overlay-c2"
+          style={{ width: friendliness * 10 + 0.5 + "%" }}
+        ></div>
+      </div>
+    </>
+  );
+}
+
+function calculateStars(overall) {
+  let str = [];
+  for (let i = 0; i < parseInt(overall); i++) {
+    str.push(<>&#9733;</>);
+  }
+  return str;
+}
 
 export default FacultyDetails;

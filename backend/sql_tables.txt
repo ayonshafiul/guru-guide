@@ -94,9 +94,7 @@ CREATE TABLE rating (
     Primary Key(facultyID,studentID,courseID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references faculty(facultyID) ON DELETE CASCADE ON UPDATE CASCADE,
-    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index ratingIndex(facultyID, courseID),
-    index indexRating(courseID, facultyID)
+    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE comment (

@@ -1,5 +1,5 @@
 // get all the comments
 Select c.commentID, commentText, upVoteSum, downVoteSum from comment c inner join (SELECT commentID FROM `comment` WHERE facultyID = 27 and courseID = 1 order by upVoteSum limit 20) ids on c.commentID = ids.commentID
-
-
+SELECT count(*), avg(teaching), avg(friendliness), avg(grading) FROM `rating` WHERE facultyID = 1 and courseID = 1
+SELECT count(*), sum(teaching), sum(friendliness), sum(grading) FROM `rating` WHERE facultyID = 1 and courseID = 1
 // 

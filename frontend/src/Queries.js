@@ -3,12 +3,10 @@ import server from "./serverDetails";
 
 export const getFaculty = async ({ queryKey }) => {
   const [key, departmentID] = queryKey;
-  console.log(departmentID);
   const res = await axios.get(
     server.url + "/api/faculty/department/" + departmentID,
     { withCredentials: true }
   );
-  console.log(res.data);
   return res.data;
 };
 export const getFacultyVerification = async ({ queryKey }) => {
@@ -96,24 +94,30 @@ export const getUserRating = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getRatingForACourse = async ({ queryKey }) => {
+  const [keyName, facultyID, courseID] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/facultyrating/" + facultyID + "/" + courseID,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
 export const postRating = async ({ rating, facultyID, courseID }) => {
   const res = await axios.post(
     server.url + "/api/facultyrate/" + facultyID,
     { ...rating, courseID },
     { withCredentials: true }
   );
-  console.log(res.data);
   return res.data;
 };
 
 export const postComment = async ({ comment, facultyID, courseID }) => {
-  console.log(comment, facultyID, courseID);
   const res = await axios.post(
     server.url + "/api/comment/" + facultyID + "/" + courseID,
     { comment },
     { withCredentials: true }
   );
-  console.log(res.data);
   return res.data;
 };
 
