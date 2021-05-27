@@ -387,11 +387,11 @@ const FacultyDetails = (props) => {
                   type={"textarea"}
                   setValue={setComment}
                   limit={300}
-                  finalRegex={/^[a-zA-Z ,.()?:-_'"]{1,500}$/}
-                  allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"]*$/}
+                  finalRegex={/^[a-zA-Z ,.()?:-_'"!]{1,500}$/}
+                  allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
                   lowercase={true}
                   errorMsg={`Uh oh you shouldn't have typed that!.`}
-                  placeholder={`Type a cool comment :)`}
+                  placeholder={`Drop a comment`}
                 />
                 <div className="submit-comment-btn" onClick={submitComment}>
                   Post comment for {courseCode}
