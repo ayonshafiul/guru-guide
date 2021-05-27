@@ -1,5 +1,5 @@
 import "./FacultyVerify.css";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { useParams, Redirect, useLocation, Link } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
@@ -12,7 +12,7 @@ const FacultyVerify = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const { departmentID, initials } = useParams();
-  const [nextUpdateRemainingTime, setNextUpdateRemainingTime] = useState(null);
+  const [nextUpdateRemainingTime, setNextUpdateRemainingTime] = useState(0);
   const queryClient = useQueryClient();
   const { addToast } = useToasts();
   const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
@@ -133,9 +133,9 @@ const FacultyVerify = () => {
           })
           .map((faculty, index) => {
             return (
-              <>
+              <React.Fragment key={faculty.facultyID}>
                 <div
-                  key={faculty.facultyID}
+                  
                   className={
                     index === 0
                       ? "faculty-verify-list-wrapper-selected"
@@ -188,7 +188,7 @@ const FacultyVerify = () => {
                     database.
                   </div>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
     </div>
