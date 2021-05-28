@@ -7,12 +7,12 @@ const {
 } = require("../../utils");
 
 module.exports = function (req, res) {
-  // let complain = validatecomplain(req.body.complain);
-  let studentID = 2; // req.user.studentID;
+  let complain = validatecomplain(req.body.complain);
+  let studentID = req.user.studentID;
 
-  // if (complain.error) {
-  //   return res.json(createErrorObject("Invalide complain or facultyID"));
-  // }
+  if (complain.error) {
+    return res.json(createErrorObject("Invalide complain or facultyID"));
+  }
 
   let sql = "SELECT complainID from complain where studentID = ?";
 
@@ -28,7 +28,7 @@ module.exports = function (req, res) {
         let sql = "INSERT INTO complain SET ?";
         let complainObj = {
           studentID,
-          complainText: "complain", //complain.value,
+          complainText: complain.value,
         };
 
         connection.query(sql, complainObj, (error, results, fields) => {
@@ -47,7 +47,7 @@ module.exports = function (req, res) {
         let sql2 = "Delete from complainvote where complainID = ?";
         connection.query(
           sql,
-          ["complain.edited" /* complain.value */, studentID],
+          [complain.value, studentID],
           (error1, results1, fields1) => {
             if (error1) {
               console.log(error1);

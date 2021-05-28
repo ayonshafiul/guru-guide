@@ -48,7 +48,7 @@ server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
 server.use("/api", authMiddleware, ratingRouter);
-server.use("/api", complainRouter);
+server.use("/api", authMiddleware, complainRouter);
 
 server.get("/api/forceupdate", (req, res) => {
   facultyVerify();
