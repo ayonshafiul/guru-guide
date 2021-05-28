@@ -12,6 +12,7 @@ const facultyRouter = require("./routes/facultyRouter");
 const courseRouter = require("./routes/courseRouter");
 const commentRouter = require("./routes/commentRouter");
 const ratingRouter = require("./routes/ratingRouter");
+const complainRouter = require("./routes/complainRouter");
 
 const authMiddleware = require("./middlewares/authentication");
 const facultyVerify = require("./facultyVerify");
@@ -47,6 +48,7 @@ server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
 server.use("/api", authMiddleware, ratingRouter);
+server.use("/api", complainRouter);
 
 server.get("/api/forceupdate", (req, res) => {
   facultyVerify();

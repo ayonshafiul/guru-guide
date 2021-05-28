@@ -120,3 +120,24 @@ CREATE TABLE commentvote(
     Primary Key(studentID, commentID),
     Foreign Key (commentID) references comment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+CREATE TABLE complain (
+    complainID int AUTO_INCREMENT,
+    studentID int,
+    complainText varchar(310),
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
+    Primary Key(complainID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index upvoteIndex(upVoteSum)
+);
+
+CREATE TABLE complainvote(
+    studentID int,
+    complainID int,
+    upVote int,
+    downVote int,
+    Primary Key(studentID, complainID),
+    Foreign Key (complainID) references complain(complainID) ON DELETE CASCADE ON UPDATE CASCADE
+);
