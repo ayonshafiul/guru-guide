@@ -289,19 +289,6 @@ const FacultyDetails = (props) => {
       <div className="faculty-details-button-wrapper" ref={pageRef}>
         <div
           className={
-            page == "rate"
-              ? "faculty-details-rate faculty-details-active"
-              : "faculty-details-rate"
-          }
-          onClick={() => {
-            if (parseInt(courseID) !== 0) setPage("rate");
-            else addToast("Please select a course!", { appearance: "error" });
-          }}
-        >
-          Rate
-        </div>
-        <div
-          className={
             page == "comments"
               ? "faculty-details-comments faculty-details-active"
               : "faculty-details-comments"
@@ -312,6 +299,19 @@ const FacultyDetails = (props) => {
           }}
         >
           Comments
+        </div>
+        <div
+          className={
+            page == "rate"
+              ? "faculty-details-rate faculty-details-active"
+              : "faculty-details-rate"
+          }
+          onClick={() => {
+            if (parseInt(courseID) !== 0) setPage("rate");
+            else addToast("Please select a course!", { appearance: "error" });
+          }}
+        >
+          Rate
         </div>
       </div>
       {commentIsSuccess &&

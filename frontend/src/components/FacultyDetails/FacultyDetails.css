@@ -58,17 +58,6 @@
   background: white;
   z-index: -1;
 }
-.overlay-c1 {
-  /* background: #b4004e; */
-}
-
-.overlay-c2 {
-  /* background: #c41c00; */
-}
-
-.overlay-c3 {
-  /* background: #007ac1; */
-}
 .faculty-details-overall-background-overlay {
   color: black;
   background: #fdcc0d;
@@ -188,9 +177,6 @@
   justify-content: space-between;
 }
 
-.faculty-details-button-wrapper {
-
-}
 
 .faculty-details-comments,
 .faculty-details-rate,
