@@ -1,6 +1,8 @@
 import "./FacultyDetails.css";
 import { motion } from "framer-motion";
-import pageAnimationVariant from "../../AnimationData";
+import pageAnimationVariant, {
+  slideAnimationVariant,
+} from "../../AnimationData";
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import TextInput from "../TextInput/TextInput";
@@ -275,8 +277,9 @@ const FacultyDetails = (props) => {
       </div>
       {facultyCourseRatingIsSuccess &&
       typeof facultyCourseRatingData.data !== "undefined"
-        ? showFacultyRatingSection(
+        ? showFacultyCourseRatingSection(
             "Rating for " + courseCode,
+            courseCode,
             facultyCourseRatingData.data.teaching,
             facultyCourseRatingData.data.grading,
             facultyCourseRatingData.data.friendliness,
@@ -284,19 +287,6 @@ const FacultyDetails = (props) => {
           )
         : ""}
       <div className="faculty-details-button-wrapper" ref={pageRef}>
-        <div
-          className={
-            page == "comments"
-              ? "faculty-details-comments faculty-details-active"
-              : "faculty-details-comments"
-          }
-          onClick={() => {
-            if (parseInt(courseID) !== 0) setPage("comments");
-            else addToast("Please select a course!", { appearance: "error" });
-          }}
-        >
-          Comments
-        </div>
         <div
           className={
             page == "rate"
@@ -310,12 +300,30 @@ const FacultyDetails = (props) => {
         >
           Rate
         </div>
+        <div
+          className={
+            page == "comments"
+              ? "faculty-details-comments faculty-details-active"
+              : "faculty-details-comments"
+          }
+          onClick={() => {
+            if (parseInt(courseID) !== 0) setPage("comments");
+            else addToast("Please select a course!", { appearance: "error" });
+          }}
+        >
+          Comments
+        </div>
       </div>
       {commentIsSuccess &&
         typeof commentData != "undefined" &&
         page == "comments" &&
         parseInt(courseID) !== 0 && (
-          <>
+          <motion.div
+            className="facultylist"
+            variants={slideAnimationVariant}
+            initial="initial"
+            animate="animate"
+          >
             {commentPage == 1 && (
               <div className="wrapper-general">
                 <TextInput
@@ -372,11 +380,16 @@ const FacultyDetails = (props) => {
                 </div>
               )}
             </div>
-          </>
+          </motion.div>
         )}
 
       {page == "rate" && parseInt(courseID) !== 0 && (
-        <>
+        <motion.div
+          className="facultylist"
+          variants={slideAnimationVariant}
+          initial="initial"
+          animate="animate"
+        >
           {courseCode && (
             <div className="info-header">
               You are giving feedback for {courseCode}.{" "}
@@ -399,7 +412,7 @@ const FacultyDetails = (props) => {
           >
             Rate
           </div>
-        </>
+        </motion.div>
       )}
     </motion.div>
   );
@@ -484,6 +497,58 @@ function calculateStars(overall) {
     str.push(<>&#9733;</>);
   }
   return str;
+}
+
+function showFacultyCourseRatingSection(
+  title,
+  courseCode,
+  teaching,
+  grading,
+  friendliness,
+  voteCount
+) {
+  <div className="faculty-details-info">{title}</div>;
+  let avgGrading = (grading / voteCount).toFixed(1);
+  let avgFriendliness = (friendliness / voteCount).toFixed(1);
+  let avgTeaching = (teaching / voteCount).toFixed(1);
+  return (
+    <motion.div
+      className="facultylist"
+      variants={pageAnimationVariant}
+      initial="initial"
+      animate="animate"
+    >
+      <div className="fd-rating-wrapper">
+        <div className="fd-average-rating">
+          <span className="fd-red">
+            {((teaching + grading + friendliness) / (3 * voteCount)).toFixed(1)}
+          </span>
+          <span>&#9733;</span>
+          {" " + courseCode}
+        </div>
+        <div className="fd-faculty-vote-count">
+          T: <span className="fd-red">{avgTeaching}</span> G:{" "}
+          <span className="fd-red">{avgGrading}</span> F:{" "}
+          <span className="fd-red">{avgFriendliness}</span> <br />
+          {voteCount === 0.1 ? "0" : voteCount} vote(s)
+        </div>
+        <div className="fd-rating-bar-wrapper">
+          <div
+            className="fd-rating-bar"
+            style={{ height: avgTeaching * 2.5 + 2 }}
+          ></div>
+          <div
+            className="fd-rating-bar"
+            style={{ height: avgGrading * 2.5 + 2 }}
+          ></div>
+          <div
+            className="fd-rating-bar"
+            style={{ height: avgFriendliness * 2.5 + 2 }}
+          ></div>
+        </div>
+      </div>
+    </motion.div>
+  );
 }
 
 export default FacultyDetails;

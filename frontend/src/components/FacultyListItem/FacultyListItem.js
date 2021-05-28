@@ -39,15 +39,15 @@ const FacultyListItem = (props) => {
           <div className="rating-bar-wrapper">
             <div
               className="rating-bar"
-              style={{ height: avgTeaching * 1.8 + 2 }}
+              style={{ height: avgTeaching * 2.8 + 2 }}
             ></div>
             <div
               className="rating-bar"
-              style={{ height: avgGrading * 1.8 + 2 }}
+              style={{ height: avgGrading * 2.8 + 2 }}
             ></div>
             <div
               className="rating-bar"
-              style={{ height: avgFriendliness * 1.8 + 2 }}
+              style={{ height: avgFriendliness * 2.8 + 2 }}
             ></div>
           </div>
         </div>

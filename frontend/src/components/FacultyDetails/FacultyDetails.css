@@ -123,6 +123,48 @@
   margin: 1em auto;
 }
 
+.fd-rating-wrapper {
+  padding: 1em;
+  border-radius: 10px;
+  background: white;
+  display: flex;
+  color: black;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.fd-rating-bar-wrapper {
+  width: 20%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+.fd-average-rating {
+  width: 20%;
+  flex-shrink: 0;
+}
+.fd-rating-bar {
+  width: 5px;
+  height: 20px;
+  background: red;
+  margin-left: 5px;
+}
+
+.fd-faculty-vote-count {
+  flex: 8;
+  font-size: 0.8em;
+  text-align: center;
+}
+
+.fd-red {
+  color: red;
+}
+
+
+
+
 .submit-comment-btn,
 .submit-btn {
   padding: 1em;
@@ -139,11 +181,15 @@
   color: #61dafb;
   background: #1f1f1f;
 }
-.faculty-details-button-wrapper,
+
 .tab-btn-wrapper {
   display: flex;
   margin: 1em auto;
   justify-content: space-between;
+}
+
+.faculty-details-button-wrapper {
+
 }
 
 .faculty-details-comments,
@@ -158,6 +204,19 @@
   border-radius: 10px;
 }
 
+.faculty-details-comments,
+.faculty-details-rate {
+  text-align: center;
+  width: 100%;
+  margin: 1em 0px;
+}
+
+.faculty-details-comments:hover,
+.faculty-details-rate:hover {
+  background-color: #61dafb;
+  color: black;
+}
+
 .faculty-details-active,
 .tab-btn-active {
   background-color: #61dafb;
@@ -165,8 +224,13 @@
   font-weight: bold;
 }
 
+.faculty-details-active:hover {
+  border: 2px solid #61dafb;
+  color: black;
+}
+
 .info-header {
-  width: 90%;
+  text-align: center;
   margin: 1em auto;
   font-weight: bold;
   color: #61dafb;

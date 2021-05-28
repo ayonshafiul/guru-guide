@@ -11,6 +11,20 @@ const pageAnimationVariant = {
   },
 };
 
+
+export const slideAnimationVariant = {
+  initial: {
+    y: "+100%",
+  },
+  animate: {
+    y: 0,
+    transition: {
+      type: "spring",
+      duration: 1,
+    },
+  },
+};
+
 export const slideAnimation = {
   hide: {
     visibility: "hidden",
