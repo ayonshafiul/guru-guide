@@ -20,13 +20,50 @@ body {
   border-radius: 10px;
   font-weight: bolder;
   text-align: center;
-  padding: .5em;
+  padding: 0.5em;
   font-size: 1.2em;
   cursor: pointer;
   border: 2px solid #61dafb;
+  z-index: 5;
 }
 .global-back-btn:hover {
   background: #1f1f1f;
   color: #61dafb;
   border: 2px solid #61dafb;
+}
+
+.global-btn-full,
+.global-btn-small {
+  padding: 1em;
+  background: #61dafb;
+  color: #1f1f1f;
+  margin: 1em auto;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.global-btn-small {
+  width: 20%;
+}
+
+.global-btn-full:hover,
+.global-btn-small:hover {
+  background: #1f1f1f;
+  color: #61dafb;
+}
+
+.global-info-header {
+  text-align: center;
+  margin: 1em auto;
+  font-weight: bold;
+  color: #61dafb;
+}
+
+.global-info-text {
+  margin: 1em auto;
+  text-align: left;
+  font-style: italic;
 }

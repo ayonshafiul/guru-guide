@@ -12,6 +12,10 @@ export default [
         path: "/verify"
     },
     {
+        title: "Complaint Box",
+        path: "/complaint"
+    },
+    {
         title: "Help",
         path: "/help"
     },

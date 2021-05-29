@@ -85,6 +85,21 @@ export const getUserComment = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getUserComplaint = async () => {
+  const res = await axios.get(server.url + "/api/complain/single", {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
+export const getAllComplaint = async ({ queryKey }) => {
+  const [keyName, page] = queryKey;
+  const res = await axios.get(server.url + "/api/complain/" + "?page=" + page, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
 export const getUserRating = async ({ queryKey }) => {
   const [keyName, facultyID, courseID] = queryKey;
   const res = await axios.get(
@@ -116,6 +131,15 @@ export const postComment = async ({ comment, facultyID, courseID }) => {
   const res = await axios.post(
     server.url + "/api/comment/" + facultyID + "/" + courseID,
     { comment },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const postComplaint = async ({ complaint }) => {
+  const res = await axios.post(
+    server.url + "/api/complain/",
+    { complaintText: complaint },
     { withCredentials: true }
   );
   return res.data;

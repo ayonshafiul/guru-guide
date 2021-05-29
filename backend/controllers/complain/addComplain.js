@@ -1,17 +1,18 @@
 const dbPool = require("../../dbPool.js");
 const {
-  validatecomplain,
+  validateComplaint,
   validateNumber,
   createErrorObject,
   createSuccessObject,
 } = require("../../utils");
 
 module.exports = function (req, res) {
-  let complain = validatecomplain(req.body.complain);
+  let complain = validateComplaint(req.body.complaintText);
   let studentID = req.user.studentID;
 
   if (complain.error) {
-    return res.json(createErrorObject("Invalide complain or facultyID"));
+    console.log(complain.error);
+    return res.json(createErrorObject("Invalide complain"));
   }
 
   let sql = "SELECT complainID from complain where studentID = ?";

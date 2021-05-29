@@ -11,10 +11,9 @@ const pageAnimationVariant = {
   },
 };
 
-
 export const slideAnimationVariant = {
   initial: {
-    y: "+100%",
+    y: "-30%",
   },
   animate: {
     y: 0,

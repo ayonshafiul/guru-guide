@@ -44,6 +44,12 @@ module.exports.validateComment = (cmnt) => {
     .validate(cmnt);
 };
 
+module.exports.validateComplaint = (complaint) => {
+  return Joi.string()
+    .regex(/^[a-zA-Z0-9 ,.()?:-_'"!]{10,310}$/)
+    .validate(complaint);
+};
+
 module.exports.validateNumber = (num) => {
   return Joi.number().integer().validate(num);
 };

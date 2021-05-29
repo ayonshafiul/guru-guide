@@ -16,6 +16,7 @@ import FacultyVerify from "../FacultyVerify/FacultyVerify";
 import Login from "../Login/Login";
 import Page404 from "../Page404/Page404";
 import Home from "../Home/Home";
+import Complaint from "../Complaint/Complaint"
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastProvider, useToasts } from "react-toast-notifications";
@@ -94,6 +95,9 @@ function App() {
                   </Route>
                   <Route exact path="/">
                     <Home></Home>
+                  </Route>
+                  <Route exact path="/complaint">
+                    <Complaint />
                   </Route>
                   <Route path="*">
                     <Page404 />

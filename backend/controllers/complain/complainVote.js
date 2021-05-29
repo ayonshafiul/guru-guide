@@ -26,7 +26,7 @@ module.exports = function (req, res) {
   dbPool.getConnection(function (err, connection) {
     if (err) throw err; // not connected!
     let sql =
-      "SELECT upVote, downVote from complainvote where studentID = ? complainID = ?";
+      "SELECT upVote, downVote from complainvote where studentID = ? and complainID = ?";
     connection.query(
       sql,
       [studentID, complainID.value],
@@ -83,6 +83,9 @@ module.exports = function (req, res) {
               }
             });
           } else {
+            // already voted
+            // update instead
+
             let firstSql;
             let secondSql;
             let msg = "";
@@ -109,7 +112,7 @@ module.exports = function (req, res) {
                 "UPDATE complain set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where complainID =?";
               msg = "upvoteupdate";
             } else {
-              res.json(createSuccessObject("noupdate"));
+              return res.json(createSuccessObject("noupdate"));
             }
 
             connection.query(

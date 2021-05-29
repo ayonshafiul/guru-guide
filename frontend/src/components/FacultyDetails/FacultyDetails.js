@@ -286,20 +286,8 @@ const FacultyDetails = (props) => {
             facultyCourseRatingData.data.voteCount
           )
         : ""}
-      <div className="faculty-details-button-wrapper" ref={pageRef}>
-        <div
-          className={
-            page == "comments"
-              ? "faculty-details-comments faculty-details-active"
-              : "faculty-details-comments"
-          }
-          onClick={() => {
-            if (parseInt(courseID) !== 0) setPage("comments");
-            else addToast("Please select a course!", { appearance: "error" });
-          }}
-        >
-          Comments
-        </div>
+
+      <div className="faculty-details-button-wrapper">
         <div
           className={
             page == "rate"
@@ -313,107 +301,132 @@ const FacultyDetails = (props) => {
         >
           Rate
         </div>
-      </div>
-      {commentIsSuccess &&
-        typeof commentData != "undefined" &&
-        page == "comments" &&
-        parseInt(courseID) !== 0 && (
+
+        {page == "rate" && parseInt(courseID) !== 0 && (
           <motion.div
             className="facultylist"
             variants={slideAnimationVariant}
             initial="initial"
             animate="animate"
           >
-            {commentPage == 1 && (
-              <div className="wrapper-general">
-                <TextInput
-                  value={comment}
-                  type={"textarea"}
-                  setValue={setComment}
-                  limit={300}
-                  finalRegex={/^[a-zA-Z ,.()?:-_'"!]{1,500}$/}
-                  allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
-                  lowercase={true}
-                  errorMsg={`Uh oh you shouldn't have typed that!.`}
-                  placeholder={`Drop a comment`}
-                />
-                <div className="submit-comment-btn" onClick={submitComment}>
-                  Post comment for {courseCode}
-                </div>
+            {courseCode && (
+              <div className="info-header">
+                You are giving feedback for {courseCode}.{" "}
               </div>
             )}
-            {courseCode && commentData.data.length > 0 ? (
-              <div className="info-header">
-                Showing comments for: {courseCode}{" "}
-              </div>
-            ) : null}
-            {commentData.data.map((comment) => {
-              return (
-                <Comment
-                  key={comment.commentID}
-                  comment={comment}
-                  submitCommentVote={submitCommentVote}
-                />
-              );
-            })}
-            <div className="comment-page-buttons">
-              {commentPage > 1 && (
-                <div
-                  className="comment-prev-btn"
-                  onClick={() => {
-                    pageRef.current.scrollIntoView({ behavior: "smooth" });
-                    setCommentPage((prevPage) => prevPage - 1);
-                  }}
-                >
-                  {`<< Prev`}
-                </div>
-              )}
-              {commentData.data.length >= 9 && (
-                <div
-                  className="comment-next-btn"
-                  onClick={() => {
-                    pageRef.current.scrollIntoView({ behavior: "smooth" });
-                    setCommentPage((prevPage) => prevPage + 1);
-                  }}
-                >
-                  {`Next >>`}
-                </div>
-              )}
+            <Rating
+              type="teaching"
+              rating={rating}
+              changeRating={changeRating}
+            />
+            <Rating
+              type="grading"
+              rating={rating}
+              changeRating={changeRating}
+            />
+            <Rating
+              type="friendliness"
+              rating={rating}
+              changeRating={changeRating}
+            />
+            <div
+              className={
+                rating["teaching"] &&
+                rating["friendliness"] &&
+                rating["grading"]
+                  ? "submit-rating"
+                  : "submit-rating-disabled"
+              }
+              onClick={submitRating}
+            >
+              Rate
             </div>
           </motion.div>
         )}
 
-      {page == "rate" && parseInt(courseID) !== 0 && (
-        <motion.div
-          className="facultylist"
-          variants={slideAnimationVariant}
-          initial="initial"
-          animate="animate"
+        <div
+          className={
+            page == "comments"
+              ? "faculty-details-comments faculty-details-active"
+              : "faculty-details-comments"
+          }
+          onClick={() => {
+            if (parseInt(courseID) !== 0) setPage("comments");
+            else addToast("Please select a course!", { appearance: "error" });
+          }}
+          ref={pageRef}
         >
-          {courseCode && (
-            <div className="info-header">
-              You are giving feedback for {courseCode}.{" "}
-            </div>
+          Comments
+        </div>
+        {commentIsSuccess &&
+          typeof commentData != "undefined" &&
+          page == "comments" &&
+          parseInt(courseID) !== 0 && (
+            <motion.div
+              className="facultylist"
+              variants={slideAnimationVariant}
+              initial="initial"
+              animate="animate"
+            >
+              {commentPage == 1 && (
+                <div className="wrapper-general">
+                  <TextInput
+                    value={comment}
+                    type={"textarea"}
+                    setValue={setComment}
+                    limit={300}
+                    finalRegex={/^[a-zA-Z ,.()?:-_'"!]{1,500}$/}
+                    allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
+                    lowercase={true}
+                    errorMsg={`Uh oh you shouldn't have typed that!.`}
+                    placeholder={`Drop a comment`}
+                  />
+                  <div className="submit-comment-btn" onClick={submitComment}>
+                    Post comment for {courseCode}
+                  </div>
+                </div>
+              )}
+              {courseCode && commentData.data.length > 0 ? (
+                <div className="info-header">
+                  Showing comments for: {courseCode}{" "}
+                </div>
+              ) : null}
+              {commentData.data.map((comment) => {
+                return (
+                  <Comment
+                    key={comment.commentID}
+                    comment={comment}
+                    submitCommentVote={submitCommentVote}
+                  />
+                );
+              })}
+              <div className="comment-page-buttons">
+                {commentPage > 1 && (
+                  <div
+                    className="comment-prev-btn"
+                    onClick={() => {
+                      pageRef.current.scrollIntoView({ behavior: "smooth" });
+                      setCommentPage((prevPage) => prevPage - 1);
+                    }}
+                  >
+                    {`<< Prev`}
+                  </div>
+                )}
+                {commentData.data.length >= 9 && (
+                  <div
+                    className="comment-next-btn"
+                    onClick={() => {
+                      pageRef.current.scrollIntoView({ behavior: "smooth" });
+                      setCommentPage((prevPage) => prevPage + 1);
+                    }}
+                  >
+                    {`Next >>`}
+                  </div>
+                )}
+              </div>
+            </motion.div>
           )}
-          <Rating type="teaching" rating={rating} changeRating={changeRating} />
-          <Rating type="grading" rating={rating} changeRating={changeRating} />
-          <Rating
-            type="friendliness"
-            rating={rating}
-            changeRating={changeRating}
-          />
-          <div
-            className={
-              rating["teaching"] && rating["friendliness"] && rating["grading"]
-                ? "submit-rating"
-                : "submit-rating-disabled"
-            }
-            onClick={submitRating}
-          >
-            Rate
-          </div>
-        </motion.div>
-      )}
+      </div>
     </motion.div>
   );
 };
