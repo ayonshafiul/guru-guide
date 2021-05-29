@@ -46,6 +46,8 @@ CREATE TABLE course (
     departmentID int,
     courseCode varchar(7) not null,
     approved boolean,
+    difficulty double not null default '0.00',
+    rateCount int not null default '0',
     Primary Key(courseID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -140,4 +142,37 @@ CREATE TABLE complainvote(
     downVote int,
     Primary Key(studentID, complainID),
     Foreign Key (complainID) references complain(complainID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+
+CREATE TABLE courserating (
+    studentID int,
+    courseID int,
+    difficulty double not null default '0.00',
+    Primary Key(courseID, studentID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE coursecomment (
+    commentID int AUTO_INCREMENT,
+    studentID int,
+    courseID int,
+    commentText varchar(510),
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
+    Primary Key(commentID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
+    unique index comment(studentID, commentID),
+);
+
+CREATE TABLE commentvote(
+    studentID int,
+    commentID int,
+    upVote int,
+    downVote int,
+    Primary Key(studentID, commentID),
+    Foreign Key (commentID) references coursecomment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
