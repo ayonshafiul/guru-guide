@@ -165,7 +165,7 @@ CREATE TABLE coursecomment (
     Primary Key(commentID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(courseID) references course(courseID) ON DELETE CASCADE ON UPDATE CASCADE,
-    unique index comment(studentID, commentID),
+    unique index comment(studentID, commentID)
 );
 
 CREATE TABLE coursecommentvote(

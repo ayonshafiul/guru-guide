@@ -16,7 +16,7 @@ import FacultyVerify from "../FacultyVerify/FacultyVerify";
 import Login from "../Login/Login";
 import Page404 from "../Page404/Page404";
 import Home from "../Home/Home";
-import Complaint from "../Complaint/Complaint"
+import Complaint from "../Complaint/Complaint";
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastProvider, useToasts } from "react-toast-notifications";
@@ -25,8 +25,9 @@ import FacultyDetails from "../FacultyDetails/FacultyDetails";
 import CourseVerify from "../CourseVerify/CourseVerify";
 import menu from "../../assets/img/menu.png";
 import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
+import CourseList from "../CourseList/CourseList";
 
-function App() { 
+function App() {
   const [navStyle, setNavStyle] = useState(false);
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -81,8 +82,11 @@ function App() {
                   <Route exact path="/faculty">
                     <FacultyList />
                   </Route>
+                  <Route exact path="/course">
+                    <CourseList />
+                  </Route>
                   <Route exact path="/faculty/:id">
-                      <FacultyDetails navStyle={navStyle} />
+                    <FacultyDetails navStyle={navStyle} />
                   </Route>
                   <Route exact path="/verify/faculty/:departmentID/:initials">
                     <FacultyVerify />
@@ -91,7 +95,7 @@ function App() {
                     <CourseVerify />
                   </Route>
                   <Route exact path="/login">
-                    <Login/>
+                    <Login />
                   </Route>
                   <Route exact path="/">
                     <Home></Home>

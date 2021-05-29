@@ -9,7 +9,7 @@ const courseVoteController = require("../controllers/course/courseVoteController
 
 router.route("/course").post(addCourse);
 
-router.route("/course/:departmentID").get(getCourseController);
+router.route("/course/department/:departmentID").get(getCourseController);
 
 router
   .route("/courseverify/:departmentID")

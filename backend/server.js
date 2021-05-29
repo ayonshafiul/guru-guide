@@ -44,21 +44,23 @@ db.connect((err) => {
 });
 
 server.use("/api", authRouter);
-server.use("/api", authMiddleware, facultyRouter);
-server.use("/api", authMiddleware, courseRouter);
-server.use("/api", authMiddleware, commentRouter);
-server.use("/api", authMiddleware, ratingRouter);
-server.use("/api", authMiddleware, complainRouter);
 
-server.get("/api/forceupdate", (req, res) => {
+server.get("/api/forceupdate/", (req, res) => {
   facultyVerify();
   courseVerify();
   res.json(createSuccessObject("Updated!"));
 });
 
-server.get("/api/ping", (req, res) => {
+server.get("/api/ping/", (req, res) => {
+  console.log("ping");
   res.json(createSuccessObject("pong!"));
 });
+
+server.use("/api", authMiddleware, facultyRouter);
+server.use("/api", authMiddleware, courseRouter);
+server.use("/api", authMiddleware, commentRouter);
+server.use("/api", authMiddleware, ratingRouter);
+server.use("/api", authMiddleware, complainRouter);
 
 server.listen(process.env.PORT, function () {
   console.log(`Server is running on ${process.env.PORT}`);

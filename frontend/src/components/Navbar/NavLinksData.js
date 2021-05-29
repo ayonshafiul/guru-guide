@@ -4,6 +4,10 @@ export default [
         path: "/faculty"
     },
     {
+        title: "Course",
+        path: "/course"
+    },
+    {
         title: "Contribute",
         path: "/contribute"
     },

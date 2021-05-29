@@ -1,6 +1,6 @@
 import "./FacultyList.css";
 import { motion } from "framer-motion";
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import { useQuery } from "react-query";
