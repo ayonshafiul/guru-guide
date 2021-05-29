@@ -1,4 +1,4 @@
-const db = require("../../db.js");
+const dbPool = require("../../dbPool.js");
 const {
   validateNumber,
   createErrorObject,
@@ -14,146 +14,107 @@ function isInvalidRating(x) {
 }
 
 module.exports = function (req, res) {
-  let teaching = validateNumber(req.body.teaching);
-  let grading = validateNumber(req.body.grading);
-  let friendliness = validateNumber(req.body.friendliness);
-  let courseID = validateNumber(req.body.courseID);
-  let facultyID = validateNumber(req.params.facultyID);
+  let difficulty = validateNumber(req.body.difficulty);
+  let courseID = validateNumber(req.params.courseID);
   let studentID = req.user.studentID;
-  if (
-    teaching.error ||
-    grading.error ||
-    friendliness.error ||
-    facultyID.error ||
-    courseID.error
-  ) {
-    return res.json(createErrorObject("Invalid rating or facultyID"));
+  if (difficulty.error || courseID.error) {
+    return res.json(createErrorObject("Invalid difficulty or courseID"));
   }
-  if (
-    isInvalidRating(teaching.value) ||
-    isInvalidRating(grading.value) ||
-    isInvalidRating(friendliness.value)
-  ) {
+  if (isInvalidRating(difficulty.value)) {
     return res.json(createErrorObject("Invalid rating"));
   }
-
-  let sql =
-    "SELECT * from rating where facultyID = ? and courseID = ? and studentID = ?";
-  db.query(
-    sql,
-    [facultyID.value, courseID.value, studentID],
-    (error, results, fields) => {
-      if (error) {
-        console.log(error);
-        return res.json(
-          createErrorObject("Something went wrong while querying!")
-        );
-      } else {
-        if (results.length == 0) {
-          // no rating exists
-          // create new rating instead
-
-          insertRating(req, res, {
-            studentID,
-            facultyID: facultyID.value,
-            courseID: courseID.value,
-            teaching: teaching.value,
-            grading: grading.value,
-            friendliness: friendliness.value,
-          });
+  dbPool.getConnection(function (err, connection) {
+    if (err) return res.json(createErrorObject("Can not establish connection"));
+    let sql = "SELECT * from courserating where studentID = ? and courseID = ?";
+    connection.query(
+      sql,
+      [studentID, courseID.value],
+      (error, results, fields) => {
+        if (error) {
+          console.log(error);
+          return res.json(createErrorObject("Something went wrong!"));
         } else {
-          // rating already exists
-          let oldTeaching = results[0].teaching;
-          let oldGrading = results[0].grading;
-          let oldfriendliness = results[0].friendliness;
-
-          let sql =
-            "UPDATE rating set teaching = ?, grading = ?, friendliness = ? where facultyID = ? and courseID = ? and studentID = ?";
-          db.query(
-            sql,
-            [
-              teaching.value,
-              grading.value,
-              friendliness.value,
-              facultyID.value,
-              courseID.value,
+          if (results.length == 0) {
+            // no rating exists
+            // create new rating instead
+            let sql = "INSERT INTO rating SET ?";
+            let rateObj = {
+              courseID: courseID.value,
+              difficulty: difficulty.value,
               studentID,
-            ],
-            (error, results, fields) => {
+            };
+            connection.query(sql, rateObj, (error, results, fields) => {
               if (error) {
                 console.log(error);
-                return res.json(
-                  createErrorObject("Updating failed with new rating!")
-                );
+                res.json(createErrorObject("Error inserting new rating."));
               } else {
-                // successfully updated
-                // update the faculty table accordingly
-                let newTeaching = -1 * oldTeaching + teaching.value;
-                let newGrading = -1 * oldGrading + grading.value;
-                let newfriendliness = -1 * oldfriendliness + friendliness.value;
-
+                // successfully inserted
+                // update all the grading voteCount field in faculty table
                 let sqlSecond =
-                  "UPDATE faculty set teaching = teaching + ?, grading = grading + ?, friendliness = friendliness + ? where facultyID = ?";
-
-                db.query(
+                  "UPDATE course set difficulty = difficulty + ?, rateCount = rateCount + 1 where courseID = ?";
+                connection.query(
                   sqlSecond,
-                  [newTeaching, newGrading, newfriendliness, facultyID.value],
+                  [difficulty.value, courseID.value],
                   (error, results, fields) => {
                     if (error) {
                       console.log(error);
                       return res.json(
-                        createErrorObject("Updating voteCount field")
+                        createErrorObject(
+                          "Error while updating voteCount field"
+                        )
                       );
                     } else {
                       //successfully updated the voteCount field
                       return res.json(
-                        createSuccessObject("Updated new rating!")
+                        createSuccessObject("Successfully inserted new rating!")
                       );
                     }
                   }
                 );
               }
-            }
-          );
+            });
+          } else {
+            // rating already exists
+            let oldDifficulty = results[0].difficulty;
+
+            let sql =
+              "UPDATE courserating set difficulty = ? where  studentID = ? and courseID = ?";
+            connection.query(
+              sql,
+              [difficulty.value, studentID, courseID.value],
+              (error, results, fields) => {
+                if (error) {
+                  console.log(error);
+                  return res.json(
+                    createErrorObject("Updating failed with new rating!")
+                  );
+                } else {
+                  // successfully updated
+                  // update the course table accordingly
+                  let newDifficulty = difficulty.value - oldDifficulty;
+                  let sqlSecond =
+                    "UPDATE course set difficulty = difficulty + ? where courseID = ?";
+                  connection.query(
+                    sqlSecond,
+                    [newDifficulty, courseID.value],
+                    (error, results, fields) => {
+                      if (error) {
+                        console.log(error);
+                        return res.json(createErrorObject("Updating failed!"));
+                      } else {
+                        return res.json(
+                          createSuccessObject("Updated new rating!")
+                        );
+                      }
+                    }
+                  );
+                }
+              }
+            );
+          }
         }
       }
-    }
-  );
-
-  function insertRating(req, res, rateObj) {
-    let sql = "INSERT INTO rating SET ?";
-    db.query(sql, rateObj, (error, results, fields) => {
-      if (error) {
-        console.log(error);
-        res.json(createErrorObject("Query failed! Get a new life!"));
-      } else {
-        // successfully inserted
-        // update all the grading voteCount field in faculty table
-        let sqlSecond =
-          "UPDATE faculty set teaching = teaching + ?, grading = grading + ?, friendliness = friendliness + ?, voteCount = voteCount + 1 where facultyID = ?";
-        db.query(
-          sqlSecond,
-          [
-            rateObj.teaching,
-            rateObj.grading,
-            rateObj.friendliness,
-            rateObj.facultyID,
-          ],
-          (error, results, fields) => {
-            if (error) {
-              console.log(error);
-              return res.json(
-                createErrorObject("Error while updating voteCount field")
-              );
-            } else {
-              //successfully updated the voteCount field
-              return res.json(
-                createSuccessObject("Successfully inserted new rating!")
-              );
-            }
-          }
-        );
-      }
-    });
-  }
+    );
+    connection.release();
+  });
 };
