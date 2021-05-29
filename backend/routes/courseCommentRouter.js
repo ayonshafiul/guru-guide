@@ -1,18 +1,13 @@
 const express = require("express");
+const addCourseComment = require("../controllers/coursecomment/addCourseComment");
+const courseCommentVote = require("../controllers/coursecomment/courseCommentVote");
+const getCourseComment = require("../controllers/coursecomment/getCourseComment");
 const router = express.Router();
 
-const addComment = require("../controllers/comment/addComment");
-const commentVoteController = require("../controllers/comment/commentVoteController");
-const getACommentController = require("../controllers/comment/getACommentController");
-const getCommentController = require("../controllers/comment/getCommentController");
+router.route("/comment/:courseID").post(addCourseComment).get(getCourseComment);
 
-router
-  .route("/comment/:facultyID/:courseID")
-  .post(addComment)
-  .get(getCommentController);
+// router.route("/usercomment/:courseID").get();
 
-router.route("/usercomment/:facultyID/:courseID").get(getACommentController);
-
-router.route("/commentvote/:commentID").post(commentVoteController);
+router.route("/commentvote/:commentID").post(courseCommentVote);
 
 module.exports = router;

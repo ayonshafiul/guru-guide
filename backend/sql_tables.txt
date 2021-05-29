@@ -168,7 +168,7 @@ CREATE TABLE coursecomment (
     unique index comment(studentID, commentID),
 );
 
-CREATE TABLE commentvote(
+CREATE TABLE coursecommentvote(
     studentID int,
     commentID int,
     upVote int,
