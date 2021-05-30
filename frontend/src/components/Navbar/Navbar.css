@@ -1,8 +1,8 @@
 .navbar {
   width: 25%;
   position: fixed;
-  top: 67px;
   left: 0;
+  top: 0;
   background: #171717;
   height: 100vh;
   display: flex;
@@ -14,6 +14,17 @@
   width: 100%;
 }
 
+.nav-title {
+  text-align: center;
+  color: white;
+  padding: 0.5em 0em;
+  border-bottom: 3px solid #61dafb;
+  display: none;
+}
+.nav-spinning {
+  text-align: center;
+  display: none;
+}
 .nav-list-item {
   display: block;
   text-transform: uppercase;
@@ -88,9 +99,11 @@ Link {
 @media screen and (min-width: 769px) {
   .navbar {
     visibility: visible;
-    top: 55px;
   }
-  .title {
-    margin-left: 12.5%;
+  .nav-title {
+    display: block;
+  }
+  .nav-spinning {
+    display: block;
   }
 }

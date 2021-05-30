@@ -8,8 +8,6 @@
   z-index: 1000;
 }
 
-.header {
-}
 .title {
   text-align: center;
   color: white;
@@ -20,7 +18,7 @@
 }
 
 .App {
-  margin-top: 65px;
+  margin-top: 67px;
   margin-left: 25%;
   width: 75%;
   background: #202124;
@@ -66,5 +64,21 @@
   .margin-auto {
     width: 95%;
     margin: 0 auto;
+  }
+  .spinning {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .header-top {
+    display: none;
+  }
+  .App {
+    margin-top: 1em;
   }
 }

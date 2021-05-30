@@ -3,14 +3,22 @@ import navlinks from "./NavLinksData";
 import { NavLink } from "react-router-dom";
 import { useIsFetching } from "react-query";
 import grid from "./grid.svg";
+import infinity from "../../assets/img/infinity.svg";
 import { motion } from "framer-motion";
 import { slideAnimation } from "../../AnimationData";
 const Navbar = (props) => {
   const numFetch = useIsFetching();
   return (
-    <motion.div variants={slideAnimation} animate={props.navStyle ? "show" : "hide"}>
+    <motion.div
+      variants={slideAnimation}
+      animate={props.navStyle ? "show" : "hide"}
+    >
       <nav className="navbar">
         <div className="nav-list">
+          <h1 className="nav-title">GURUGUIDE</h1>
+          <div className="nav-spinning">
+            <img src={infinity} />
+          </div>
           {navlinks.map((item, index) => {
             return (
               <NavLink
