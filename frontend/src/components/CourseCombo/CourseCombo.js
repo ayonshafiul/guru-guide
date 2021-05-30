@@ -10,6 +10,7 @@ import { Redirect, useLocation } from "react-router-dom";
 import { useToasts } from "react-toast-notifications";
 import CourseListItem from "../CourseListItem/CourseListItem";
 import { showCourseRatingSection } from "../CourseDetails/CourseDetails";
+import refetchicon from "../../assets/img/refetch.svg";
 
 const CourseCombo = () => {
   const location = useLocation();
@@ -135,16 +136,32 @@ const CourseCombo = () => {
       )}
 
       {courseCombo.map((course) => {
-        return <CourseListItem key={course.courseCode} course={course} />;
+        return (
+          <CourseListItem
+            key={course.courseCode}
+            course={course}
+            hideLink={true}
+          />
+        );
       })}
-      {courseCombo.length > 0
-        ? showCourseRatingSection(
+      {courseCombo.length > 0 ? (
+        <>
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            className="global-refetch-btn"
+            onClick={() => setCourseCombo([])}
+          >
+            <img src={refetchicon} />
+            <div className="global-refetch-btn-title"> Reset</div>
+          </motion.div>
+          {showCourseRatingSection(
             "Estimated difficulty for the course choice: ",
             totalDifficulty,
             courseCombo.length,
             true
-          )
-        : null}
+          )}
+        </>
+      ) : null}
     </motion.div>
   );
 };
