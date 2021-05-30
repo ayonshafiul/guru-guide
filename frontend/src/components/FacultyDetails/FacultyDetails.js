@@ -208,10 +208,10 @@ const FacultyDetails = (props) => {
       initial="initial"
       animate="animate"
     >
+      <Link style={{ textDecoration: "none" }} to="/faculty">
+        <div className="global-back-btn">&lArr;</div>
+      </Link>
       <div className="faculty-details-wrapper">
-        <Link style={{ textDecoration: "none" }} to="/faculty">
-          <div className="global-back-btn">&lArr;</div>
-        </Link>
         {facultyIsSuccess && typeof facultyData.data !== "undefined"
           ? showFacultyDetailsSection(
               facultyData.data.facultyInitials,

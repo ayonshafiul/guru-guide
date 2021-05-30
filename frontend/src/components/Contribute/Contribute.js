@@ -25,26 +25,23 @@ const Contribute = () => {
   const { isAuth } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const { addToast } = useToasts();
-  const [tab, setTab] = useState("");
+  const [tab, setTab] = useLocalStorage("contributetab", "");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
   const [initials, setInitials] = useState("");
-  const [showFacultyVerification, setShowFacultyVerification] = useState(false);
   const [showName, setShowName] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
   const [name, setName] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
   const [courseCode, setCourseCode] = useState("");
-  const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
-    useQuery(
-      ["/api/facultyverify", departmentID, String(initials)],
-      getAFacultyVerification,
-      {
-        enabled: parseInt(departmentID) !== 0 && initials.length == 3,
-      }
-    );
+  const { isSuccess, data, refetch } = useQuery(
+    ["/api/facultyverify", departmentID, String(initials)],
+    getAFacultyVerification,
+    {
+      enabled: parseInt(departmentID) !== 0 && initials.length == 3,
+    }
+  );
   const {
     isSuccess: isCourseSuccess,
-    error: courseError,
     data: courseData,
     refetch: courseRefetch,
   } = useQuery(
@@ -56,7 +53,6 @@ const Contribute = () => {
   );
   async function submitFaculty() {
     const inRegex = /^[a-zA-Z]{3}$/;
-    const nameRegex = /^$/;
     if (
       parseInt(departmentID) !== 0 &&
       initials.match(inRegex) &&
@@ -497,29 +493,31 @@ const Contribute = () => {
                 ) : null}
               </>
             )}
-            {showTitle && courseCode.length == 6 && parseInt(departmentID) !== 0 && (
-              <>
-                <div>
-                  Since you think that the info is wrong, please feel free to
-                  add the correct info about {courseCode}.
-                </div>
-                <div className="input">
-                  <TextInput
-                    value={courseTitle}
-                    setValue={setCourseTitle}
-                    limit={50}
-                    type=""
-                    finalRegex={/^[a-zA-Z ]{3, 50}$/}
-                    allowedRegex={/^[a-zA-Z ]*$/}
-                    errorMsg={`Type something like "Introduction to microfinance" :)`}
-                    placeholder={`Type the full title of the course you would like to add to the database`}
-                  />
-                </div>
-                <div className="submit-btn" onClick={submitCourse}>
-                  Add Course
-                </div>
-              </>
-            )}
+            {showTitle &&
+              courseCode.length == 6 &&
+              parseInt(departmentID) !== 0 && (
+                <>
+                  <div>
+                    Since you think that the info is wrong, please feel free to
+                    add the correct info about {courseCode}.
+                  </div>
+                  <div className="input">
+                    <TextInput
+                      value={courseTitle}
+                      setValue={setCourseTitle}
+                      limit={50}
+                      type=""
+                      finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                      allowedRegex={/^[a-zA-Z ]*$/}
+                      errorMsg={`Type something like "Introduction to microfinance" :)`}
+                      placeholder={`Type the full title of the course you would like to add to the database`}
+                    />
+                  </div>
+                  <div className="submit-btn" onClick={submitCourse}>
+                    Add Course
+                  </div>
+                </>
+              )}
           </div>
         </>
       )}

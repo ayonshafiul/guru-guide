@@ -9,16 +9,15 @@ import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
+import refetchicon from "../../assets/img/refetch.svg";
 
 const FacultyList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
-  const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/faculty/department", String(departmentID)],
-    getFaculty
-  );
+  const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
+    useQuery(["/api/faculty/department", String(departmentID)], getFaculty);
 
   function sortFunction(a, b) {
     let sortValue = 0;
@@ -109,6 +108,14 @@ const FacultyList = () => {
             <option value="vote">Number of votes</option>
           </select>
         )}
+        <motion.div
+          whileTap={{ scale: 0.8 }}
+          className="global-refetch-btn"
+          onClick={() => refetch()}
+        >
+          <img src={refetchicon} />
+          <div className="global-refetch-btn-title">Refresh</div>
+        </motion.div>
         {isError ? <div>Error Fetching data...</div> : null}
         {isSuccess &&
           typeof data.data !== undefined &&

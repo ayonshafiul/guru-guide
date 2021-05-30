@@ -163,10 +163,10 @@ const CourseDetails = () => {
       initial="initial"
       animate="animate"
     >
+      <Link style={{ textDecoration: "none" }} to="/course">
+        <div className="global-back-btn">&lArr;</div>
+      </Link>
       <div className="course-details-wrapper">
-        <Link style={{ textDecoration: "none" }} to="/course">
-          <div className="global-back-btn">&lArr;</div>
-        </Link>
         {courseIsSuccess && typeof courseData.data !== "undefined"
           ? showCourseDetailsSection(
               courseData.data.courseCode,

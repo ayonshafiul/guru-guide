@@ -9,16 +9,15 @@ import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
 import CourseListItem from "../CourseListItem/CourseListItem";
+import refetchicon from "../../assets/img/refetch.svg";
 
 const CourseList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("courselistsort", "");
-  const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/course/department", String(departmentID)],
-    getCourse
-  );
+  const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
+    useQuery(["/api/course/department", String(departmentID)], getCourse);
 
   function sortFunction(a, b) {
     let sortValue = 0;
@@ -93,6 +92,14 @@ const CourseList = () => {
           </select>
         )}
       </div>
+      <motion.div
+        whileTap={{ scale: 0.8 }}
+        className="global-refetch-btn"
+        onClick={() => refetch()}
+      >
+        <img src={refetchicon} />
+        <div className="global-refetch-btn-title">Refresh</div>
+      </motion.div>
       {isSuccess &&
         typeof data.data !== undefined &&
         data.data.sort(sortFunction).map((course) => {

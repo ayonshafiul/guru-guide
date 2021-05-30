@@ -13,8 +13,8 @@ body {
 }
 
 .global-back-btn {
-  background: #61dafb;
-  color: #1f1f1f;
+  background: #1f1f1f;
+  color: #61dafb;
   width: 20%;
   text-transform: uppercase;
   border-radius: 10px;
@@ -24,11 +24,13 @@ body {
   font-size: 1.2em;
   cursor: pointer;
   border: 2px solid #61dafb;
-  z-index: 5;
+  position: sticky;
+  top: 57px;
+  z-index: 6;
 }
 .global-back-btn:hover {
-  background: #1f1f1f;
-  color: #61dafb;
+  background: #61dafb;
+  color: #1f1f1f;
   border: 2px solid #61dafb;
 }
 
@@ -184,6 +186,31 @@ body {
   background-color: #1f1f1f;
 }
 
+.global-refetch-btn {
+  background: #1f1f1f;
+  color: white;
+  display: flex;
+  align-items: center;
+  border: 2px solid #61dafb;
+  padding: 5px;
+  border-radius: 10px;
+  color: #61dafb;
+  width: 130px;
+  margin: 0 auto;
+  position: sticky;
+  top: 57px;
+}
+
+.global-refetch-btn:hover {
+  background: white;
+  color: #1f1f1f;
+  border: 2px solid white;
+}
+
+.global-refetch-btn-title {
+  margin-left: 4px;
+}
+
 .bg-red {
   background-color: #ba000d;
 }
@@ -194,4 +221,14 @@ body {
 
 .bg-yellow {
   background-color: #fdcc0d;
+}
+
+@media screen and (min-width: 769px) {
+  .global-refetch-btn {
+    top: 2px;
+  }
+  .global-back-btn {
+    top: 2px;
+    z-index: 6;
+  }
 }
