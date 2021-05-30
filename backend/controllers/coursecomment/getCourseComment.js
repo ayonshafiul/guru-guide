@@ -19,7 +19,7 @@ module.exports = function (req, res, next) {
     let sql =
       "SELECT * from coursecomment where courseID = ? order by upVoteSum desc limit ?, 10";
 
-    db.query(
+    connection.query(
       sql,
       [courseID.value, (parseInt(page.value) - 1) * 10],
       (error, results) => {

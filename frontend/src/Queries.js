@@ -65,6 +65,15 @@ export const getAFaculty = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getACourse = async ({ queryKey }) => {
+  const [keyName, courseID] = queryKey;
+  const res = await axios.get(server.url + "/api/course/" + courseID, {
+    withCredentials: true,
+  });
+  console.log(res.data);
+  return res.data;
+};
+
 export const getComment = async ({ queryKey }) => {
   const [keyName, facultyID, courseID, commentPage] = queryKey;
   const res = await axios.get(
@@ -75,6 +84,15 @@ export const getComment = async ({ queryKey }) => {
       courseID +
       "?page=" +
       commentPage,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const getCourseComment = async ({ queryKey }) => {
+  const [keyName, courseID, commentPage] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/coursecomment/" + courseID + "/?page=" + commentPage,
     { withCredentials: true }
   );
   return res.data;
@@ -131,9 +149,27 @@ export const postRating = async ({ rating, facultyID, courseID }) => {
   return res.data;
 };
 
+export const postCourseRating = async ({ rating, courseID }) => {
+  const res = await axios.post(
+    server.url + "/api/courserate/" + courseID,
+    { ...rating },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
 export const postComment = async ({ comment, facultyID, courseID }) => {
   const res = await axios.post(
     server.url + "/api/comment/" + facultyID + "/" + courseID,
+    { comment },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const postCourseComment = async ({ comment, courseID }) => {
+  const res = await axios.post(
+    server.url + "/api/coursecomment/" + courseID,
     { comment },
     { withCredentials: true }
   );

@@ -1,4 +1,4 @@
-.course-wrapper {
+.course-list-wrapper {
   display: flex;
   margin: 20px auto;
   color: #1f1f1f;
@@ -73,7 +73,7 @@
 }
 
 @media screen and (max-width: 600px) {
-  .course-wrapper {
+  .course-list-wrapper {
     display: block;
     margin: 20px auto;
     color: #1f1f1f;

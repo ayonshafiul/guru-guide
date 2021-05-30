@@ -11,7 +11,9 @@ const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
 const courseRouter = require("./routes/courseRouter");
 const commentRouter = require("./routes/commentRouter");
+const courseCommentRouter = require("./routes/courseCommentRouter");
 const ratingRouter = require("./routes/ratingRouter");
+const courseRatingRouter = require("./routes/courseRatingRouter");
 const complainRouter = require("./routes/complainRouter");
 
 const authMiddleware = require("./middlewares/authentication");
@@ -59,7 +61,9 @@ server.get("/api/ping/", (req, res) => {
 server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
+server.use("/api", authMiddleware, courseCommentRouter);
 server.use("/api", authMiddleware, ratingRouter);
+server.use("/api", authMiddleware, courseRatingRouter);
 server.use("/api", authMiddleware, complainRouter);
 
 server.listen(process.env.PORT, function () {

@@ -4,10 +4,11 @@ const courseCommentVote = require("../controllers/coursecomment/courseCommentVot
 const getCourseComment = require("../controllers/coursecomment/getCourseComment");
 const router = express.Router();
 
-router.route("/comment/:courseID").post(addCourseComment).get(getCourseComment);
+router
+  .route("/coursecomment/:courseID")
+  .post(addCourseComment)
+  .get(getCourseComment);
 
-// router.route("/usercomment/:courseID").get();
-
-router.route("/commentvote/:commentID").post(courseCommentVote);
+router.route("/coursecommentvote/:commentID").post(courseCommentVote);
 
 module.exports = router;

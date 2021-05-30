@@ -37,7 +37,7 @@ module.exports = function (req, res) {
           if (results.length == 0) {
             // no rating exists
             // create new rating instead
-            let sql = "INSERT INTO rating SET ?";
+            let sql = "INSERT INTO courserating SET ?";
             let rateObj = {
               courseID: courseID.value,
               difficulty: difficulty.value,

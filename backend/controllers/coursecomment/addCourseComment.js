@@ -22,12 +22,7 @@ module.exports = function (req, res) {
       "UPDATE coursecomment SET commentText = ? where courseID = ? and studentID = ?";
     connection.query(
       sql,
-      [
-        comment.value + " (*Edited*)",
-        facultyID.value,
-        courseID.value,
-        studentID,
-      ],
+      [comment.value + " (*Edited*)", courseID.value, studentID],
       (error, results, fields) => {
         if (error) {
           console.log(error);

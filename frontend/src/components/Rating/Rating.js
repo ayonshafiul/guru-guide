@@ -11,9 +11,13 @@ import i10 from "../../assets/img/10.png";
 import "./Rating.css";
 
 export default function Rating(props) {
-  //type //rating {teaching: 1, grading: 2, humanity: 3}
   const buttons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   const emojiArray = [i1, i1, i2, i3, i4, i5, i6, i7, i8, i9, i10];
+  const emojiArrayRev = [i1, i10, i9, i8, i7, i6, i5, i4, i3, i2, i1];
+  let eArray = emojiArray;
+  if (props.reversed) {
+    eArray = emojiArrayRev;
+  }
   return (
     <div className="ratingBox">
       <div className="rc">
@@ -41,7 +45,7 @@ export default function Rating(props) {
                       ? "rc-emoji-active"
                       : "rc-emoji-img"
                   }
-                  src={emojiArray[buttonNo]}
+                  src={eArray[buttonNo]}
                 />
               </div>
             );

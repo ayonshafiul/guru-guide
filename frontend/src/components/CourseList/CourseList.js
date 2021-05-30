@@ -36,7 +36,7 @@ const CourseList = () => {
       animate="animate"
     >
       <h1 className="global-header"> Course List</h1>
-      <div className="course-list-wrapper">
+      <div className="general-wrapper">
         <select
           className="select-css select-css-full"
           value={departmentID}

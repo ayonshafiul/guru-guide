@@ -7,11 +7,11 @@ const courseListItem = (props) => {
   if (rateCount === 0) {
     rateCount = 0.1;
   }
-  let avgDifficulty = 7;
+  let avgDifficulty = difficulty / rateCount;
 
   return (
     <Link style={{ textDecoration: "none" }} to={`/course/${courseID}`}>
-      <div className="course-wrapper">
+      <div className="course-list-wrapper">
         <div className="course-name-wrapper">
           <div className="course-name">{courseTitle}</div>
           <div className="course-initials">{courseCode}</div>

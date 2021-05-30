@@ -22,6 +22,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastProvider, useToasts } from "react-toast-notifications";
 import { ReactQueryDevtools } from "react-query/devtools";
 import FacultyDetails from "../FacultyDetails/FacultyDetails";
+import CourseDetails from "../CourseDetails/CourseDetails";
 import CourseVerify from "../CourseVerify/CourseVerify";
 import menu from "../../assets/img/menu.png";
 import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
@@ -62,7 +63,9 @@ function App() {
               >
                 <img src={menu} style={{ width: 40, height: 40 }} />
               </div>
-              <div className="spinning"><img src={infinity}/></div>
+              <div className="spinning">
+                <img src={infinity} />
+              </div>
               <h1 className="title">Guruguide</h1>
             </div>
 
@@ -88,7 +91,10 @@ function App() {
                     <CourseList />
                   </Route>
                   <Route exact path="/faculty/:id">
-                    <FacultyDetails navStyle={navStyle} />
+                    <FacultyDetails />
+                  </Route>
+                  <Route exact path="/course/:id">
+                    <CourseDetails />
                   </Route>
                   <Route exact path="/verify/faculty/:departmentID/:initials">
                     <FacultyVerify />
