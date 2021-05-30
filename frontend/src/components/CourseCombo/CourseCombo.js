@@ -47,7 +47,7 @@ const CourseCombo = () => {
             });
             setCourseID("0");
           } else {
-            addToast("Coudn't load the course Data. :(");
+            addToast("Couldn't load the course Data. :(");
           }
         } else {
           addToast(
@@ -55,7 +55,7 @@ const CourseCombo = () => {
           );
         }
       } else {
-        addToast("Can you even take seven courses in BRACU?");
+        addToast("Can you even take seven courses in BRACU? :)");
       }
     }
   }
