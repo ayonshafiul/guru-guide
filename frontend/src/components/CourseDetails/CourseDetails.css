@@ -44,24 +44,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: #61dafb;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   width: 50%;
   height: 100%;
   z-index: -1;
-}
-
-.bg-red {
-  background-color: red;
-}
-
-.bg-green {
-  background-color: yellowgreen;
-}
-
-.bg-yellow {
-  background-color: #fdcc0d;
 }
 
 .course-details-comments,

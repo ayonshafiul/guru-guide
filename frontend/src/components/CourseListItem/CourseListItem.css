@@ -66,18 +66,6 @@
   border-radius: 5px;
 }
 
-.bg-red {
-  background-color: red;
-}
-
-.bg-green {
-  background-color: green;
-}
-
-.bg-yellow {
-  background-color: #fdcc0d;
-}
-
 @media screen and (max-width: 600px) {
   .course-list-wrapper {
     display: block;

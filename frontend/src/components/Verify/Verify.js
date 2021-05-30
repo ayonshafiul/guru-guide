@@ -49,18 +49,19 @@ const Verify = () => {
       initial="initial"
       animate="animate"
     >
+      <h1 class="global-header"> Verify</h1>
       <div className="tab-btn-wrapper">
         <div
           className={tab === "faculty" ? "tab-btn tab-btn-active" : "tab-btn"}
           onClick={(e) => setTab("faculty")}
         >
-          Verify Faculty
+          Faculty
         </div>
         <div
           className={tab === "course" ? "tab-btn tab-btn-active" : "tab-btn"}
           onClick={(e) => setTab("course")}
         >
-          Verify Course
+          Course
         </div>
       </div>
       {tab === "faculty" && (

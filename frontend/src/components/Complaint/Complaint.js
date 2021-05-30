@@ -107,6 +107,7 @@ const Complaint = () => {
       initial="initial"
       animate="animate"
     >
+      <h1 class="global-header"> Complaint Box</h1>
       <div className="tab-btn-wrapper" ref={topBarRef}>
         <div
           className={

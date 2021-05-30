@@ -183,3 +183,15 @@ body {
   color: #61dafb;
   background-color: #1f1f1f;
 }
+
+.bg-red {
+  background-color: #ba000d;
+}
+
+.bg-green {
+  background-color: #087f23;
+}
+
+.bg-yellow {
+  background-color: #fdcc0d;
+}
