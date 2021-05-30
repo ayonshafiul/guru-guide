@@ -30,7 +30,7 @@
   flex: 4 0 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   position: relative;
   z-index: 5;
 }
@@ -57,6 +57,13 @@
   border-radius: 5px;
   padding: 0.3em;
   color: #61dafb;
+}
+.course-list-item-rate-count {
+  font-size: 8px;
+  background: #1f1f1f;
+  color: #ccc;
+  padding: 4px;
+  border-radius: 5px;
 }
 
 .bg-red {

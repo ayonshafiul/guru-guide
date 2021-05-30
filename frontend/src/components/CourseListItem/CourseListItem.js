@@ -18,6 +18,7 @@ const courseListItem = (props) => {
         </div>
         <div className="course-difficulty-wrapper">
           <span className="span-bg">{avgDifficulty + " "} &#9762;</span>
+          <div className="course-list-item-rate-count">{rateCount} vote(s)</div>
           <div
             className={
               avgDifficulty <= 4

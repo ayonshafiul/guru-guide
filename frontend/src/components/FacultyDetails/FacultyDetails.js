@@ -33,14 +33,12 @@ const FacultyDetails = (props) => {
   const pageRef = useRef(null);
   const queryClient = useQueryClient();
   const [page, setPage] = useState("");
-  const [displayRating, setDisplayRating] = useState({});
   const [rating, setRating] = useState({});
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
   const [courseID, setCourseID] = useState("0");
   const [courseCode, setCourseCode] = useState("");
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
-  const [currentFaculty, setCurrentFaculty] = useState({});
 
   const {
     isLoading: commentIsLoading,

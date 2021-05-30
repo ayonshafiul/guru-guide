@@ -23,6 +23,9 @@
 
 .course-details-difficulty {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
   background-color: #ccc;
   border-radius: 10px;

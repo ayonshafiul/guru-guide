@@ -20,6 +20,30 @@ const CourseList = () => {
     getCourse
   );
 
+  function sortFunction(a, b) {
+    let sortValue = 0;
+    switch (sort) {
+      case "difficulty":
+        let avgA = 0;
+        let avgB = 0;
+        if (a.rateCount !== 0) {
+          avgA = a.difficulty / a.rateCount;
+        }
+        if (b.rateCount !== 0) {
+          avgB = b.difficulty / b.rateCount;
+        }
+        sortValue = avgB >= avgA ? -1 : 1;
+        break;
+      case "coursecode":
+        sortValue =
+          a.courseCode.toUpperCase() >= b.courseCode.toUpperCase() ? 1 : -1;
+        break;
+      case "vote":
+        sortValue = b.rateCount >= a.rateCount ? 1 : -1;
+        break;
+    }
+    return sortValue;
+  }
   if (!isAuth)
     return (
       <Redirect
@@ -71,7 +95,7 @@ const CourseList = () => {
       </div>
       {isSuccess &&
         typeof data.data !== undefined &&
-        data.data.map((course) => {
+        data.data.sort(sortFunction).map((course) => {
           return <CourseListItem course={course} key={course.courseID} />;
         })}
     </motion.div>
