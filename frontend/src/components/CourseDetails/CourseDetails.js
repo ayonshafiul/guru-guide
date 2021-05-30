@@ -314,7 +314,12 @@ function showCourseDetailsSection(courseCode, courseTitle, departmentID) {
   );
 }
 
-function showCourseRatingSection(title, difficulty, rateCount) {
+export function showCourseRatingSection(
+  title,
+  difficulty,
+  rateCount,
+  showCourseCount
+) {
   let overall = 0;
   if (parseInt(rateCount) !== 0) {
     difficulty = (difficulty / rateCount).toFixed(1);
@@ -329,7 +334,9 @@ function showCourseRatingSection(title, difficulty, rateCount) {
         <span className="course-details-text-bg">
           Difficulty: {difficulty} &#9762;
         </span>
-        <span className="course-details-text-bg">{rateCount} vote(s)</span>
+        <span className="course-details-text-bg">
+          {rateCount} {showCourseCount ? "course(s)" : "vote(s)"}
+        </span>
         <div
           className={
             difficulty <= 4

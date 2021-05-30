@@ -10,9 +10,7 @@ module.exports = function login(req, res) {
   async function verify() {
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-      // Or, if multiple clients access the backend:
-      //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+      audience: process.env.CLIENT_ID,
     });
     const payload = ticket.getPayload();
     // Chance of error! Fix in future
@@ -47,15 +45,12 @@ module.exports = function login(req, res) {
     });
   }
 
-  verify().then(function () {
-    console.log("Verified!");
-  });
+  verify().then(function () {});
 
   function signInUser(studentID) {
     const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-    console.log("The token is" + token);
     res.cookie("jwt", token, {
       expires: new Date(
         Date.now() +
@@ -63,6 +58,6 @@ module.exports = function login(req, res) {
       ),
       httpOnly: true,
     });
-    res.status(200).json({ message: "user logged in", token: token });
+    res.status(200).json(createSuccessObject("loginsuccessfull"));
   }
 };

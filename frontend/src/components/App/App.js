@@ -24,6 +24,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import FacultyDetails from "../FacultyDetails/FacultyDetails";
 import CourseDetails from "../CourseDetails/CourseDetails";
 import CourseVerify from "../CourseVerify/CourseVerify";
+import CourseCombo from "../CourseCombo/CourseCombo";
 import menu from "../../assets/img/menu.png";
 import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
 import CourseList from "../CourseList/CourseList";
@@ -95,6 +96,9 @@ function App() {
                   </Route>
                   <Route exact path="/course/:id">
                     <CourseDetails />
+                  </Route>
+                  <Route exact path="/coursecombo">
+                    <CourseCombo />
                   </Route>
                   <Route exact path="/verify/faculty/:departmentID/:initials">
                     <FacultyVerify />

@@ -17,7 +17,6 @@ export const getCourse = async ({ queryKey }) => {
       withCredentials: true,
     }
   );
-  console.log(res.data);
   return res.data;
 };
 
@@ -70,7 +69,6 @@ export const getACourse = async ({ queryKey }) => {
   const res = await axios.get(server.url + "/api/course/" + courseID, {
     withCredentials: true,
   });
-  console.log(res.data);
   return res.data;
 };
 

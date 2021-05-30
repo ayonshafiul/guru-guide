@@ -19,9 +19,14 @@ const Login = () => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(history);
-        history.go(-1);
-        setIsAuth(true);
+        if (typeof res.data !== "undefined") {
+          if (res.data.success) {
+            history.go(-1);
+            setIsAuth(true);
+          } else {
+            alert("An error occured while logging you in. :(");
+          }
+        }
       })
       .catch((err) => {
         console.log(err);
