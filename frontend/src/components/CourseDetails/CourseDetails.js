@@ -48,7 +48,7 @@ const CourseDetails = () => {
     isSuccess: courseIsSuccess,
     data: courseData,
     refetch: courseRefetch,
-  } = useQuery(["/api/course", String(id)], getACourse);
+  } = useQuery(["/api/coursedetails", String(id)], getACourse);
 
   function changeRating(type, buttonNo) {
     setRating({
@@ -326,9 +326,17 @@ function showCourseRatingSection(title, difficulty, rateCount) {
     <>
       <div className="course-details-info">{title}</div>
       <div className="course-details-difficulty">
-        <span className="course-details-text-bg">Difficulty: {difficulty}</span>
+        <span className="course-details-text-bg">
+          Difficulty: {difficulty} &#9762;
+        </span>
         <div
-          className="course-details-overlay"
+          className={
+            difficulty <= 4
+              ? "course-details-overlay bg-green"
+              : difficulty <= 7
+              ? "course-details-overlay bg-yellow"
+              : "course-details-overlay bg-red"
+          }
           style={{ width: difficulty * 10 + 0.5 + "%" }}
         ></div>
       </div>

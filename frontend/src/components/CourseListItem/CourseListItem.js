@@ -17,7 +17,7 @@ const courseListItem = (props) => {
           <div className="course-initials">{courseCode}</div>
         </div>
         <div className="course-difficulty-wrapper">
-          <span className="span-bg">{avgDifficulty}</span>
+          <span className="span-bg">{avgDifficulty + " "} &#9762;</span>
           <div
             className={
               avgDifficulty <= 4

@@ -1,0 +1,154 @@
+.course-details-wrapper {
+  position: relative;
+  margin: 1em auto;
+  text-align: left;
+}
+
+.course-details-title,
+.course-details-code,
+.course-details-department,
+.course-details-info {
+  font-size: 1.5em;
+  margin: 1em;
+  font-weight: bold;
+  text-align: center;
+  color: #61dafb;
+}
+.course-details-title {
+  font-size: 2em;
+}
+.course-details-code {
+  letter-spacing: 10px;
+}
+
+.course-details-difficulty {
+  position: relative;
+  text-align: center;
+  background-color: #ccc;
+  border-radius: 10px;
+  padding: 1em;
+  z-index: 5;
+}
+.course-details-text-bg {
+  background-color: #171717;
+  font-weight: bold;
+  color: #61dafb;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.course-details-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #61dafb;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  width: 50%;
+  height: 100%;
+  z-index: -1;
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-green {
+  background-color: yellowgreen;
+}
+
+.bg-yellow {
+  background-color: #fdcc0d;
+}
+
+.course-details-comments,
+.course-details-rate {
+  text-align: center;
+  width: 100%;
+  margin: 1em 0px;
+}
+
+.course-details-comments:hover,
+.course-details-rate:hover {
+  background-color: #61dafb;
+  color: black;
+}
+
+.course-details-active,
+.tab-btn-active {
+  background-color: #61dafb;
+  color: black;
+  font-weight: bold;
+}
+
+.course-details-active:hover {
+  border: 2px solid #61dafb;
+  color: black;
+}
+
+.info-header {
+  text-align: center;
+  margin: 1em auto;
+  font-weight: bold;
+  color: #61dafb;
+}
+
+.submit-comment-btn,
+.submit-btn {
+  padding: 1em;
+  background: #61dafb;
+  color: #1f1f1f;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.submit-comment-btn:hover,
+.submit-btn:hover {
+  color: #61dafb;
+  background: #1f1f1f;
+}
+
+.tab-btn-wrapper {
+  display: flex;
+  margin: 1em auto;
+  justify-content: space-between;
+}
+
+.course-details-comments,
+.course-details-rate,
+.tab-btn {
+  width: 49%;
+  padding: 1em;
+  cursor: pointer;
+  color: #61dafb;
+  background-color: #202124;
+  border: 2px solid #61dafb;
+  border-radius: 10px;
+}
+
+.course-details-comments,
+.course-details-rate {
+  text-align: center;
+  width: 100%;
+  margin: 1em 0px;
+}
+
+.course-details-comments:hover,
+.course-details-rate:hover {
+  background-color: #61dafb;
+  color: black;
+}
+
+.course-details-active,
+.tab-btn-active {
+  background-color: #61dafb;
+  color: black;
+  font-weight: bold;
+}
+
+.course-details-active:hover {
+  border: 2px solid #61dafb;
+  color: black;
+}
