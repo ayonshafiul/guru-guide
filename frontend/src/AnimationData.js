@@ -24,6 +24,19 @@ export const slideAnimationVariant = {
   },
 };
 
+export const revealAnimation = {
+  initial: {
+    y: "-40%",
+  },
+  animate: {
+    y: 0,
+    transition: {
+      type: "spring",
+      duration: 1,
+    },
+  },
+};
+
 export const slideAnimation = {
   hide: {
     visibility: "hidden",

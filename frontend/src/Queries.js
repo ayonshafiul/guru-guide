@@ -128,6 +128,17 @@ export const getAllQueries = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getAllReplies = async ({ queryKey }) => {
+  const [keyName, queryID, page] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/reply/" + queryID + "?page=" + page,
+    {
+      withCredentials: true,
+    }
+  );
+  return res.data;
+};
+
 export const getUserRating = async ({ queryKey }) => {
   const [keyName, facultyID, courseID] = queryKey;
   const res = await axios.get(
@@ -168,6 +179,15 @@ export const postComment = async ({ comment, facultyID, courseID }) => {
   const res = await axios.post(
     server.url + "/api/comment/" + facultyID + "/" + courseID,
     { comment },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const postReply = async ({ reply, queryID }) => {
+  const res = await axios.post(
+    server.url + "/api/reply/" + queryID,
+    { replyText: reply },
     { withCredentials: true }
   );
   return res.data;

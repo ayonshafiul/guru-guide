@@ -4,10 +4,56 @@
   background: #ccc;
   margin: 1em auto;
   border-radius: 10px;
+  font-weight: bold;
 }
 
 .reply {
-  margin-left: 3em;
+  background: #1f1f1f;
+  border: 2px solid #61dafb;
+  color: #61dafb;
+  padding: 1em;
+  margin-left: 2em;
+}
+
+.reply-section-wrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  background: #1f1f1f;
+  color: #ccc;
+}
+
+.reply-btn {
+  width: 120px;
+}
+
+.reply-view-wrapper:hover,
+.reply-btn-wrapper:hover {
+  color: #1f1f1f;
+  background: #61dafb;
+  font-weight: bold;
+}
+.reply-view-wrapper,
+.reply-btn-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.reply-view-icon {
+  width: 24px;
+  height: 28px;
+  background: #1f1f1f;
+}
+
+.reply-view-icon img {
+  width: 24px;
+  height: 24px;
+}
+
+.reply-view-text {
+  margin-left: 1em;
+  text-align: center;
 }
 
 .query-text {

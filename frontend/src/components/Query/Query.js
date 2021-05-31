@@ -1,7 +1,7 @@
 import "./Query.css";
 import { motion } from "framer-motion";
 import pageAnimationVariant from "../../AnimationData";
-import { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
 import useLocalStorage from "../../useLocalStorage";
@@ -13,6 +13,7 @@ import QueryItem from "../QueryItem/QueryItem";
 
 const Query = () => {
   const location = useLocation();
+  const pageRef = useRef(null);
   const { isAuth } = useContext(AuthContext);
   const { addToast } = useToasts();
   const [tab, setTab] = useLocalStorage("querytab", "");
@@ -40,7 +41,8 @@ const Query = () => {
       const data = await postQuery({ queryText });
       if (data.success) {
         setQueryText("");
-        setShowQueryInput(false);
+        setPage(1);
+        setTab("queries");
         queryRefetch();
       }
     } else {
@@ -54,7 +56,7 @@ const Query = () => {
       animate="animate"
     >
       <h1 className="global-header"> Queries</h1>
-      <div className="tab-btn-wrapper">
+      <div className="tab-btn-wrapper" ref={pageRef}>
         <div
           className={tab === "queries" ? "tab-btn tab-btn-active" : "tab-btn"}
           onClick={(e) => {
@@ -76,6 +78,30 @@ const Query = () => {
           {queryData.data.map((query) => {
             return <QueryItem key={query.queryID} query={query} />;
           })}
+          <div className="comment-page-buttons">
+            {page > 1 && (
+              <div
+                className="comment-prev-btn"
+                onClick={() => {
+                  pageRef.current.scrollIntoView({ behavior: "smooth" });
+                  setPage((prevPage) => prevPage - 1);
+                }}
+              >
+                {`<< Prev`}
+              </div>
+            )}
+            {queryData.data.length >= 10 && (
+              <div
+                className="comment-next-btn"
+                onClick={() => {
+                  pageRef.current.scrollIntoView({ behavior: "smooth" });
+                  setPage((prevPage) => prevPage + 1);
+                }}
+              >
+                {`Next >>`}
+              </div>
+            )}
+          </div>
         </>
       )}
 

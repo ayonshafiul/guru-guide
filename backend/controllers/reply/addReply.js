@@ -20,12 +20,12 @@ module.exports = function (req, res) {
     let sql = "INSERT INTO reply SET ?";
     let replyObj = {
       queryID: queryID.value,
-      studentID,
       replyText: reply.value,
     };
 
     connection.query(sql, replyObj, (error, results, fields) => {
       if (error) {
+        console.log(error);
         res.json(createErrorObject("Error while inserting reply"));
       } else {
         let updateSql =
@@ -35,6 +35,7 @@ module.exports = function (req, res) {
           [queryID.value],
           (error, results, fields) => {
             if (error) {
+              console.log(error);
               res.json(createErrorObject("Error while inserting reply"));
             } else {
               res.json(createSuccessObject("Successfully inserted."));
