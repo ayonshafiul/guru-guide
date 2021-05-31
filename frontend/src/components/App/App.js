@@ -25,6 +25,7 @@ import FacultyDetails from "../FacultyDetails/FacultyDetails";
 import CourseDetails from "../CourseDetails/CourseDetails";
 import CourseVerify from "../CourseVerify/CourseVerify";
 import CourseCombo from "../CourseCombo/CourseCombo";
+import Queries from "../Query/Query";
 import menu from "../../assets/img/menu.png";
 import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
 import CourseList from "../CourseList/CourseList";
@@ -99,6 +100,9 @@ function App() {
                   </Route>
                   <Route exact path="/coursecombo">
                     <CourseCombo />
+                  </Route>
+                  <Route exact path="/queries">
+                    <Queries />
                   </Route>
                   <Route exact path="/verify/faculty/:departmentID/:initials">
                     <FacultyVerify />

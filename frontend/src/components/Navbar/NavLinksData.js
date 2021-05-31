@@ -24,6 +24,10 @@ export default [
     path: "/complaint",
   },
   {
+    title: "Queries",
+    path: "/queries",
+  },
+  {
     title: "Help",
     path: "/help",
   },

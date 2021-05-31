@@ -28,7 +28,19 @@ module.exports = function (req, res) {
       if (error) {
         res.json(createErrorObject("Error while inserting reply"));
       } else {
-        res.json(createSuccessObject("Successfully Inserted!"));
+        let updateSql =
+          "UPDATE query set replyCount = replyCount + 1 where queryID = ?";
+        connection.query(
+          updateSql,
+          [queryID.value],
+          (error, results, fields) => {
+            if (error) {
+              res.json(createErrorObject("Error while inserting reply"));
+            } else {
+              res.json(createSuccessObject("Successfully inserted."));
+            }
+          }
+        );
       }
     });
     connection.release();

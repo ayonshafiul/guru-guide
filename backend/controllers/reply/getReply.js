@@ -16,7 +16,8 @@ module.exports = function (req, res, next) {
   dbPool.getConnection(function (err, connection) {
     if (err) return res.json(createErrorObject("Can not establish connection"));
 
-    let sql = "SELECT * from reply where queryID = ? limit ?, 10";
+    let sql =
+      "SELECT * from reply where queryID = ? order by replyID limit ?, 10";
 
     connection.query(
       sql,

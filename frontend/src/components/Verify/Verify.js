@@ -49,7 +49,7 @@ const Verify = () => {
       initial="initial"
       animate="animate"
     >
-      <h1 class="global-header"> Verify</h1>
+      <h1 className="global-header"> Verify</h1>
       <div className="tab-btn-wrapper">
         <div
           className={tab === "faculty" ? "tab-btn tab-btn-active" : "tab-btn"}

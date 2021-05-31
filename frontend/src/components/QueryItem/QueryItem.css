@@ -1,0 +1,16 @@
+.query,
+.reply {
+  color: #1f1f1f;
+  background: #ccc;
+  margin: 1em auto;
+  border-radius: 10px;
+}
+
+.reply {
+  margin-left: 3em;
+}
+
+.query-text {
+  padding: 1em;
+  font-weight: bold;
+}

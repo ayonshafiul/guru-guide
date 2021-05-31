@@ -120,6 +120,14 @@ export const getAllComplaint = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getAllQueries = async ({ queryKey }) => {
+  const [keyName, page] = queryKey;
+  const res = await axios.get(server.url + "/api/query/" + "?page=" + page, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
 export const getUserRating = async ({ queryKey }) => {
   const [keyName, facultyID, courseID] = queryKey;
   const res = await axios.get(
@@ -178,6 +186,15 @@ export const postComplaint = async ({ complaint }) => {
   const res = await axios.post(
     server.url + "/api/complain/",
     { complaintText: complaint },
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
+export const postQuery = async ({ queryText }) => {
+  const res = await axios.post(
+    server.url + "/api/query/",
+    { queryText },
     { withCredentials: true }
   );
   return res.data;

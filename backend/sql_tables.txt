@@ -183,6 +183,7 @@ CREATE TABLE query (
     queryID int AUTO_INCREMENT,
     studentID int,
     queryText varchar(510),
+    replyCount int not null default '0',
     Primary Key(queryID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
