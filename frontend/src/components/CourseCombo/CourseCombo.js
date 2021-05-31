@@ -63,7 +63,10 @@ const CourseCombo = () => {
 
   let totalDifficulty = 0;
   courseCombo.forEach((course) => {
-    totalDifficulty += parseInt(course.difficulty);
+    if (parseInt(course.rateCount) !== 0)
+      totalDifficulty +=
+        parseInt(course.difficulty) / parseInt(course.rateCount);
+    else totalDifficulty += parseInt(course.difficulty);
   });
 
   if (!isAuth)
