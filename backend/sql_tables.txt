@@ -176,3 +176,22 @@ CREATE TABLE coursecommentvote(
     Primary Key(studentID, commentID),
     Foreign Key (commentID) references coursecomment(commentID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+
+
+CREATE TABLE query (
+    queryID int AUTO_INCREMENT,
+    studentID int,
+    queryText varchar(510),
+    Primary Key(queryID),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE reply (
+    replyID int AUTO_INCREMENT,
+    queryID int,
+    replyText varchar(510),
+    Primary Key(replyID),
+    Foreign Key(queryID) references query(queryID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+

@@ -15,6 +15,8 @@ const courseCommentRouter = require("./routes/courseCommentRouter");
 const ratingRouter = require("./routes/ratingRouter");
 const courseRatingRouter = require("./routes/courseRatingRouter");
 const complainRouter = require("./routes/complainRouter");
+const queryRouter = require("./routes/queryRouter");
+const replyRouter = require("./routes/replyRouter");
 
 const authMiddleware = require("./middlewares/authentication");
 const facultyVerify = require("./facultyVerify");
@@ -65,6 +67,8 @@ server.use("/api", authMiddleware, courseCommentRouter);
 server.use("/api", authMiddleware, ratingRouter);
 server.use("/api", authMiddleware, courseRatingRouter);
 server.use("/api", authMiddleware, complainRouter);
+server.use("/api", authMiddleware, queryRouter);
+server.use("/api", authMiddleware, replyRouter);
 
 server.listen(process.env.PORT, function () {
   console.log(`Server is running on ${process.env.PORT}`);
