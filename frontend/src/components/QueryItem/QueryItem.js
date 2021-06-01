@@ -124,7 +124,7 @@ const QueryItem = (props) => {
             event.target.innerText = queryText;
           }}
         >
-          {downVoteSum > upVoteSum
+          {downVoteSum - upVoteSum > 5
             ? "Negative content ahead! *CLICK* to view anyway."
             : queryText}
         </div>
@@ -219,7 +219,7 @@ const QueryItem = (props) => {
                       event.target.innerText = reply.replyText;
                     }}
                   >
-                    {reply.downVoteSum > reply.upVoteSum
+                    {reply.downVoteSum - reply.upVoteSum > 5
                       ? "Negative content ahead! *CLICK* to view anyway."
                       : reply.replyText}
                   </div>

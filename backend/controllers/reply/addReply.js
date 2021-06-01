@@ -1,13 +1,13 @@
 const dbPool = require("../../dbPool.js");
 const {
-  validateComment,
+  validateComplaint,
   validateNumber,
   createErrorObject,
   createSuccessObject,
 } = require("../../utils");
 
 module.exports = function (req, res) {
-  let reply = validateComment(req.body.replyText);
+  let reply = validateComplaint(req.body.replyText);
   let queryID = validateNumber(req.params.queryID);
   let studentID = req.user.studentID;
 

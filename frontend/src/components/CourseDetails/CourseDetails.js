@@ -56,17 +56,22 @@ const CourseDetails = () => {
       [type]: buttonNo,
     });
   }
-
+  const allowedRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]*$/;
+  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,300}$/;
   async function submitCourseComment() {
-    const data = await postCourseComment({ comment, courseID: id });
-    if (typeof data !== "undefined") {
-      if (data.success) {
-        setComment("");
-        commentRefetch();
-        addToast("Thanks for the feedback");
-      } else {
-        addToast("");
+    if (comment.match(finalRegex)) {
+      const data = await postCourseComment({ comment, courseID: id });
+      if (typeof data !== "undefined") {
+        if (data.success) {
+          setComment("");
+          commentRefetch();
+          addToast("Thanks for the feedback");
+        } else {
+          addToast("Error posting your comment!");
+        }
       }
+    } else {
+      addToast("Please type at leat 2 or more characters!");
     }
   }
 
@@ -249,11 +254,11 @@ const CourseDetails = () => {
                     type={"textarea"}
                     setValue={setComment}
                     limit={300}
-                    finalRegex={/^[a-zA-Z ,.()?:-_'"!]{1,500}$/}
-                    allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
+                    finalRegex={finalRegex}
+                    allowedRegex={allowedRegex}
                     lowercase={true}
-                    errorMsg={`Uh oh you shouldn't have typed that!.`}
-                    placeholder={`Drop a comment`}
+                    errorMsg={"Please type at leat 2 or more characters!"}
+                    placeholder={`Type a short comment. :)`}
                   />
                   <div
                     className="submit-comment-btn"
@@ -284,7 +289,7 @@ const CourseDetails = () => {
                     {`<< Prev`}
                   </div>
                 )}
-                {commentData.data.length >= 9 && (
+                {commentData.data.length >= 10 && (
                   <div
                     className="comment-next-btn"
                     onClick={() => {

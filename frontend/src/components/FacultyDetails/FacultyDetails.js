@@ -39,6 +39,8 @@ const FacultyDetails = (props) => {
   const [courseCode, setCourseCode] = useState("");
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
+  const allowedRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]*$/;
+  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,300}$/;
 
   const {
     isLoading: commentIsLoading,
@@ -102,16 +104,19 @@ const FacultyDetails = (props) => {
   }
 
   async function submitComment() {
-    const data = await postComment({ comment, facultyID: id, courseID });
-
-    if (typeof data !== "undefined") {
-      if (data.success) {
-        setComment("");
-        commentRefetch();
-        addToast("Thanks for the feedback");
-      } else {
-        addToast("");
+    if (comment.match(finalRegex)) {
+      const data = await postComment({ comment, facultyID: id, courseID });
+      if (typeof data !== "undefined") {
+        if (data.success) {
+          setComment("");
+          commentRefetch();
+          addToast("Thanks for the feedback");
+        } else {
+          addToast("");
+        }
       }
+    } else {
+      addToast("Please type at least 2 or more characters!");
     }
   }
 
@@ -373,11 +378,11 @@ const FacultyDetails = (props) => {
                     type={"textarea"}
                     setValue={setComment}
                     limit={300}
-                    finalRegex={/^[a-zA-Z ,.()?:-_'"!]{1,500}$/}
-                    allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
+                    finalRegex={finalRegex}
+                    allowedRegex={allowedRegex}
                     lowercase={true}
-                    errorMsg={`Uh oh you shouldn't have typed that!.`}
-                    placeholder={`Drop a comment`}
+                    errorMsg={"Please type at leat 2 or more characters!"}
+                    placeholder={`Type a short comment. :)`}
                   />
                   <div className="submit-comment-btn" onClick={submitComment}>
                     Post comment for {courseCode}
