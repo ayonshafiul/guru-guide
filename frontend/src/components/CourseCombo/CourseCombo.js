@@ -84,92 +84,97 @@ const CourseCombo = () => {
       initial="initial"
       animate="animate"
     >
-      <h1 className="global-header" style={{ marginBottom: "1em" }}>
-        {" "}
-        Course Combo
-      </h1>
-      {courseCombo.length > 0 ? (
-        <>
-          <motion.div
-            whileTap={{ scale: 0.8 }}
-            className="global-refetch-btn"
-            onClick={() => setCourseCombo([])}
-          >
-            <img src={refetchicon} />
-            <div className="global-refetch-btn-title"> Reset</div>
-          </motion.div>
-          {showCourseRatingSection(
-            "Estimated difficulty for the course(s) choosen: ",
-            totalDifficulty,
-            courseCombo.length,
-            true
-          )}
-        </>
-      ) : null}
-      {courseCombo.map((course) => {
-        return (
-          <CourseListItem
-            key={course.courseCode}
-            course={course}
-            hideLink={true}
-          />
-        );
-      })}
-      <div className="global-info-text">
-        Please select a course from below and press add course:
-      </div>
-      <div className="course-wrapper">
-        <select
-          className="select-css"
-          value={departmentID}
-          onChange={(e) => {
-            setDepartmentID(String(e.target.value));
-            setCourseID("0");
-          }}
-        >
-          {departments.map((department, index) => {
-            if (index != 8) {
-              return (
-                <option key={department} value={index}>
-                  {department}
-                </option>
-              );
-            }
-          })}
-        </select>
-        {parseInt(departmentID) !== 0 && typeof courseData !== "undefined" && (
+      <div style={{ minHeight: "200vw" }}>
+        <h1 className="global-header" style={{ marginBottom: "1em" }}>
+          {" "}
+          Course Combo
+        </h1>
+        {courseCombo.length > 0 ? (
+          <>
+            <motion.div
+              whileTap={{ scale: 0.8 }}
+              className="global-refetch-btn"
+              onClick={() => setCourseCombo([])}
+            >
+              <img src={refetchicon} />
+              <div className="global-refetch-btn-title"> Reset</div>
+            </motion.div>
+            {showCourseRatingSection(
+              "Estimated difficulty for the course(s) choosen: ",
+              totalDifficulty,
+              courseCombo.length,
+              true
+            )}
+          </>
+        ) : null}
+        {courseCombo.length > 0 && (
+          <h2 className="global-info-header">Added Courses:</h2>
+        )}
+        {courseCombo.map((course) => {
+          return (
+            <CourseListItem
+              key={course.courseCode}
+              course={course}
+              hideLink={true}
+            />
+          );
+        })}
+        <div className="global-info-text">
+          Please select a course from below and press add course:
+        </div>
+        <div className="course-wrapper">
           <select
             className="select-css"
-            value={courseID}
+            value={departmentID}
             onChange={(e) => {
-              // setCourseCode(e.target.options[e.target.selectedIndex].text);
-              setCourseID(String(e.target.value));
+              setDepartmentID(String(e.target.value));
+              setCourseID("0");
             }}
           >
-            <option value="0">SELECT COURSE</option>
-            {typeof courseData !== "undefined" &&
-              courseData.data
-                .sort((c1, c2) => {
-                  return c1.courseCode > c2.courseCode ? 1 : -1;
-                })
-                .map((course) => {
-                  return (
-                    <option
-                      key={course.courseID}
-                      value={String(course.courseID)}
-                    >
-                      {course.courseCode}
-                    </option>
-                  );
-                })}
+            {departments.map((department, index) => {
+              if (index != 8) {
+                return (
+                  <option key={department} value={index}>
+                    {department}
+                  </option>
+                );
+              }
+            })}
           </select>
+          {parseInt(departmentID) !== 0 && typeof courseData !== "undefined" && (
+            <select
+              className="select-css"
+              value={courseID}
+              onChange={(e) => {
+                // setCourseCode(e.target.options[e.target.selectedIndex].text);
+                setCourseID(String(e.target.value));
+              }}
+            >
+              <option value="0">SELECT COURSE</option>
+              {typeof courseData !== "undefined" &&
+                courseData.data
+                  .sort((c1, c2) => {
+                    return c1.courseCode > c2.courseCode ? 1 : -1;
+                  })
+                  .map((course) => {
+                    return (
+                      <option
+                        key={course.courseID}
+                        value={String(course.courseID)}
+                      >
+                        {course.courseCode}
+                      </option>
+                    );
+                  })}
+            </select>
+          )}
+        </div>
+        {parseInt(courseID) !== 0 && (
+          <div className="submit-btn" onClick={addCourse}>
+            Add Course
+          </div>
         )}
       </div>
-      {parseInt(courseID) !== 0 && (
-        <div className="submit-btn" onClick={addCourse}>
-          Add Course
-        </div>
-      )}
     </motion.div>
   );
 };
