@@ -15,6 +15,7 @@ import axios from "axios";
 import server, { departments } from "../../serverDetails";
 import up from "../../assets/img/up.png";
 import down from "../../assets/img/down.png";
+import refetchicon from "../../assets/img/refetch.svg";
 
 const Complaint = () => {
   const queryClient = useQueryClient();
@@ -207,6 +208,14 @@ const Complaint = () => {
 
       {tab === "complaints" && (
         <>
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            className="global-refetch-btn"
+            onClick={() => complaintRefetch()}
+          >
+            <img src={refetchicon} />
+            <div className="global-refetch-btn-title">Refresh</div>
+          </motion.div>
           {isComplaintSuccess &&
           typeof complaintData !== "undefined" &&
           complaintData.data.length > 0

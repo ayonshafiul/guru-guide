@@ -1,10 +1,10 @@
 export default [
   {
-    title: "Faculty",
+    title: "Faculty List",
     path: "/faculty",
   },
   {
-    title: "Course",
+    title: "Course List",
     path: "/course",
   },
   {

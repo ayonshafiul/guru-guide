@@ -39,6 +39,7 @@ const QueryItem = (props) => {
         addToast("Thanks for the feedback!");
         setReply("");
         setInitialReplyCont((prevCount) => prevCount + 1);
+        refetch();
         setShowReplyInput(false);
         setShowReply(true);
       }
@@ -207,7 +208,7 @@ const QueryItem = (props) => {
       )}{" "}
       {showReply && typeof data !== "undefined" && (
         <motion.div
-          variants={revealAnimation}
+          variants={slideAnimationVariant}
           initial="initial"
           animate="animate"
         >

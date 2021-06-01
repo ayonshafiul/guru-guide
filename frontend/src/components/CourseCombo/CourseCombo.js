@@ -84,7 +84,40 @@ const CourseCombo = () => {
       initial="initial"
       animate="animate"
     >
-      <h1 className="global-header"> Course Combo</h1>
+      <h1 className="global-header" style={{ marginBottom: "1em" }}>
+        {" "}
+        Course Combo
+      </h1>
+      {courseCombo.length > 0 ? (
+        <>
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            className="global-refetch-btn"
+            onClick={() => setCourseCombo([])}
+          >
+            <img src={refetchicon} />
+            <div className="global-refetch-btn-title"> Reset</div>
+          </motion.div>
+          {showCourseRatingSection(
+            "Estimated difficulty for the course(s) choosen: ",
+            totalDifficulty,
+            courseCombo.length,
+            true
+          )}
+        </>
+      ) : null}
+      {courseCombo.map((course) => {
+        return (
+          <CourseListItem
+            key={course.courseCode}
+            course={course}
+            hideLink={true}
+          />
+        );
+      })}
+      <div className="global-info-text">
+        Please select a course from below and press add course:
+      </div>
       <div className="course-wrapper">
         <select
           className="select-css"
@@ -137,34 +170,6 @@ const CourseCombo = () => {
           Add Course
         </div>
       )}
-
-      {courseCombo.map((course) => {
-        return (
-          <CourseListItem
-            key={course.courseCode}
-            course={course}
-            hideLink={true}
-          />
-        );
-      })}
-      {courseCombo.length > 0 ? (
-        <>
-          <motion.div
-            whileTap={{ scale: 0.8 }}
-            className="global-refetch-btn"
-            onClick={() => setCourseCombo([])}
-          >
-            <img src={refetchicon} />
-            <div className="global-refetch-btn-title"> Reset</div>
-          </motion.div>
-          {showCourseRatingSection(
-            "Estimated difficulty for the course choice: ",
-            totalDifficulty,
-            courseCombo.length,
-            true
-          )}
-        </>
-      ) : null}
     </motion.div>
   );
 };
