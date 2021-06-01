@@ -73,8 +73,8 @@ const Contribute = () => {
       }
     }
   }
+  const ccRegex = /^[a-zA-Z]{3}[0-9]{3}$/;
   async function submitCourse() {
-    const ccRegex = /^[a-zA-Z]{3}[0-9]{3}$/;
     if (
       parseInt(departmentID) !== 0 &&
       courseCode.match(ccRegex) &&
@@ -89,6 +89,8 @@ const Contribute = () => {
         setShowTitle(false);
         addToast("Thanks for your contribution!");
       }
+    } else {
+      addToast("Please type a valide course code.");
     }
   }
   async function submitVote(type, id, voteType) {
@@ -410,7 +412,7 @@ const Contribute = () => {
               </div>
             )}
 
-            {courseCode.length === 6 && (
+            {courseCode.length === 6 && courseCode.match(ccRegex) && (
               <>
                 {isCourseSuccess && typeof courseData != undefined ? (
                   courseData.data.length > 0 ? (
