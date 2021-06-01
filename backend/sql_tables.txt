@@ -183,6 +183,8 @@ CREATE TABLE query (
     queryID int AUTO_INCREMENT,
     studentID int,
     queryText varchar(510),
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
     replyCount int not null default '0',
     Primary Key(queryID),
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -191,8 +193,28 @@ CREATE TABLE query (
 CREATE TABLE reply (
     replyID int AUTO_INCREMENT,
     queryID int,
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
     replyText varchar(510),
     Primary Key(replyID),
     Foreign Key(queryID) references query(queryID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE queryvote(
+    studentID int,
+    queryID int,
+    upVote int,
+    downVote int,
+    Primary Key(studentID, queryID),
+    Foreign Key (queryID) references query(queryID) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE replyvote(
+    studentID int,
+    replyID int,
+    upVote int,
+    downVote int,
+    Primary Key(studentID, replyID),
+    Foreign Key (replyID) references reply(replyID) ON DELETE CASCADE ON UPDATE CASCADE
 );
 

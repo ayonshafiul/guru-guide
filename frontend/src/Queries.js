@@ -127,6 +127,16 @@ export const getAllQueries = async ({ queryKey }) => {
   });
   return res.data;
 };
+export const getUserQuery = async ({ queryKey }) => {
+  const [keyName, page] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/userquery/" + "?page=" + page,
+    {
+      withCredentials: true,
+    }
+  );
+  return res.data;
+};
 
 export const getAllReplies = async ({ queryKey }) => {
   const [keyName, queryID, page] = queryKey;

@@ -6,18 +6,22 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
 import useLocalStorage from "../../useLocalStorage";
 import TextInput from "../TextInput/TextInput";
-import { postQuery, getAllQueries } from "../../Queries";
-import { useQuery } from "react-query";
+import { postQuery, getAllQueries, getUserQuery } from "../../Queries";
+import { useQuery, useQueryClient } from "react-query";
 import { useToasts } from "react-toast-notifications";
 import QueryItem from "../QueryItem/QueryItem";
+import axios from "axios";
+import server from "../../serverDetails";
 
 const Query = () => {
   const location = useLocation();
+  const queryClient = useQueryClient();
   const pageRef = useRef(null);
   const { isAuth } = useContext(AuthContext);
   const { addToast } = useToasts();
   const [tab, setTab] = useLocalStorage("querytab", "");
   const [page, setPage] = useState(1);
+  const [userQueryPage, setUserQueryPage] = useState(1);
   const [showQueryInput, setShowQueryInput] = useState(true);
   const [queryText, setQueryText] = useState("");
   const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{10,300}$/;
@@ -26,7 +30,14 @@ const Query = () => {
     isSuccess: isQuerySuccess,
     data: queryData,
     refetch: queryRefetch,
-  } = useQuery(["/api/query", page], getAllQueries);
+  } = useQuery(["/api/query", String(page)], getAllQueries);
+  const { data: userQueryData, refetch: userQueryRefetch } = useQuery(
+    ["/api/userquery", String(userQueryPage)],
+    getUserQuery,
+    {
+      enabled: tab === "myqueries",
+    }
+  );
   if (!isAuth)
     return (
       <Redirect
@@ -41,12 +52,72 @@ const Query = () => {
       const data = await postQuery({ queryText });
       if (data.success) {
         setQueryText("");
+        setUserQueryPage(1);
         setPage(1);
-        setTab("queries");
+        setShowQueryInput(false);
         queryRefetch();
+        userQueryRefetch();
       }
     } else {
       addToast("Please type at least 10 characters!");
+    }
+  }
+  async function submitQueryVote(queryID, voteType) {
+    const res = await axios.post(
+      server.url + "/api/queryvote/" + queryID,
+      { voteType },
+      { withCredentials: true }
+    );
+    const resData = res.data;
+    const cacheExists = queryClient.getQueryData(["/api/query", String(page)]);
+    if (cacheExists) {
+      queryClient.setQueryData(["/api/query", String(page)], (prevData) => {
+        console.log(prevData);
+        for (let i = 0; i < prevData.data.length; i++) {
+          let currentQuery = prevData.data[i];
+          if (currentQuery.queryID == queryID) {
+            switch (resData.message) {
+              case "upvoteinsert":
+                currentQuery.upVoteSum = currentQuery.upVoteSum + 1;
+                break;
+              case "downvoteinsert":
+                currentQuery.downVoteSum = currentQuery.downVoteSum + 1;
+                break;
+              case "upvoteupdate":
+                currentQuery.upVoteSum = currentQuery.upVoteSum + 1;
+                currentQuery.downVoteSum = currentQuery.downVoteSum - 1;
+                break;
+              case "downvoteupdate":
+                currentQuery.downVoteSum = currentQuery.downVoteSum + 1;
+                currentQuery.upVoteSum = currentQuery.upVoteSum - 1;
+                break;
+              case "noupdate":
+                addToast("Thank you. We got your vote!");
+                break;
+            }
+          }
+        }
+        return prevData;
+      });
+    } else {
+      switch (resData.message) {
+        case "upvoteinsert":
+          addToast("Thanks for the thumbs up!");
+          break;
+        case "downvoteinsert":
+          addToast("Thanks for the thumbs down!");
+          break;
+        case "upvoteupdate":
+          addToast("Thanks for the thumbs up!");
+          break;
+        case "downvoteupdate":
+          addToast("Thanks for the thumbs down!");
+
+          break;
+        case "noupdate":
+          addToast("Thank you. We got your vote!");
+          break;
+      }
     }
   }
   return (
@@ -61,7 +132,6 @@ const Query = () => {
           className={tab === "queries" ? "tab-btn tab-btn-active" : "tab-btn"}
           onClick={(e) => {
             setTab("queries");
-            setShowQueryInput(true);
           }}
         >
           Queries
@@ -76,7 +146,13 @@ const Query = () => {
       {tab === "queries" && isQuerySuccess && typeof queryData !== "undefined" && (
         <>
           {queryData.data.map((query) => {
-            return <QueryItem key={query.queryID} query={query} />;
+            return (
+              <QueryItem
+                key={query.queryID}
+                query={query}
+                submitQueryVote={submitQueryVote}
+              />
+            );
           })}
           <div className="comment-page-buttons">
             {page > 1 && (
@@ -90,7 +166,7 @@ const Query = () => {
                 {`<< Prev`}
               </div>
             )}
-            {queryData.data.length >= 10 && (
+            {typeof queryData !== "undefined" && queryData.data.length >= 10 && (
               <div
                 className="comment-next-btn"
                 onClick={() => {
@@ -105,21 +181,74 @@ const Query = () => {
         </>
       )}
 
-      {tab === "myqueries" && showQueryInput && (
+      {tab === "myqueries" && (
         <>
-          <TextInput
-            value={queryText}
-            type={"textarea"}
-            setValue={setQueryText}
-            limit={300}
-            finalRegex={finalRegex}
-            allowedRegex={allowedRegex}
-            lowercase={true}
-            errorMsg={`Please type at least 10 characters!.`}
-            placeholder={`Type your query here...`}
-          />
-          <div className="global-btn-full" onClick={submitQuery}>
-            Post your query
+          {showQueryInput && (
+            <>
+              <TextInput
+                value={queryText}
+                type={"textarea"}
+                setValue={setQueryText}
+                limit={300}
+                finalRegex={finalRegex}
+                allowedRegex={allowedRegex}
+                lowercase={true}
+                errorMsg={`Please type at least 10 characters!.`}
+                placeholder={`Type your query here...`}
+              />
+              <div className="global-btn-full" onClick={submitQuery}>
+                Post your query
+              </div>
+            </>
+          )}{" "}
+          {!showQueryInput && (
+            <div
+              className="global-btn-full"
+              onClick={() => {
+                setShowQueryInput(true);
+              }}
+            >
+              I have another query!
+            </div>
+          )}
+          <div className="global-info-text">
+            Your previous queries are listed below:{" "}
+          </div>
+          {typeof userQueryData !== "undefined" &&
+            userQueryData.data.map((query) => {
+              return (
+                <QueryItem
+                  key={query.queryID}
+                  query={query}
+                  submitQueryVote={() => {}}
+                  linkDisabled={true}
+                />
+              );
+            })}
+          <div className="comment-page-buttons">
+            {userQueryPage > 1 && (
+              <div
+                className="comment-prev-btn"
+                onClick={() => {
+                  pageRef.current.scrollIntoView({ behavior: "smooth" });
+                  setUserQueryPage((prevPage) => prevPage - 1);
+                }}
+              >
+                {`<< Prev`}
+              </div>
+            )}
+            {typeof userQueryData !== "undefined" &&
+              userQueryData.data.length >= 10 && (
+                <div
+                  className="comment-next-btn"
+                  onClick={() => {
+                    pageRef.current.scrollIntoView({ behavior: "smooth" });
+                    setUserQueryPage((prevPage) => prevPage + 1);
+                  }}
+                >
+                  {`Next >>`}
+                </div>
+              )}
           </div>
         </>
       )}

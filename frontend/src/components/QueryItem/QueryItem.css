@@ -6,13 +6,12 @@
   border-radius: 10px;
   font-weight: bold;
 }
-
-.reply {
-  background: #1f1f1f;
-  border: 2px solid #61dafb;
-  color: #61dafb;
-  padding: 1em;
+.reply-wrapper {
   margin-left: 2em;
+}
+
+.reply-text {
+  padding: 1em;
 }
 
 .reply-section-wrapper {

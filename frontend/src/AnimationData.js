@@ -26,10 +26,10 @@ export const slideAnimationVariant = {
 
 export const revealAnimation = {
   initial: {
-    y: "-40%",
+    x: "+10%",
   },
   animate: {
-    y: 0,
+    x: 0,
     transition: {
       type: "spring",
       duration: 1,
