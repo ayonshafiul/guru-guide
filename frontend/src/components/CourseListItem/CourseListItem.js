@@ -7,7 +7,7 @@ const courseListItem = (props) => {
   if (rateCount === 0) {
     rateCount = 0.1;
   }
-  let avgDifficulty = difficulty / rateCount;
+  let avgDifficulty = (difficulty / rateCount).toFixed(1);
 
   return (
     <Link

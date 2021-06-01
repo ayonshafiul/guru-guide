@@ -10,11 +10,14 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect } from "react-router-dom";
 import useLocalStorage from "../../useLocalStorage";
 import refetchicon from "../../assets/img/refetch.svg";
+import TextInput from "../TextInput/TextInput";
 
 const Verify = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [tab, setTab] = useLocalStorage("verifytab", "");
+  const [initials, setInitials] = useState("");
+  const [courseCode, setCourseCode] = useState("");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
     useQuery(
@@ -84,6 +87,7 @@ const Verify = () => {
               onChange={(e) => {
                 setDepartmentID(String(e.target.value));
               }}
+              style={{ marginBottom: "1em" }}
             >
               {departments.map((department, index) => {
                 if (index != 8) {
@@ -95,10 +99,33 @@ const Verify = () => {
                 }
               })}
             </select>
+            <TextInput
+              value={initials}
+              setValue={setInitials}
+              limit={3}
+              finalRegex={/^[a-zA-Z]{3}$/}
+              allowedRegex={/^[a-zA-Z]*$/}
+              errorMsg={``}
+              placeholder={`Search by initials...`}
+            />
             <div className="verify-list-wrapper">
               {isSuccess &&
                 typeof data !== "undefined" &&
                 data.data
+                  .filter((f) => {
+                    if (initials.length > 0) {
+                      let match = true;
+                      for (var i = 0; i < initials.length; i++) {
+                        if (initials[i] != f.facultyInitials[i]) {
+                          match = false;
+                        }
+                      }
+
+                      return match;
+                    } else {
+                      return true;
+                    }
+                  })
                   .sort((f1, f2) => {
                     return f1.facultyInitials > f2.facultyInitials ? 1 : -1;
                   })
@@ -137,6 +164,7 @@ const Verify = () => {
               onChange={(e) => {
                 setDepartmentID(String(e.target.value));
               }}
+              style={{ marginBottom: "1em" }}
             >
               {departments.map((department, index) => {
                 if (index != 8) {
@@ -148,10 +176,32 @@ const Verify = () => {
                 }
               })}
             </select>
+            <TextInput
+              value={courseCode}
+              setValue={setCourseCode}
+              limit={6}
+              finalRegex={/^[a-zA-Z]{3}[0-9]{3}$/}
+              allowedRegex={/^[a-zA-Z0-9]*$/}
+              errorMsg={``}
+              placeholder={`Search by course code...`}
+            />
             <div className="verify-list-wrapper">
               {isCourseSuccess &&
                 typeof courseData !== "undefined" &&
                 courseData.data
+                  .filter((c) => {
+                    if (courseCode.length > 0) {
+                      let match = true;
+                      for (var i = 0; i < courseCode.length; i++) {
+                        if (courseCode[i] != c.courseCode[i]) {
+                          match = false;
+                        }
+                      }
+                      return match;
+                    } else {
+                      return true;
+                    }
+                  })
                   .sort((f1, f2) => {
                     return f1.courseCode > f2.courseCode ? 1 : -1;
                   })
