@@ -38,7 +38,6 @@ const QueryItem = (props) => {
       if (data.success) {
         addToast("Thanks for the feedback!");
         setReply("");
-        refetch();
         setInitialReplyCont((prevCount) => prevCount + 1);
         setShowReplyInput(false);
         setShowReply(true);
@@ -164,6 +163,9 @@ const QueryItem = (props) => {
           <div
             className="reply-view-wrapper"
             onClick={() => {
+              if (!showReply) {
+                refetch();
+              }
               setShowReply((prevReply) => !prevReply);
               setShowReplyInput(false);
             }}
@@ -247,29 +249,31 @@ const QueryItem = (props) => {
               </div>
             );
           })}
-          <div className="comment-page-buttons">
-            {page > 1 && (
-              <div
-                className="comment-prev-btn"
-                onClick={() => {
-                  pageRef.current.scrollIntoView({ behavior: "smooth" });
-                  setPage((prevPage) => prevPage - 1);
-                }}
-              >
-                {`<< Prev`}
-              </div>
-            )}
-            {typeof data !== "undefined" && data.data.length >= 10 && (
-              <div
-                className="comment-next-btn"
-                onClick={() => {
-                  pageRef.current.scrollIntoView({ behavior: "smooth" });
-                  setPage((prevPage) => prevPage + 1);
-                }}
-              >
-                {`Next >>`}
-              </div>
-            )}
+          <div className="reply-wrapper">
+            <div className="comment-page-buttons">
+              {page > 1 && (
+                <div
+                  className="comment-prev-btn"
+                  onClick={() => {
+                    pageRef.current.scrollIntoView({ behavior: "smooth" });
+                    setPage((prevPage) => prevPage - 1);
+                  }}
+                >
+                  {`<< Prev`}
+                </div>
+              )}
+              {typeof data !== "undefined" && data.data.length >= 10 && (
+                <div
+                  className="comment-next-btn"
+                  onClick={() => {
+                    pageRef.current.scrollIntoView({ behavior: "smooth" });
+                    setPage((prevPage) => prevPage + 1);
+                  }}
+                >
+                  {`Next >>`}
+                </div>
+              )}
+            </div>
           </div>
         </motion.div>
       )}

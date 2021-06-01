@@ -12,6 +12,7 @@ import { useToasts } from "react-toast-notifications";
 import QueryItem from "../QueryItem/QueryItem";
 import axios from "axios";
 import server from "../../serverDetails";
+import refetchicon from "../../assets/img/refetch.svg";
 
 const Query = () => {
   const location = useLocation();
@@ -126,6 +127,7 @@ const Query = () => {
       animate="animate"
     >
       <h1 className="global-header"> Queries</h1>
+
       <div className="tab-btn-wrapper" ref={pageRef}>
         <div
           className={tab === "queries" ? "tab-btn tab-btn-active" : "tab-btn"}
@@ -142,8 +144,17 @@ const Query = () => {
           My Queries
         </div>
       </div>
+
       {tab === "queries" && isQuerySuccess && typeof queryData !== "undefined" && (
         <>
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            className="global-refetch-btn"
+            onClick={() => queryRefetch()}
+          >
+            <img src={refetchicon} />
+            <div className="global-refetch-btn-title">Refresh</div>
+          </motion.div>
           {queryData.data.map((query) => {
             return (
               <QueryItem

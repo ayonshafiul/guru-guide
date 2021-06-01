@@ -9,19 +9,21 @@ import "./Verify.css";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect } from "react-router-dom";
 import useLocalStorage from "../../useLocalStorage";
+import refetchicon from "../../assets/img/refetch.svg";
 
 const Verify = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [tab, setTab] = useLocalStorage("verifytab", "");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
-  const { isSuccess, isLoading, isError, error, data, isFetching } = useQuery(
-    ["/api/facultyverify", String(departmentID)],
-    getFacultyVerification,
-    {
-      enabled: parseInt(departmentID) !== 0 && tab === "faculty",
-    }
-  );
+  const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
+    useQuery(
+      ["/api/facultyverify", String(departmentID)],
+      getFacultyVerification,
+      {
+        enabled: parseInt(departmentID) !== 0 && tab === "faculty",
+      }
+    );
 
   const {
     isSuccess: isCourseSuccess,
@@ -30,6 +32,7 @@ const Verify = () => {
     error: courseError,
     data: courseData,
     isFetching: isCourseFetching,
+    refetch: courseRefetch,
   } = useQuery(["/api/courseverify", departmentID], getCourseVerification, {
     enabled: parseInt(departmentID) !== 0 && tab === "course",
   });
@@ -65,89 +68,109 @@ const Verify = () => {
         </div>
       </div>
       {tab === "faculty" && (
-        <div className="verify-wrapper">
-          <select
-            className="select-css select-full"
-            value={departmentID}
-            onChange={(e) => {
-              setDepartmentID(String(e.target.value));
-            }}
+        <>
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            className="global-refetch-btn"
+            onClick={() => refetch()}
           >
-            {departments.map((department, index) => {
-              if (index != 8) {
-                return (
-                  <option key={department} value={index}>
-                    {department}
-                  </option>
-                );
-              }
-            })}
-          </select>
-          <div className="verify-list-wrapper">
-            {isSuccess &&
-              typeof data !== "undefined" &&
-              data.data
-                .sort((f1, f2) => {
-                  return f1.facultyInitials > f2.facultyInitials ? 1 : -1;
-                })
-                .map((faculty) => {
+            <img src={refetchicon} />
+            <div className="global-refetch-btn-title">Refresh</div>
+          </motion.div>
+          <div className="verify-wrapper">
+            <select
+              className="select-css select-full"
+              value={departmentID}
+              onChange={(e) => {
+                setDepartmentID(String(e.target.value));
+              }}
+            >
+              {departments.map((department, index) => {
+                if (index != 8) {
                   return (
-                    <Link
-                      key={faculty.facultyInitials}
-                      to={`/verify/faculty/${departmentID}/${faculty.facultyInitials}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <div className="verify-list-item">
-                        {faculty.facultyInitials}
-                      </div>
-                    </Link>
+                    <option key={department} value={index}>
+                      {department}
+                    </option>
                   );
-                })}
+                }
+              })}
+            </select>
+            <div className="verify-list-wrapper">
+              {isSuccess &&
+                typeof data !== "undefined" &&
+                data.data
+                  .sort((f1, f2) => {
+                    return f1.facultyInitials > f2.facultyInitials ? 1 : -1;
+                  })
+                  .map((faculty) => {
+                    return (
+                      <Link
+                        key={faculty.facultyInitials}
+                        to={`/verify/faculty/${departmentID}/${faculty.facultyInitials}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <div className="verify-list-item">
+                          {faculty.facultyInitials}
+                        </div>
+                      </Link>
+                    );
+                  })}
+            </div>
           </div>
-        </div>
+        </>
       )}
 
       {tab === "course" && (
-        <div className="verify-wrapper">
-          <select
-            className="select-css select-full"
-            value={departmentID}
-            onChange={(e) => {
-              setDepartmentID(String(e.target.value));
-            }}
+        <>
+          <motion.div
+            whileTap={{ scale: 0.8 }}
+            className="global-refetch-btn"
+            onClick={() => courseRefetch()}
           >
-            {departments.map((department, index) => {
-              if (index != 8) {
-                return (
-                  <option key={department} value={index}>
-                    {department}
-                  </option>
-                );
-              }
-            })}
-          </select>
-          <div className="verify-list-wrapper">
-            {isCourseSuccess &&
-              typeof courseData !== "undefined" &&
-              courseData.data
-                .sort((f1, f2) => {
-                  return f1.courseCode > f2.courseCode ? 1 : -1;
-                })
-                .map((course) => {
+            <img src={refetchicon} />
+            <div className="global-refetch-btn-title">Refresh</div>
+          </motion.div>
+          <div className="verify-wrapper">
+            <select
+              className="select-css select-full"
+              value={departmentID}
+              onChange={(e) => {
+                setDepartmentID(String(e.target.value));
+              }}
+            >
+              {departments.map((department, index) => {
+                if (index != 8) {
                   return (
-                    <Link
-                      key={course.courseCode}
-                      to={`/verify/course/${departmentID}/${course.courseCode}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <div className="verify-list-item">
-                        {course.courseCode}
-                      </div>
-                    </Link>
+                    <option key={department} value={index}>
+                      {department}
+                    </option>
                   );
-                })}
+                }
+              })}
+            </select>
+            <div className="verify-list-wrapper">
+              {isCourseSuccess &&
+                typeof courseData !== "undefined" &&
+                courseData.data
+                  .sort((f1, f2) => {
+                    return f1.courseCode > f2.courseCode ? 1 : -1;
+                  })
+                  .map((course) => {
+                    return (
+                      <Link
+                        key={course.courseCode}
+                        to={`/verify/course/${departmentID}/${course.courseCode}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <div className="verify-list-item">
+                          {course.courseCode}
+                        </div>
+                      </Link>
+                    );
+                  })}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </motion.div>
   );
