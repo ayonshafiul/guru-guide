@@ -58,4 +58,11 @@
 .query-text {
   padding: 1em;
   font-weight: bold;
+  display: block;
+}
+
+.query-text-hidden {
+  padding: 1em;
+  font-weight: bold;
+  display: none;
 }

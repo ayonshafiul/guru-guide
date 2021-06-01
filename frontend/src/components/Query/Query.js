@@ -72,7 +72,6 @@ const Query = () => {
     const cacheExists = queryClient.getQueryData(["/api/query", String(page)]);
     if (cacheExists) {
       queryClient.setQueryData(["/api/query", String(page)], (prevData) => {
-        console.log(prevData);
         for (let i = 0; i < prevData.data.length; i++) {
           let currentQuery = prevData.data[i];
           if (currentQuery.queryID == queryID) {
@@ -220,8 +219,9 @@ const Query = () => {
                 <QueryItem
                   key={query.queryID}
                   query={query}
-                  submitQueryVote={() => {}}
-                  linkDisabled={true}
+                  submitQueryVote={() => {
+                    addToast("Please do not vote on your own post!");
+                  }}
                 />
               );
             })}

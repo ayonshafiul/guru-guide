@@ -33,88 +33,84 @@ const QueryItem = (props) => {
   );
 
   async function submitReply() {
-    if (!props.linkDisabled) {
-      if (reply.match(finalRegex)) {
-        const data = await postReply({ reply, queryID });
-        if (data.success) {
-          addToast("Thanks for the feedback!");
-          setReply("");
-          refetch();
-          setInitialReplyCont((prevCount) => prevCount + 1);
-          setShowReplyInput(false);
-          setShowReply(true);
-        }
-      } else {
-        addToast("Please type at least 10 characters!");
+    if (reply.match(finalRegex)) {
+      const data = await postReply({ reply, queryID });
+      if (data.success) {
+        addToast("Thanks for the feedback!");
+        setReply("");
+        refetch();
+        setInitialReplyCont((prevCount) => prevCount + 1);
+        setShowReplyInput(false);
+        setShowReply(true);
       }
+    } else {
+      addToast("Please type at least 10 characters!");
     }
   }
 
   async function submitReplyVote(replyID, voteType) {
-    if (!props.linkDisabled) {
-      const res = await axios.post(
-        server.url + "/api/replyvote/" + replyID,
-        { voteType },
-        { withCredentials: true }
-      );
-      const resData = res.data;
-      console.log(resData);
-      const cacheExists = queryClient.getQueryData([
-        "/api/reply",
-        String(queryID),
-        String(page),
-      ]);
-      if (cacheExists) {
-        queryClient.setQueryData(
-          ["/api/reply", String(queryID), String(page)],
-          (prevData) => {
-            console.log(prevData);
-            for (let i = 0; i < prevData.data.length; i++) {
-              let currentReply = prevData.data[i];
-              if (currentReply.replyID == replyID) {
-                switch (resData.message) {
-                  case "upvoteinsert":
-                    currentReply.upVoteSum = currentReply.upVoteSum + 1;
-                    break;
-                  case "downvoteinsert":
-                    currentReply.downVoteSum = currentReply.downVoteSum + 1;
-                    break;
-                  case "upvoteupdate":
-                    currentReply.upVoteSum = currentReply.upVoteSum + 1;
-                    currentReply.downVoteSum = currentReply.downVoteSum - 1;
-                    break;
-                  case "downvoteupdate":
-                    currentReply.downVoteSum = currentReply.downVoteSum + 1;
-                    currentReply.upVoteSum = currentReply.upVoteSum - 1;
-                    break;
-                  case "noupdate":
-                    addToast("Thank you. We got your vote!");
-                    break;
-                }
+    const res = await axios.post(
+      server.url + "/api/replyvote/" + replyID,
+      { voteType },
+      { withCredentials: true }
+    );
+    const resData = res.data;
+    console.log(resData);
+    const cacheExists = queryClient.getQueryData([
+      "/api/reply",
+      String(queryID),
+      String(page),
+    ]);
+    if (cacheExists) {
+      queryClient.setQueryData(
+        ["/api/reply", String(queryID), String(page)],
+        (prevData) => {
+          console.log(prevData);
+          for (let i = 0; i < prevData.data.length; i++) {
+            let currentReply = prevData.data[i];
+            if (currentReply.replyID == replyID) {
+              switch (resData.message) {
+                case "upvoteinsert":
+                  currentReply.upVoteSum = currentReply.upVoteSum + 1;
+                  break;
+                case "downvoteinsert":
+                  currentReply.downVoteSum = currentReply.downVoteSum + 1;
+                  break;
+                case "upvoteupdate":
+                  currentReply.upVoteSum = currentReply.upVoteSum + 1;
+                  currentReply.downVoteSum = currentReply.downVoteSum - 1;
+                  break;
+                case "downvoteupdate":
+                  currentReply.downVoteSum = currentReply.downVoteSum + 1;
+                  currentReply.upVoteSum = currentReply.upVoteSum - 1;
+                  break;
+                case "noupdate":
+                  addToast("Thank you. We got your vote!");
+                  break;
               }
             }
-            return prevData;
           }
-        );
-      } else {
-        switch (resData.message) {
-          case "upvoteinsert":
-            addToast("Thanks for the thumbs up!");
-            break;
-          case "downvoteinsert":
-            addToast("Thanks for the thumbs down!");
-            break;
-          case "upvoteupdate":
-            addToast("Thanks for the thumbs up!");
-            break;
-          case "downvoteupdate":
-            addToast("Thanks for the thumbs down!");
-
-            break;
-          case "noupdate":
-            addToast("Thank you. We got your vote!");
-            break;
+          return prevData;
         }
+      );
+    } else {
+      switch (resData.message) {
+        case "upvoteinsert":
+          addToast("Thanks for the thumbs up!");
+          break;
+        case "downvoteinsert":
+          addToast("Thanks for the thumbs down!");
+          break;
+        case "upvoteupdate":
+          addToast("Thanks for the thumbs up!");
+          break;
+        case "downvoteupdate":
+          addToast("Thanks for the thumbs down!");
+
+          break;
+        case "noupdate":
+          addToast("Thank you. We got your vote!");
+          break;
       }
     }
   }
@@ -122,7 +118,16 @@ const QueryItem = (props) => {
   return (
     <>
       <div className="query">
-        <div className="query-text">{queryText}</div>
+        <div
+          className="query-text"
+          onClick={(event) => {
+            event.target.innerText = queryText;
+          }}
+        >
+          {downVoteSum > upVoteSum
+            ? "Negative content ahead! *CLICK* to view anyway."
+            : queryText}
+        </div>
         <div className="comment-buttons">
           <div className="vote">
             <div
@@ -144,21 +149,18 @@ const QueryItem = (props) => {
           </div>
         </div>
         <div className="reply-section-wrapper" ref={pageRef}>
-          {!props.linkDisabled && (
-            <div
-              className="reply-btn-wrapper"
-              onClick={() => {
-                setShowReplyInput((prevInput) => !prevInput);
-                setShowReply(false);
-              }}
-            >
-              <div className="reply-view-icon">
-                <img src={showReplyInput ? up : down} />
-              </div>
-              <div className="reply-btn">Reply</div>
+          <div
+            className="reply-btn-wrapper"
+            onClick={() => {
+              setShowReplyInput((prevInput) => !prevInput);
+              setShowReply(false);
+            }}
+          >
+            <div className="reply-view-icon">
+              <img src={showReplyInput ? up : down} />
             </div>
-          )}
-
+            <div className="reply-btn">Reply</div>
+          </div>
           <div
             className="reply-view-wrapper"
             onClick={() => {
@@ -211,7 +213,16 @@ const QueryItem = (props) => {
             return (
               <div className="reply-wrapper">
                 <div className="reply">
-                  <div className="reply-text">{reply.replyText}</div>
+                  <div
+                    className="reply-text"
+                    onClick={(event) => {
+                      event.target.innerText = reply.replyText;
+                    }}
+                  >
+                    {reply.downVoteSum > reply.upVoteSum
+                      ? "Negative content ahead! *CLICK* to view anyway."
+                      : reply.replyText}
+                  </div>
                   <div className="comment-buttons">
                     <div className="vote">
                       <div
