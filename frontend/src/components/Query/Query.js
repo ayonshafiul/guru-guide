@@ -50,6 +50,7 @@ const Query = () => {
     );
   async function submitQuery() {
     if (queryText.match(finalRegex)) {
+      console.log(queryText);
       const data = await postQuery({ queryText });
       console.log(data);
       if (data.success) {

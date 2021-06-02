@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { useIsFetching } from "react-query";
 import grid from "./grid.svg";
 import infinity from "../../assets/img/infinity.svg";
+import logo from "../../assets/img/logo.png";
 import { motion } from "framer-motion";
 import { slideAnimation } from "../../AnimationData";
 const Navbar = (props) => {
@@ -17,7 +18,7 @@ const Navbar = (props) => {
         <div className="nav-list">
           <h1 className="nav-title">GURUGUIDE</h1>
           <div className="nav-spinning">
-            <img src={infinity} />
+            <img className="nav-spinning-img" src={logo} />
           </div>
           {navlinks.map((item, index) => {
             return (
