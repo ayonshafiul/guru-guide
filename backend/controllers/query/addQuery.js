@@ -24,6 +24,7 @@ module.exports = function (req, res) {
 
     connection.query(sql, queryObj, (error, results, fields) => {
       if (error) {
+        console.log(error);
         res.json(createErrorObject("Error while inserting query"));
       } else {
         res.json(createSuccessObject("Successfully Inserted!"));

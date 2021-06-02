@@ -29,7 +29,7 @@ import Queries from "../Query/Query";
 import menu from "../../assets/img/menu.png";
 import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
 import CourseList from "../CourseList/CourseList";
-import infinity from "../../assets/img/infinity.svg";
+import logo from "../../assets/img/logo.png";
 
 function App() {
   const [navStyle, setNavStyle] = useState(false);
@@ -66,7 +66,7 @@ function App() {
                 <img src={menu} style={{ width: 40, height: 40 }} />
               </div>
               <div className="spinning">
-                <img src={infinity} />
+                <img src={logo} />
               </div>
               <h1 className="title">Guruguide</h1>
             </div>

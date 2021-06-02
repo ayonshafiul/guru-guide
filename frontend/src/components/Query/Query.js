@@ -50,6 +50,7 @@ const Query = () => {
     );
   async function submitQuery() {
     if (queryText.match(finalRegex)) {
+      console.log(queryText);
       const data = await postQuery({ queryText });
       if (data.success) {
         setQueryText("");
@@ -58,6 +59,8 @@ const Query = () => {
         setShowQueryInput(false);
         queryRefetch();
         userQueryRefetch();
+      } else {
+        console.log(data);
       }
     } else {
       addToast("Please type at least 10 characters!");
