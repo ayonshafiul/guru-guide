@@ -60,6 +60,7 @@ server.get("/api/ping/", (req, res) => {
   res.json(createSuccessObject("pong!"));
 });
 
+
 server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);

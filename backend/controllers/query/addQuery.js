@@ -5,6 +5,7 @@ const {
   createErrorObject,
   createSuccessObject,
 } = require("../../utils");
+const client = require("../../redisClient");
 
 module.exports = function (req, res) {
   let query = validateComplaint(req.body.queryText);
@@ -16,19 +17,28 @@ module.exports = function (req, res) {
 
   dbPool.getConnection(function (err, connection) {
     if (err) return res.json(createErrorObject("Can not establish connection"));
-    let sql = "INSERT INTO query SET ?";
-    let queryObj = {
-      studentID,
-      queryText: query.value,
-    };
 
-    connection.query(sql, queryObj, (error, results, fields) => {
-      if (error) {
-        res.json(createErrorObject("Error while inserting query"));
+    client.get("s" + studentID, function (err, value) {
+      if (!value) {
+        let sql = "INSERT INTO query SET ?";
+        let queryObj = {
+          studentID,
+          queryText: query.value,
+        };
+
+        connection.query(sql, queryObj, (error, results, fields) => {
+          if (error) {
+            res.json(createErrorObject("Error while inserting query"));
+          } else {
+            client.setex("s" + studentID, 60, "1", function (err, reply) {});
+            res.json(createSuccessObject("Successfully Inserted!"));
+          }
+        });
       } else {
-        res.json(createSuccessObject("Successfully Inserted!"));
+        res.json(createErrorObject("toosoon"));
       }
     });
+
     connection.release();
   });
 };

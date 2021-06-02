@@ -51,13 +51,17 @@ const Query = () => {
   async function submitQuery() {
     if (queryText.match(finalRegex)) {
       const data = await postQuery({ queryText });
+      console.log(data);
       if (data.success) {
+        addToast("Hope you will get your answer. :)");
         setQueryText("");
         setUserQueryPage(1);
         setPage(1);
         setShowQueryInput(false);
         queryRefetch();
         userQueryRefetch();
+      } else if (data.message === "toosoon") {
+        addToast("Please wait a minute before you post another query!");
       }
     } else {
       addToast("Please type at least 10 characters!");
