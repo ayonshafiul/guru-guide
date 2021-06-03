@@ -14,8 +14,10 @@ module.exports = function (req, res, next) {
   }
 
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
-
+    if (err) {
+      next(err);
+      return;
+    }
     let sql =
       "SELECT * from coursecomment where courseID = ? order by upVoteSum desc limit ?, 10";
 
@@ -25,12 +27,12 @@ module.exports = function (req, res, next) {
       (error, results) => {
         if (error) {
           console.log(error);
-          return res.json(createErrorObject("Error while querying"));
+          res.json(createErrorObject("Error while querying"));
         } else {
-          return res.json(createSuccessObjectWithData(results));
+          res.json(createSuccessObjectWithData(results));
         }
+        connection.release();
       }
     );
-    connection.release();
   });
 };

@@ -5,7 +5,7 @@ const {
   createSuccessObjectWithData,
 } = require("../../utils");
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let courseID = validateNumber(req.params.courseID);
 
   if (courseID.error) {
@@ -13,8 +13,10 @@ module.exports = function (req, res) {
   }
 
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
-
+    if (err) {
+      next(err);
+      return;
+    }
     let sql = "SELECT * from course where courseID= ?";
     connection.query(sql, courseID.value, (error, results) => {
       if (error) {
@@ -22,10 +24,10 @@ module.exports = function (req, res) {
         return res.json(createErrorObject("Error while querying"));
       } else {
         if (results.length > 0)
-          return res.json(createSuccessObjectWithData(results[0]));
-        else return res.json(createErrorObject("No data found"));
+          res.json(createSuccessObjectWithData(results[0]));
+        else res.json(createErrorObject("No data found"));
       }
+      connection.release();
     });
-    connection.release();
   });
 };

@@ -5,7 +5,7 @@ const {
   createSuccessObject,
 } = require("../../utils");
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let voteType = validateNumber(req.body.voteType);
   let studentID = req.user.studentID;
   let commentID = validateNumber(req.params.commentID);
@@ -24,8 +24,10 @@ module.exports = function (req, res) {
   //************************************************** */
 
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
-
+    if (err) {
+      next(err);
+      return;
+    }
     let sql =
       "SELECT upVote, downVote from coursecommentvote where studentID = ?  and commentID = ?";
     connection.query(
@@ -34,7 +36,8 @@ module.exports = function (req, res) {
       function (error, results) {
         if (error) {
           console.log(error);
-          return res.json(createErrorObject("comment voting failed"));
+          connection.release();
+          res.json(createErrorObject("comment voting failed"));
         } else {
           if (results.length == 0) {
             let commentratingObj;
@@ -67,6 +70,7 @@ module.exports = function (req, res) {
             connection.query(sql, commentratingObj, function (error, results) {
               if (error) {
                 console.log(error);
+                connection.release();
                 res.json(createErrorObject("Voting error"));
               } else {
                 connection.query(
@@ -79,6 +83,7 @@ module.exports = function (req, res) {
                     } else {
                       res.json(createSuccessObject(msg));
                     }
+                    connection.release();
                   }
                 );
               }
@@ -110,6 +115,7 @@ module.exports = function (req, res) {
                 "UPDATE coursecomment set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where commentID =?";
               msg = "upvoteupdate";
             } else {
+              connection.release();
               return res.json(createSuccessObject("noupdate"));
             }
 
@@ -119,6 +125,7 @@ module.exports = function (req, res) {
               function (error, results) {
                 if (error) {
                   console.log(error);
+                  connection.release();
                   res.json(createErrorObject("vote not updated"));
                 } else {
                   //run second sql here
@@ -132,6 +139,7 @@ module.exports = function (req, res) {
                       } else {
                         res.json(createSuccessObject(msg));
                       }
+                      connection.release();
                     }
                   );
                 }
@@ -141,6 +149,5 @@ module.exports = function (req, res) {
         }
       }
     );
-    connection.release();
   });
 };

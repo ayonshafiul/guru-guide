@@ -1,15 +1,14 @@
-const db = require("../../db.js");
+const dbPool = require("../../dbPool.js");
 const {
   createErrorObject,
   createSuccessObjectWithData,
   createSuccessObject,
   validateAlphaNumeric,
   validateNumber,
-  validateCharactersOnlyWithSpaces
+  validateCharactersOnlyWithSpaces,
 } = require("../../utils");
 
-
-module.exports = function addCourse(req, res) {
+module.exports = function addCourse(req, res, next) {
   let { departmentID, courseTitle, courseCode } = req.body;
   departmentID = validateNumber(departmentID);
   courseTitle = validateCharactersOnlyWithSpaces(courseTitle);
@@ -21,13 +20,13 @@ module.exports = function addCourse(req, res) {
     );
   }
 
-  var sql = "INSERT INTO courseverify SET ?";
-  var faculty = {
+  const sql = "INSERT INTO courseverify SET ?";
+  const faculty = {
     departmentID: departmentID.value,
     courseTitle: courseTitle.value,
     courseCode: courseCode.value,
   };
-  db.query(sql, faculty, function (error, results) {
+  dbPool.query(sql, faculty, function (error, results) {
     if (error) {
       console.log(error);
     } else {

@@ -6,7 +6,7 @@ const {
   createSuccessObject,
 } = require("../../utils");
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let comment = validateComment(req.body.comment);
   let courseID = validateNumber(req.params.courseID);
   let studentID = req.user.studentID;
@@ -16,8 +16,10 @@ module.exports = function (req, res) {
   }
 
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
-
+    if (err) {
+      next(err);
+      return;
+    }
     let sql =
       "UPDATE coursecomment SET commentText = ? where courseID = ? and studentID = ?";
     connection.query(
@@ -26,7 +28,8 @@ module.exports = function (req, res) {
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          return res.json(
+          connection.release();
+          res.json(
             createErrorObject("Something bad happened while updating!")
           );
         } else if (results.affectedRows == 0) {
@@ -44,14 +47,15 @@ module.exports = function (req, res) {
               console.log(error);
               res.json(createErrorObject("Error while inserting comment"));
             } else {
-              return res.json(createSuccessObject("Successfully Inserted!"));
+              res.json(createSuccessObject("Successfully Inserted!"));
             }
+            connection.release();
           });
         } else {
-          return res.json(createSuccessObject("Updated successfully!"));
+          connection.release();
+          res.json(createSuccessObject("Updated successfully!"));
         }
       }
     );
-    connection.release();
   });
 };
