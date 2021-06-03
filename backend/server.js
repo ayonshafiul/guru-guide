@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
 const db = require("./db.js");
+const dbPool = require("./dbPool");
 const mysql = require("mysql");
 const cors = require("cors");
 const path = require("path");
@@ -19,8 +20,7 @@ const queryRouter = require("./routes/queryRouter");
 const replyRouter = require("./routes/replyRouter");
 
 const authMiddleware = require("./middlewares/authentication");
-const facultyVerify = require("./facultyVerify");
-const courseVerify = require("./courseVerify");
+
 const { createSuccessObject, createErrorObject } = require("./utils.js");
 
 const server = express();
@@ -50,14 +50,12 @@ db.connect((err) => {
 server.use("/api", authRouter);
 
 server.get("/api/forceupdate/", (req, res) => {
-  facultyVerify();
-  courseVerify();
   res.json(createSuccessObject("Updated!"));
 });
 
 server.get("/api/ping/", (req, res) => {
-  console.log("ping");
-  res.json(createSuccessObject("pong!"));
+  const all = dbPool._allConnections.length;
+  res.json(createSuccessObject(all));
 });
 
 server.use("/api", authMiddleware, facultyRouter);
