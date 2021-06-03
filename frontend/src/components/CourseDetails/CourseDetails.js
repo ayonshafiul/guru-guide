@@ -23,6 +23,7 @@ const CourseDetails = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const { id } = useParams();
+  const [cid, setCid] = useState(0);
   const { addToast } = useToasts();
   const pageRef = useRef(null);
   const queryClient = useQueryClient();
@@ -36,7 +37,7 @@ const CourseDetails = () => {
     data: commentData,
     refetch: commentRefetch,
   } = useQuery(
-    ["/api/coursecomment", String(id), String(commentPage)],
+    ["/api/coursecomment", String(cid), String(commentPage)],
     getCourseComment,
     {
       enabled: page === "comments",
@@ -50,6 +51,16 @@ const CourseDetails = () => {
     refetch: courseRefetch,
   } = useQuery(["/api/coursedetails", String(id)], getACourse);
 
+  useEffect(async () => {
+    const data = await getACourse({
+      queryKey: ["/api/coursedetails", String(id)],
+    });
+    console.log("useEffect", data);
+    if (data.success) {
+      setCid(data.data.courseID);
+    }
+  }, []);
+
   function changeRating(type, buttonNo) {
     setRating({
       ...rating,
@@ -60,7 +71,7 @@ const CourseDetails = () => {
   const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,300}$/;
   async function submitCourseComment() {
     if (comment.match(finalRegex)) {
-      const data = await postCourseComment({ comment, courseID: id });
+      const data = await postCourseComment({ comment, courseID: cid });
       if (typeof data !== "undefined") {
         if (data.success) {
           setComment("");
@@ -77,7 +88,7 @@ const CourseDetails = () => {
 
   async function submitCourseRating() {
     if (rating["difficulty"]) {
-      const data = await postCourseRating({ rating, courseID: id });
+      const data = await postCourseRating({ rating, courseID: cid });
       console.log(data);
       if (typeof data !== "undefined" && data.success) {
         setRating({});
@@ -98,12 +109,12 @@ const CourseDetails = () => {
     const resData = res.data;
     const cacheExists = queryClient.getQueryData([
       "/api/coursecomment",
-      String(id),
+      String(cid),
       String(commentPage),
     ]);
     if (cacheExists) {
       queryClient.setQueryData(
-        ["/api/coursecomment", String(id), String(commentPage)],
+        ["/api/coursecomment", String(cid), String(commentPage)],
         (prevData) => {
           for (let i = 0; i < prevData.data.length; i++) {
             let currentComment = prevData.data[i];

@@ -2,7 +2,7 @@ import "./CourseListItem.css";
 import { Link } from "react-router-dom";
 
 const courseListItem = (props) => {
-  let { courseTitle, courseID, courseCode, difficulty, rateCount } =
+  let { courseTitle, courseCode, difficulty, rateCount, cuid } =
     props.course;
   if (rateCount === 0) {
     rateCount = 0.1;
@@ -12,7 +12,7 @@ const courseListItem = (props) => {
   return (
     <Link
       style={{ textDecoration: "none" }}
-      to={props.hideLink ? `#` : `/course/${courseID}`}
+      to={props.hideLink ? `#` : `/course/${cuid}`}
     >
       <div className="course-list-wrapper">
         <div className="course-name-wrapper">

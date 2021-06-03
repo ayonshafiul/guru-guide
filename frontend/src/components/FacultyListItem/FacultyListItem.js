@@ -21,7 +21,6 @@ const FacultyListItem = (props) => {
 
   return (
     <Link style={{ textDecoration: "none" }} to={`/faculty/${fuid}`}>
-      {console.log(fuid)}
       <div className="faculty-wrapper">
         <div className="name-wrapper">
           <div className="faculty-name">{facultyName}</div>

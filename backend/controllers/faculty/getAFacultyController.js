@@ -7,11 +7,6 @@ const {
 
 module.exports = function (req, res, next) {
   let facultyID = req.params.facultyID;
-
-  if (facultyID.error) {
-    return res.json(createErrorObject("Invalid facultyID"));
-  }
-
   dbPool.getConnection(function (err, connection) {
     if (err) {
       next(err);

@@ -55,7 +55,8 @@ const FacultyDetails = (props) => {
     ["/api/comment", String(fid), String(courseID), String(commentPage)],
     getComment,
     {
-      enabled: page === "comments" && parseInt(courseID) !== 0,
+      enabled:
+        page === "comments" && parseInt(courseID) !== 0 && parseInt(fid) !== 0,
       keepPreviousData: true,
     }
   );
@@ -83,7 +84,10 @@ const FacultyDetails = (props) => {
     ["/api/facultyrating", String(fid), String(courseID)],
     getRatingForACourse,
     {
-      enabled: parseInt(departmentID) !== 0 && parseInt(courseID) !== 0,
+      enabled:
+        parseInt(departmentID) !== 0 &&
+        parseInt(courseID) !== 0 &&
+        parseInt(fid) !== 0,
     }
   );
 
@@ -95,21 +99,10 @@ const FacultyDetails = (props) => {
     error: facultyError,
     isError: facultyIsError,
     refetch: facultyRefetch,
-  } = useQuery(["/api/faculty", String(id)], getAFaculty, {
-    onSuccess: function (data) {
-      if (data.success) {
-        console.log(data.data);
-        setFid(data.data.facultyID);
-      }
-    },
-    onSettled: function (data) {
-      console.log("settled", data);
-    },
-  });
+  } = useQuery(["/api/faculty", String(id)], getAFaculty, {});
 
   useEffect(async () => {
     const data = await getAFaculty({ queryKey: ["/api/faculty", String(id)] });
-    console.log("useEffect", data);
     if (data.success) {
       setFid(data.data.facultyID);
     }
@@ -140,7 +133,11 @@ const FacultyDetails = (props) => {
 
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
-      const data = await postRating({ rating, facultyID: fid, courseID });
+      const data = await postRating({
+        rating,
+        facultyID: String(fid),
+        courseID,
+      });
       if (typeof data !== "undefined") {
         setRating({});
         addToast("Thanks for the feedback!");
@@ -231,7 +228,6 @@ const FacultyDetails = (props) => {
       initial="initial"
       animate="animate"
     >
-      {fid}
       <Link style={{ textDecoration: "none" }} to="/faculty">
         <div className="global-back-btn">&lArr;</div>
       </Link>
@@ -408,7 +404,9 @@ const FacultyDetails = (props) => {
                   </div>
                 </div>
               )}
-              {courseCode && commentData.data.length > 0 ? (
+              {courseCode &&
+              typeof commentData !== "undefined" &&
+              commentData.data.length > 0 ? (
                 <div className="info-header">
                   Showing comments for: {courseCode}{" "}
                 </div>
