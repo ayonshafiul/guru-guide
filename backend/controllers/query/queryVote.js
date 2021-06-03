@@ -37,6 +37,7 @@ module.exports = function (req, res) {
         if (error) {
           console.log(error);
           res.json(createErrorObject("query voting failed"));
+          connection.release();
         } else {
           if (results.length == 0) {
             let queryvoteObj;
@@ -70,6 +71,7 @@ module.exports = function (req, res) {
               if (error) {
                 console.log(error);
                 res.json(createErrorObject("Voting error"));
+                connection.release();
               } else {
                 connection.query(
                   secondsql,
@@ -81,14 +83,12 @@ module.exports = function (req, res) {
                     } else {
                       res.json(createSuccessObject(msg));
                     }
+                    connection.release();
                   }
                 );
               }
             });
           } else {
-            // already voted
-            // update instead
-
             let firstSql;
             let secondSql;
             let msg = "";
@@ -115,6 +115,7 @@ module.exports = function (req, res) {
                 "UPDATE query set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where queryID =?";
               msg = "upvoteupdate";
             } else {
+              connection.release();
               return res.json(createSuccessObject("noupdate"));
             }
 
@@ -125,6 +126,7 @@ module.exports = function (req, res) {
                 if (error) {
                   console.log(error);
                   res.json(createErrorObject("vote not updated"));
+                  connection.release();
                 } else {
                   //run second sql here
                   connection.query(
@@ -137,6 +139,7 @@ module.exports = function (req, res) {
                       } else {
                         res.json(createSuccessObject(msg));
                       }
+                      connection.release();
                     }
                   );
                 }
@@ -146,7 +149,5 @@ module.exports = function (req, res) {
         }
       }
     );
-
-    connection.release();
   });
 };

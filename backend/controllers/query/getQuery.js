@@ -25,12 +25,12 @@ module.exports = function (req, res, next) {
       (error, results) => {
         if (error) {
           console.log(error);
-          return res.json(createErrorObject("Error while querying"));
+          res.json(createErrorObject("Error while querying"));
         } else {
-          return res.json(createSuccessObjectWithData(results));
+          res.json(createSuccessObjectWithData(results));
         }
+        connection.release();
       }
     );
-    connection.release();
   });
 };

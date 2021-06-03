@@ -14,13 +14,14 @@ module.exports = function (req, res, next) {
   if (query.error) {
     return res.json(createErrorObject("Invalid query"));
   }
-  dbPool.getConnection(function (err, connection) {
-    if (err) {
-      next(err);
-      return;
-    }
-    client.get("s" + studentID, function (err, value) {
-      if (!value) {
+
+  client.get("q" + studentID, function (err, value) {
+    if (!value) {
+      dbPool.getConnection(function (err, connection) {
+        if (err) {
+          next(err);
+          return;
+        }
         let sql = "INSERT INTO query SET ?";
         let queryObj = {
           studentID,
@@ -31,15 +32,13 @@ module.exports = function (req, res, next) {
           if (error) {
             res.json(createErrorObject("Error while inserting query"));
           } else {
-            client.setex("s" + studentID, 60, "1", function (err, reply) {});
+            client.setex("q" + studentID, 60, "1", function (err, reply) {});
             res.json(createSuccessObject("Successfully Inserted!"));
           }
         });
-      } else {
-        res.json(createErrorObject("toosoon"));
-      }
-    });
-
-    connection.release();
+      });
+    } else {
+      res.json(createErrorObject("toosoon"));
+    }
   });
 };
