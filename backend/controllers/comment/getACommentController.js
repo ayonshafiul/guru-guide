@@ -1,4 +1,4 @@
-const db = require("../../db");
+const dbPool = require("../../dbPool");
 const {
   validateNumber,
   createErrorObject,
@@ -17,15 +17,15 @@ module.exports = function (req, res, next) {
   let sql =
     "SELECT commentText from comment where facultyID = ? and courseID = ?  and studentID = ?";
 
-  db.query(
+  dbPool.query(
     sql,
     [facultyID.value, courseID.value, studentID],
     (error, results) => {
       if (error) {
         console.log(error);
-        return res.json(createErrorObject("Error while querying"));
+        res.json(createErrorObject("Error while querying"));
       } else {
-        return res.json(createSuccessObjectWithData(results));
+        res.json(createSuccessObjectWithData(results));
       }
     }
   );

@@ -14,7 +14,10 @@ module.exports = function (req, res, next) {
   let sql = "SELECT * from complain order by upVoteSum desc limit ?, 10";
 
   dbPool.getConnection(function (err, connection) {
-    if (err) throw err;
+    if (err) {
+      next(err);
+      return;
+    }
     connection.query(
       sql,
       [(parseInt(page.value) - 1) * 10],
@@ -26,7 +29,6 @@ module.exports = function (req, res, next) {
           res.json(createSuccessObjectWithData(results));
         }
         connection.release();
-        return;
       }
     );
   });

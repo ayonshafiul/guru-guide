@@ -12,7 +12,10 @@ module.exports = function (req, res, next) {
   let sql = "SELECT * from complain where studentID = ?";
 
   dbPool.getConnection(function (err, connection) {
-    if (err) throw err;
+    if (err) {
+      next(err);
+      return;
+    }
     connection.query(sql, [studentID], (error, results) => {
       if (error) {
         console.log(error);
@@ -21,7 +24,6 @@ module.exports = function (req, res, next) {
         res.json(createSuccessObjectWithData(results));
       }
       connection.release();
-      return;
     });
   });
 };

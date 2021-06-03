@@ -6,7 +6,7 @@ const {
   createSuccessObject,
 } = require("../../utils");
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let complain = validateComplaint(req.body.complaintText);
   let studentID = req.user.studentID;
 
@@ -18,10 +18,14 @@ module.exports = function (req, res) {
   let sql = "SELECT complainID from complain where studentID = ?";
 
   dbPool.getConnection(function (err, connection) {
-    if (err) throw err;
+    if (err) {
+      next(err);
+      return;
+    }
     connection.query(sql, [studentID], (error, results, fields) => {
       if (error) {
         console.log(error);
+        connection.release();
         res.json(createErrorObject("Something bad happened while updating!"));
       } else if (results.length === 0) {
         // complain doesn't exist
@@ -39,6 +43,7 @@ module.exports = function (req, res) {
           } else {
             res.json(createSuccessObject("Successfully Inserted!"));
           }
+          connection.release();
         });
       } else if (results.length > 0) {
         // complain exists
@@ -52,6 +57,7 @@ module.exports = function (req, res) {
           (error1, results1, fields1) => {
             if (error1) {
               console.log(error1);
+              connection.release();
               res.json(createErrorObject("Error while updating complain"));
             } else {
               connection.query(
@@ -63,14 +69,13 @@ module.exports = function (req, res) {
                   } else {
                     res.json(createSuccessObject("Success!"));
                   }
+                  connection.release();
                 }
               );
             }
           }
         );
       }
-      connection.release();
-      return;
     });
   });
 };

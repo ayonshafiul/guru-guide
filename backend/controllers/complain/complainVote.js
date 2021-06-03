@@ -33,6 +33,7 @@ module.exports = function (req, res) {
       function (error, results) {
         if (error) {
           console.log(error);
+          connection.release();
           res.json(createErrorObject("complain voting failed"));
         } else {
           if (results.length == 0) {
@@ -66,6 +67,7 @@ module.exports = function (req, res) {
             connection.query(sql, complainvoteObj, function (error, results) {
               if (error) {
                 console.log(error);
+                connection.release();
                 res.json(createErrorObject("Voting error"));
               } else {
                 connection.query(
@@ -78,6 +80,7 @@ module.exports = function (req, res) {
                     } else {
                       res.json(createSuccessObject(msg));
                     }
+                    connection.release();
                   }
                 );
               }
@@ -112,6 +115,7 @@ module.exports = function (req, res) {
                 "UPDATE complain set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where complainID =?";
               msg = "upvoteupdate";
             } else {
+              connection.release();
               return res.json(createSuccessObject("noupdate"));
             }
 
@@ -121,6 +125,7 @@ module.exports = function (req, res) {
               function (error, results) {
                 if (error) {
                   console.log(error);
+                  connection.release();
                   res.json(createErrorObject("vote not updated"));
                 } else {
                   //run second sql here
@@ -134,6 +139,7 @@ module.exports = function (req, res) {
                       } else {
                         res.json(createSuccessObject(msg));
                       }
+                      connection.release();
                     }
                   );
                 }
@@ -143,8 +149,5 @@ module.exports = function (req, res) {
         }
       }
     );
-
-    connection.release();
-    return;
   });
 };
