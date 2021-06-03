@@ -1,12 +1,12 @@
 const express = require("express");
 const dotenv = require("dotenv").config();
-const db = require("./db.js");
 const dbPool = require("./dbPool");
 const mysql = require("mysql");
 const cors = require("cors");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
+const helmet = require("helmet");
 
 const authRouter = require("./routes/authRouter");
 const facultyRouter = require("./routes/facultyRouter");
@@ -24,6 +24,7 @@ const authMiddleware = require("./middlewares/authentication");
 const { createSuccessObject, createErrorObject } = require("./utils.js");
 
 const server = express();
+server.use(helmet());
 server.use(bodyParser.urlencoded({ extended: false }));
 server.use(express.json());
 server.use(cookieParser());
@@ -39,14 +40,6 @@ server.use(
   })
 );
 
-db.connect((err) => {
-  if (err) {
-    console.log(err.message);
-  } else {
-    console.log("Mysql connected...");
-  }
-});
-
 server.use("/api", authRouter);
 
 server.get("/api/forceupdate/", (req, res) => {
@@ -55,7 +48,8 @@ server.get("/api/forceupdate/", (req, res) => {
 
 server.get("/api/ping/", (req, res) => {
   const all = dbPool._allConnections.length;
-  res.json(createSuccessObject(all));
+  const free = dbPool._freeConnections.length;
+  res.json(createSuccessObject(all + " " + free));
 });
 
 server.use("/api", authMiddleware, facultyRouter);

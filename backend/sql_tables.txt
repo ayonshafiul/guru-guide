@@ -15,6 +15,7 @@ CREATE TABLE student (
 
 CREATE TABLE faculty(
     facultyID int AUTO_INCREMENT,
+    fuid binary(16),
     facultyName varchar(50),
     departmentID int,
     facultyInitials varchar(3) not null,
@@ -24,7 +25,8 @@ CREATE TABLE faculty(
     friendliness double not null default '0.00',
     voteCount int not null default '0',
     Primary Key(facultyID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index f(fuid)
 );
 
 
@@ -43,13 +45,15 @@ CREATE TABLE facultyverify (
 CREATE TABLE course (
     courseID int AUTO_INCREMENT,
     courseTitle varchar(50),
+    cuid binary(16),
     departmentID int,
     courseCode varchar(7) not null,
     approved boolean,
     difficulty double not null default '0.00',
     rateCount int not null default '0',
     Primary Key(courseID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index c(cuid)
 );
 
 

@@ -1,8 +1,7 @@
 const faker = require("faker");
 const dotenv = require("dotenv");
 dotenv.config();
-const db = require("./db");
-const bcrypt = require("bcrypt");
+const dbPool = require("./dbPool");
 
 const numStudents = 5000;
 const numFaculties = 100;
@@ -24,20 +23,13 @@ const numComments = 100;
 const numCommentRating = 100;
 const timeBetweenEntry = 5;
 
-db.connect((err) => {
-  if (err) {
-    console.log(err.message);
-  } else {
-    console.log("Mysql connected...");
-  }
-});
 function insertDepartments() {
   departmentArray.forEach((dept) => {
     let sql = "INSERT INTO department SET ?";
     let departmentObj = {
       departmentName: dept,
     };
-    db.query(sql, departmentObj, (error, results, fields) => {
+    dbPool.query(sql, departmentObj, (error, results, fields) => {
       if (error) {
         console.log(error);
       } else {

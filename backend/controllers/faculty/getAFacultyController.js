@@ -6,19 +6,27 @@ const {
 } = require("../../utils");
 
 module.exports = function (req, res, next) {
-  let facultyID = validateNumber(req.params.facultyID);
+  let facultyID = req.params.facultyID;
 
   if (facultyID.error) {
     return res.json(createErrorObject("Invalid facultyID"));
   }
 
-  let sql = "SELECT * from faculty where facultyID= ?";
-  dbPool.query(sql, facultyID.value, (error, results) => {
-    if (error) {
-      console.log(error);
-      res.json(createErrorObject("Error while querying"));
-    } else {
-      res.json(createSuccessObjectWithData(results[0]));
+  dbPool.getConnection(function (err, connection) {
+    if (err) {
+      next(err);
+      return;
     }
+
+    let sql =
+      "SELECT facultyID, facultyName, facultyInitials, departmentID, teaching, grading, friendliness, voteCount from faculty where fuid=UUID_TO_BIN(?)";
+    connection.query(sql, facultyID, (error, results) => {
+      if (error) {
+        console.log(error);
+        res.json(createErrorObject("Error while querying"));
+      } else {
+        res.json(createSuccessObjectWithData(results[0]));
+      }
+    });
   });
 };

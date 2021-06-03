@@ -12,7 +12,8 @@ module.exports = function (req, res, next) {
     return res.json(createErrorObject("Invalid departmentID"));
   }
 
-  let sql = "SELECT * from faculty where departmentID = ? and approved = 1";
+  let sql =
+    "SELECT facultyName, facultyInitials, departmentID, BIN_TO_UUID(fuid) as fuid, teaching, grading, friendliness, voteCount from faculty where departmentID = ? and approved = 1";
 
   dbPool.query(sql, departmentID.value, (error, results) => {
     if (error) {

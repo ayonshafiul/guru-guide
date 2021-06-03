@@ -46,7 +46,8 @@ dbPool.getConnection(function (err, connection) {
                     if (error) {
                       console.log(error);
                     } else if (thirdResults.affectedRows == 0) {
-                      let fourthSql = "INSERT INTO faculty set ?";
+                      let fourthSql =
+                        "INSERT INTO faculty (facultyName, departmentID, facultyInitials, approved, fuid) values (?, ?, ?, ?, UUID_TO_BIN(UUID(), true))";
                       let facultyObj = {
                         facultyName: secondResults[0].facultyName,
                         departmentID: result.departmentID,
@@ -55,7 +56,12 @@ dbPool.getConnection(function (err, connection) {
                       };
                       connection.query(
                         fourthSql,
-                        [facultyObj],
+                        [
+                          secondResults[0].facultyName,
+                          result.departmentID,
+                          result.facultyInitials,
+                          1,
+                        ],
                         (error, fourthResults) => {
                           if (error) {
                             console.log(error);
@@ -148,7 +154,8 @@ dbPool.getConnection(function (err, connection) {
                     if (error) {
                       console.log(error);
                     } else if (thirdResults.affectedRows == 0) {
-                      let fourthSql = "INSERT INTO course set ?";
+                      let fourthSql =
+                        "INSERT INTO course(courseTitle, departmentID, courseCode, approved, cuid) values(?, ?, ?, ?, UUID_TO_BIN(UUID(), true))";
                       let courseObj = {
                         courseTitle: secondResults[0].courseTitle,
                         departmentID: result.departmentID,
@@ -157,7 +164,12 @@ dbPool.getConnection(function (err, connection) {
                       };
                       connection.query(
                         fourthSql,
-                        [courseObj],
+                        [
+                          secondResults[0].courseTitle,
+                          result.departmentID,
+                          result.courseCode,
+                          1,
+                        ],
                         (error, fourthResults) => {
                           if (error) {
                             console.log(error);

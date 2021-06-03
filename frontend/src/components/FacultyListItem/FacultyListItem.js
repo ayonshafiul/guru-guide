@@ -10,6 +10,7 @@ const FacultyListItem = (props) => {
     grading,
     friendliness,
     voteCount,
+    fuid,
   } = props.faculty;
   if (voteCount === 0) {
     voteCount = 0.1;
@@ -19,7 +20,8 @@ const FacultyListItem = (props) => {
   let avgFriendliness = friendliness / voteCount;
 
   return (
-    <Link style={{ textDecoration: "none" }} to={`/faculty/${facultyID}`}>
+    <Link style={{ textDecoration: "none" }} to={`/faculty/${fuid}`}>
+      {console.log(fuid)}
       <div className="faculty-wrapper">
         <div className="name-wrapper">
           <div className="faculty-name">{facultyName}</div>

@@ -32,6 +32,7 @@ const FacultyDetails = (props) => {
   const { addToast } = useToasts();
   const pageRef = useRef(null);
   const queryClient = useQueryClient();
+  const [fid, setFid] = useState(0);
   const [page, setPage] = useState("");
   const [rating, setRating] = useState({});
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
@@ -51,7 +52,7 @@ const FacultyDetails = (props) => {
     refetch: commentRefetch,
     remove: commentRemove,
   } = useQuery(
-    ["/api/comment", String(id), String(courseID), String(commentPage)],
+    ["/api/comment", String(fid), String(courseID), String(commentPage)],
     getComment,
     {
       enabled: page === "comments" && parseInt(courseID) !== 0,
@@ -79,7 +80,7 @@ const FacultyDetails = (props) => {
     isError: facultyCourseRatingIsError,
     refetch: facultyCourseRatingRefetch,
   } = useQuery(
-    ["/api/facultyrating", String(id), String(courseID)],
+    ["/api/facultyrating", String(fid), String(courseID)],
     getRatingForACourse,
     {
       enabled: parseInt(departmentID) !== 0 && parseInt(courseID) !== 0,
@@ -94,8 +95,25 @@ const FacultyDetails = (props) => {
     error: facultyError,
     isError: facultyIsError,
     refetch: facultyRefetch,
-  } = useQuery(["/api/faculty", String(id)], getAFaculty);
+  } = useQuery(["/api/faculty", String(id)], getAFaculty, {
+    onSuccess: function (data) {
+      if (data.success) {
+        console.log(data.data);
+        setFid(data.data.facultyID);
+      }
+    },
+    onSettled: function (data) {
+      console.log("settled", data);
+    },
+  });
 
+  useEffect(async () => {
+    const data = await getAFaculty({ queryKey: ["/api/faculty", String(id)] });
+    console.log("useEffect", data);
+    if (data.success) {
+      setFid(data.data.facultyID);
+    }
+  }, []);
   function changeRating(type, buttonNo) {
     setRating({
       ...rating,
@@ -105,7 +123,7 @@ const FacultyDetails = (props) => {
 
   async function submitComment() {
     if (comment.match(finalRegex)) {
-      const data = await postComment({ comment, facultyID: id, courseID });
+      const data = await postComment({ comment, facultyID: fid, courseID });
       if (typeof data !== "undefined") {
         if (data.success) {
           setComment("");
@@ -122,7 +140,7 @@ const FacultyDetails = (props) => {
 
   async function submitRating() {
     if (rating["teaching"] && rating["friendliness"] && rating["grading"]) {
-      const data = await postRating({ rating, facultyID: id, courseID });
+      const data = await postRating({ rating, facultyID: fid, courseID });
       if (typeof data !== "undefined") {
         setRating({});
         addToast("Thanks for the feedback!");
@@ -141,13 +159,13 @@ const FacultyDetails = (props) => {
     const resData = res.data;
     const cacheExists = queryClient.getQueryData([
       "/api/comment",
-      String(id),
+      String(fid),
       String(courseID),
       String(commentPage),
     ]);
     if (cacheExists) {
       queryClient.setQueryData(
-        ["/api/comment", String(id), String(courseID), String(commentPage)],
+        ["/api/comment", String(fid), String(courseID), String(commentPage)],
         (prevData) => {
           for (let i = 0; i < prevData.data.length; i++) {
             let currentComment = prevData.data[i];
@@ -213,6 +231,7 @@ const FacultyDetails = (props) => {
       initial="initial"
       animate="animate"
     >
+      {fid}
       <Link style={{ textDecoration: "none" }} to="/faculty">
         <div className="global-back-btn">&lArr;</div>
       </Link>
