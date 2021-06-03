@@ -1,4 +1,4 @@
-const db = require("../../db.js");
+const dbPool = require("../../dbPool.js");
 const { createErrorObject, createSuccessObjectWithData, createSuccessObject } = require("../../utils");
 const {
   validateNumber,
@@ -6,7 +6,7 @@ const {
   validateCharactersOnly,
 } = require("../../utils");
 
-module.exports = function addFaculty(req, res) {
+module.exports = function addFaculty(req, res, next) {
   let { departmentID, facultyName, facultyInitials } = req.body;
   departmentID = validateNumber(departmentID);
   facultyName = validateCharactersOnlyWithSpaces(facultyName);
@@ -26,7 +26,7 @@ module.exports = function addFaculty(req, res) {
     facultyName: facultyName.value,
     facultyInitials: facultyInitials.value,
   };
-  db.query(sql, faculty, function (error, results) {
+  dbPool.query(sql, faculty, function (error, results) {
     if (error) {
       console.log(error);
     } else {

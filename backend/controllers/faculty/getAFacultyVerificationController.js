@@ -1,4 +1,4 @@
-const db = require("../../db");
+const dbPool = require("../../dbPool");
 const {
   createErrorObject,
   createSuccessObjectWithData,
@@ -6,7 +6,7 @@ const {
   validateCharactersOnly,
 } = require("../../utils");
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let departmentID = validateNumber(req.params.departmentID);
   let facultyInitials = validateCharactersOnly(req.params.facultyInitials);
 
@@ -18,15 +18,15 @@ module.exports = function (req, res) {
 
   let sql =
     "SELECT facultyID, facultyName, facultyInitials, departmentID, upVoteSum, downVoteSum from facultyverify where facultyInitials = ? and departmentID = ?";
-  db.query(
+  dbPool.query(
     sql,
     [facultyInitials.value, departmentID.value],
     (error, results) => {
       if (error) {
         console.log(error);
-        return res.json(createErrorObject("Error while querying"));
+        res.json(createErrorObject("Error while querying"));
       } else {
-        return res.json(createSuccessObjectWithData(results));
+        res.json(createSuccessObjectWithData(results));
       }
     }
   );

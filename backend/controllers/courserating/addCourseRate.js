@@ -13,7 +13,7 @@ function isInvalidRating(x) {
   }
 }
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let difficulty = validateNumber(req.body.difficulty);
   let courseID = validateNumber(req.params.courseID);
   let studentID = req.user.studentID;
@@ -24,7 +24,10 @@ module.exports = function (req, res) {
     return res.json(createErrorObject("Invalid rating"));
   }
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
+    if (err) {
+      next(err);
+      return;
+    }
     let sql = "SELECT * from courserating where studentID = ? and courseID = ?";
     connection.query(
       sql,
@@ -32,7 +35,8 @@ module.exports = function (req, res) {
       (error, results, fields) => {
         if (error) {
           console.log(error);
-          return res.json(createErrorObject("Something went wrong!"));
+          connection.release();
+          res.json(createErrorObject("Something went wrong!"));
         } else {
           if (results.length == 0) {
             // no rating exists
@@ -46,6 +50,7 @@ module.exports = function (req, res) {
             connection.query(sql, rateObj, (error, results, fields) => {
               if (error) {
                 console.log(error);
+                connection.release();
                 res.json(createErrorObject("Error inserting new rating."));
               } else {
                 // successfully inserted
@@ -58,17 +63,18 @@ module.exports = function (req, res) {
                   (error, results, fields) => {
                     if (error) {
                       console.log(error);
-                      return res.json(
+                      res.json(
                         createErrorObject(
                           "Error while updating voteCount field"
                         )
                       );
                     } else {
                       //successfully updated the voteCount field
-                      return res.json(
+                      res.json(
                         createSuccessObject("Successfully inserted new rating!")
                       );
                     }
+                    connection.release();
                   }
                 );
               }
@@ -85,7 +91,8 @@ module.exports = function (req, res) {
               (error, results, fields) => {
                 if (error) {
                   console.log(error);
-                  return res.json(
+                  connection.release();
+                  res.json(
                     createErrorObject("Updating failed with new rating!")
                   );
                 } else {
@@ -100,12 +107,11 @@ module.exports = function (req, res) {
                     (error, results, fields) => {
                       if (error) {
                         console.log(error);
-                        return res.json(createErrorObject("Updating failed!"));
+                        res.json(createErrorObject("Updating failed!"));
                       } else {
-                        return res.json(
-                          createSuccessObject("Updated new rating!")
-                        );
+                        res.json(createSuccessObject("Updated new rating!"));
                       }
+                      connection.release();
                     }
                   );
                 }
@@ -115,6 +121,5 @@ module.exports = function (req, res) {
         }
       }
     );
-    connection.release();
   });
 };
