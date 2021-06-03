@@ -24,7 +24,10 @@ module.exports = function (req, res) {
   //************************************************** */
 
   dbPool.getConnection(function (err, connection) {
-    if (err) throw err; // not connected!
+    if (err) {
+      next(err);
+      return;
+    }
     let sql =
       "SELECT upVote, downVote from queryvote where studentID = ? and queryID = ?";
     connection.query(
@@ -145,6 +148,5 @@ module.exports = function (req, res) {
     );
 
     connection.release();
-    return;
   });
 };

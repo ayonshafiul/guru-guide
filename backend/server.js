@@ -21,7 +21,7 @@ const replyRouter = require("./routes/replyRouter");
 const authMiddleware = require("./middlewares/authentication");
 const facultyVerify = require("./facultyVerify");
 const courseVerify = require("./courseVerify");
-const { createSuccessObject } = require("./utils.js");
+const { createSuccessObject, createErrorObject } = require("./utils.js");
 
 const server = express();
 server.use(bodyParser.urlencoded({ extended: false }));
@@ -60,7 +60,6 @@ server.get("/api/ping/", (req, res) => {
   res.json(createSuccessObject("pong!"));
 });
 
-
 server.use("/api", authMiddleware, facultyRouter);
 server.use("/api", authMiddleware, courseRouter);
 server.use("/api", authMiddleware, commentRouter);
@@ -70,6 +69,11 @@ server.use("/api", authMiddleware, courseRatingRouter);
 server.use("/api", authMiddleware, complainRouter);
 server.use("/api", authMiddleware, queryRouter);
 server.use("/api", authMiddleware, replyRouter);
+
+server.use(function (err, req, res, next) {
+  console.log(err);
+  res.status(500).json(createErrorObject("Something bad happened! :("));
+});
 
 server.listen(process.env.PORT, function () {
   console.log(`Server is running on ${process.env.PORT}`);

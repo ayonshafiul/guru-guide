@@ -1,4 +1,4 @@
-const db = require("../../db");
+const dbPool = require("../../dbPool");
 const {
   validateNumber,
   createErrorObject,
@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
   let sql =
     "SELECT teaching, grading, friendliness from rating where facultyID = ? and courseID = ?  and studentID = ?";
 
-  db.query(
+  dbPool.query(
     sql,
     [facultyID.value, courseID.value, studentID],
     (error, results) => {

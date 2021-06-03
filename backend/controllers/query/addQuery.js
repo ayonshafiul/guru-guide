@@ -7,17 +7,18 @@ const {
 } = require("../../utils");
 const client = require("../../redisClient");
 
-module.exports = function (req, res) {
+module.exports = function (req, res, next) {
   let query = validateComplaint(req.body.queryText);
   let studentID = req.user.studentID;
 
   if (query.error) {
     return res.json(createErrorObject("Invalid query"));
   }
-
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
-
+    if (err) {
+      next(err);
+      return;
+    }
     client.get("s" + studentID, function (err, value) {
       if (!value) {
         let sql = "INSERT INTO query SET ?";

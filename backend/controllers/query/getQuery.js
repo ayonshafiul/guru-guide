@@ -13,8 +13,10 @@ module.exports = function (req, res, next) {
   }
 
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
-
+    if (err) {
+      next(err);
+      return;
+    }
     let sql = "SELECT * from query order by queryID desc limit ?, 10";
 
     connection.query(
