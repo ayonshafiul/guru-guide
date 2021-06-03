@@ -16,7 +16,10 @@ module.exports = function (req, res) {
   }
 
   dbPool.getConnection(function (err, connection) {
-    if (err) return res.json(createErrorObject("Can not establish connection"));
+    if (err) {
+      next(err);
+      return;
+    }
     let sql = "INSERT INTO reply SET ?";
     let replyObj = {
       queryID: queryID.value,
@@ -26,6 +29,7 @@ module.exports = function (req, res) {
     connection.query(sql, replyObj, (error, results, fields) => {
       if (error) {
         console.log(error);
+        connection.release();
         res.json(createErrorObject("Error while inserting reply"));
       } else {
         let updateSql =
@@ -40,10 +44,10 @@ module.exports = function (req, res) {
             } else {
               res.json(createSuccessObject("Successfully inserted."));
             }
+            connection.release();
           }
         );
       }
     });
-    connection.release();
   });
 };

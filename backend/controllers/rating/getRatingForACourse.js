@@ -32,7 +32,6 @@ module.exports = function (req, res, next) {
                 res.json(createErrorObject("no data"));
               } else {
                 let { teaching, grading, friendliness, voteCount } = results[0];
-                console.log(results[0]);
                 client.setex(
                   "rf" + facultyID.value + "c" + courseID.value,
                   60,

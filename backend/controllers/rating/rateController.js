@@ -49,6 +49,7 @@ module.exports = function (req, res, next) {
       [facultyID.value, courseID.value, studentID],
       (error, results, fields) => {
         if (error) {
+          connection.release();
           res.json(createErrorObject("Something went wrong while querying!"));
         } else {
           if (results.length == 0) {
@@ -63,6 +64,7 @@ module.exports = function (req, res, next) {
             let sql = "INSERT INTO rating SET ?";
             connection.query(sql, rateObj, (error, results, fields) => {
               if (error) {
+                connection.release();
                 res.json(createErrorObject("Insert Failed!"));
               } else {
                 let sqlSecond =
@@ -85,6 +87,7 @@ module.exports = function (req, res, next) {
                         createSuccessObject("Successfully inserted new rating!")
                       );
                     }
+                    connection.release();
                   }
                 );
               }
@@ -108,6 +111,7 @@ module.exports = function (req, res, next) {
               ],
               (error, results, fields) => {
                 if (error) {
+                  connection.release();
                   res.json(
                     createErrorObject("Updating failed with new rating!")
                   );
@@ -128,6 +132,7 @@ module.exports = function (req, res, next) {
                         //successfully updated the voteCount field
                         res.json(createSuccessObject("Updated new rating!"));
                       }
+                      connection.release();
                     }
                   );
                 }
@@ -137,6 +142,5 @@ module.exports = function (req, res, next) {
         }
       }
     );
-    connection.release();
   });
 };
