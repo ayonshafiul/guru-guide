@@ -10,7 +10,8 @@ CREATE TABLE student (
     email varchar(50),
     departmentID int,
     Primary Key(studentID),
-    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE
+    Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    index email(email)
 );
 
 CREATE TABLE faculty(
