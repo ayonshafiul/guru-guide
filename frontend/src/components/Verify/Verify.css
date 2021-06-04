@@ -5,6 +5,7 @@
 .verify-list-wrapper {
   margin: 1em auto;
 }
+
 .verify-list-item {
   background: #ccc;
   color: #1f1f1f;
@@ -15,10 +16,18 @@
   border-left: 2px solid #ccc;
   border-right: 2px solid #ccc;
   cursor: pointer;
+  display: flex;
+  justify-content: space-between;
 }
 .verify-list-item:hover {
   background: #202124;
   color: #61dafb;
   border-left: 2px solid #61dafb;
   border-right: 2px solid #61dafb;
+}
+
+.needs-verification {
+  background-color: #ff6346;
+  border-left: 2px solid #ff6346;
+  border-right: 2px solid #ff6346;
 }

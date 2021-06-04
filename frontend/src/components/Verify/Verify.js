@@ -136,8 +136,17 @@ const Verify = () => {
                         to={`/verify/faculty/${departmentID}/${faculty.facultyInitials}`}
                         style={{ textDecoration: "none" }}
                       >
-                        <div className="verify-list-item">
-                          {faculty.facultyInitials}
+                        <div
+                          className={
+                            faculty.upVoteSum > 9
+                              ? "verify-list-item"
+                              : "verify-list-item needs-verification"
+                          }
+                        >
+                          <div>{faculty.facultyInitials}</div>
+                          <div>
+                            {faculty.upVoteSum > 9 ? "" : "Needs Verification"}
+                          </div>
                         </div>
                       </Link>
                     );
@@ -212,8 +221,17 @@ const Verify = () => {
                         to={`/verify/course/${departmentID}/${course.courseCode}`}
                         style={{ textDecoration: "none" }}
                       >
-                        <div className="verify-list-item">
-                          {course.courseCode}
+                        <div
+                          className={
+                            course.upVoteSum > 9
+                              ? "verify-list-item"
+                              : "verify-list-item needs-verification"
+                          }
+                        >
+                          <div>{course.courseCode}</div>
+                          <div>
+                            {course.upVoteSum > 9 ? "" : "Needs Verification"}
+                          </div>
                         </div>
                       </Link>
                     );

@@ -12,7 +12,7 @@ module.exports = function (req, res) {
   }
 
   let sql =
-    "SELECT courseCode, departmentID from courseverify where departmentID = ? group by courseCode, departmentID";
+    "SELECT courseCode, departmentID, max(upVoteSum) as upVoteSum from courseverify where departmentID = ? group by courseCode, departmentID";
   dbPool.query(sql, departmentID.value, (error, results) => {
     if (error) {
       console.log(error);
