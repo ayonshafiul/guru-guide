@@ -1,11 +1,4 @@
-const mysql = require("mysql");
-const dbPool = mysql.createPool({
-  connectionLimit: 150,
-  host: "localhost",
-  user: "root",
-  password: "mshafiul",
-  database: "test5",
-});
+const dbPool = require("./dbPool");
 
 dbPool.getConnection(function (err, connection) {
   if (err) {
