@@ -35,10 +35,10 @@ const FacultyVerify = () => {
           0,
           0
         ) - Date.now();
-        if ( remaining < 0) {
-          remaining += 86400000; // add the next day in milliseconds
-        }
-      setNextUpdateRemainingTime(Math.floor(remaining/1000));
+      if (remaining < 0) {
+        remaining += 86400000; // add the next day in milliseconds
+      }
+      setNextUpdateRemainingTime(Math.floor(remaining / 1000));
     }, 1000);
 
     return function cleanup() {
@@ -115,12 +115,13 @@ const FacultyVerify = () => {
     );
   return (
     <div className="faculty-verify-wrapper">
-      <Link style ={{textDecoration: "none"}}to="/verify"><div className="global-back-btn">&lArr;</div></Link>
+      <Link style={{ textDecoration: "none" }} to="/verify">
+        <div className="global-back-btn">&lArr;</div>
+      </Link>
       <div className="faculty-verify-header">
-        Next update in {" "} 
-      {Math.floor(nextUpdateRemainingTime / 60 / 60) + "h: "}
-      {Math.floor(nextUpdateRemainingTime / 60) % 60 + "m: "}
-      {nextUpdateRemainingTime % 60 +"s"}
+        Next update in {Math.floor(nextUpdateRemainingTime / 60 / 60) + "h: "}
+        {(Math.floor(nextUpdateRemainingTime / 60) % 60) + "m: "}
+        {(nextUpdateRemainingTime % 60) + "s"}
       </div>
       <div className="faculty-verify-header">
         Showing all the entries for "{initials}"
@@ -135,7 +136,6 @@ const FacultyVerify = () => {
             return (
               <React.Fragment key={faculty.facultyID}>
                 <div
-                  
                   className={
                     index === 0
                       ? "faculty-verify-list-wrapper-selected"
@@ -179,9 +179,9 @@ const FacultyVerify = () => {
                 </div>
                 {index === 0 && (
                   <div className="faculty-verify-info">
-                    This is the entry with the highest number of upvotes and
-                    will be included in the verified database during the next
-                    update cycle <b>only if it has at least 10 upvotes.</b>
+                    &#8593; This is the entry with the highest number of upvotes
+                    and will be included in the verified database during the
+                    next update cycle <b>only if it has at least 10 upvotes.</b>
                     <br />
                     If it gets more downvotes than upvotes then{" "}
                     <b>{initials}</b> will be removed from the verified

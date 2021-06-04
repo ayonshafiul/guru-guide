@@ -139,7 +139,6 @@ const CourseVerify = () => {
             return (
               <React.Fragment key={course.courseID}>
                 <div
-                  
                   className={
                     index === 0
                       ? "course-verify-list-wrapper-selected"
@@ -181,9 +180,9 @@ const CourseVerify = () => {
                 </div>
                 {index === 0 && (
                   <div className="course-verify-info">
-                    This is the entry with the highest number of upvotes and
-                    will be included in the verified database during the next
-                    update cycle <b>only if it has at least 10 upvotes.</b>
+                    &#8593; This is the entry with the highest number of upvotes
+                    and will be included in the verified database during the
+                    next update cycle <b>only if it has at least 10 upvotes.</b>
                     <br />
                     If it gets more downvotes than upvotes then <b>
                       {code}
