@@ -22,6 +22,7 @@ module.exports = function (req, res, next) {
       } else {
         res.json(createSuccessObjectWithData(results[0]));
       }
+      connection.release();
     });
   });
 };

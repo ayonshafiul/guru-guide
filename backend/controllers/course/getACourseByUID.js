@@ -6,20 +6,15 @@ const {
 } = require("../../utils");
 
 module.exports = function (req, res, next) {
-  let courseID = validateNumber(req.params.courseID);
-
-  if (courseID.error) {
-    return res.json(createErrorObject("Invalid course ID"));
-  }
+  let courseID = req.params.courseID;
 
   dbPool.getConnection(function (err, connection) {
     if (err) {
       next(err);
       return;
     }
-    let sql =
-      "SELECT courseID, courseTitle, courseCode, departmentID, difficulty, rateCount from course where courseID = ?";
-    connection.query(sql, courseID.value, (error, results) => {
+    let sql = "SELECT courseID, courseTitle, courseCode, departmentID, difficulty, rateCount from course where cuid=UUID_TO_BIN(?)";
+    connection.query(sql, courseID, (error, results) => {
       if (error) {
         console.log(error);
         connection.release();

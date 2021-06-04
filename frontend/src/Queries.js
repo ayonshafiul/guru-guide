@@ -72,6 +72,14 @@ export const getACourse = async ({ queryKey }) => {
   return res.data;
 };
 
+export const getACourseByUID = async ({ queryKey }) => {
+  const [keyName, courseID] = queryKey;
+  const res = await axios.get(server.url + "/api/course/uid/" + courseID, {
+    withCredentials: true,
+  });
+  return res.data;
+};
+
 export const getComment = async ({ queryKey }) => {
   const [keyName, facultyID, courseID, commentPage] = queryKey;
   const res = await axios.get(

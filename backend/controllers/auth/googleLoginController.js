@@ -1,10 +1,10 @@
-const db = require("../../db");
+const dbPool = require("../../dbPool");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = process.env.CLIENT_ID;
 const { createErrorObject, createSuccessObject } = require("../../utils");
 
-module.exports = function login(req, res) {
+module.exports = function (req, res, next) {
   const token = req.headers.auth;
   const client = new OAuth2Client(CLIENT_ID);
   async function verify() {
@@ -14,34 +14,43 @@ module.exports = function login(req, res) {
     });
     const payload = ticket.getPayload();
     // Chance of error! Fix in future
+
     let sql = "SELECT email,studentID from student where email = ?";
-    db.query(sql, payload.email, (error, results) => {
-      if (error) {
-        console.log(error);
-        return res.json(createErrorObject("Error while querying for student!"));
-      } else {
-        if (results.length == 0) {
-          sql = "Insert into student set ?";
-          let studentObject = {
-            name: payload.name,
-            departmentID: 8,
-            email: payload.email,
-          };
-          db.query(sql, studentObject, (error, results) => {
-            if (error) {
-              console.log(error);
-              return res.json(
-                createErrorObject("Error while creating a new student!")
-              );
-            } else {
-              console.log("created new student!");
-              signInUser(results.insertId);
-            }
-          });
-        } else {
-          signInUser(results[0].studentID);
-        }
+    dbPool.getConnection(function (err, connection) {
+      if (err) {
+        next(err);
+        return;
       }
+      connection.query(sql, payload.email, (error, results) => {
+        if (error) {
+          console.log(error);
+          connection.release();
+          res.json(createErrorObject("Error while querying for student!"));
+        } else {
+          if (results.length == 0) {
+            sql = "Insert into student set ?";
+            let studentObject = {
+              name: payload.name,
+              departmentID: 8,
+              email: payload.email,
+            };
+            connection.query(sql, studentObject, (error, results) => {
+              if (error) {
+                console.log(error);
+                res.json(
+                  createErrorObject("Error while creating a new student!")
+                );
+              } else {
+                signInUser(results.insertId);
+              }
+              connection.release();
+            });
+          } else {
+            connection.release();
+            signInUser(results[0].studentID);
+          }
+        }
+      });
     });
   }
 
@@ -57,6 +66,7 @@ module.exports = function login(req, res) {
           Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000
       ),
       httpOnly: true,
+      secure: true,
     });
     res.status(200).json(createSuccessObject("loginsuccessfull"));
   }

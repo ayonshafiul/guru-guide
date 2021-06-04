@@ -35,6 +35,7 @@ module.exports = function (req, res, next) {
             client.setex("q" + studentID, 60, "1", function (err, reply) {});
             res.json(createSuccessObject("Successfully Inserted!"));
           }
+          connection.release();
         });
       });
     } else {

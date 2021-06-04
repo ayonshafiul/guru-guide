@@ -18,6 +18,7 @@ import {
   postCourseRating,
   getACourse,
   postCourseComment,
+  getACourseByUID,
 } from "../../Queries";
 const CourseDetails = () => {
   const location = useLocation();
@@ -49,13 +50,12 @@ const CourseDetails = () => {
     isSuccess: courseIsSuccess,
     data: courseData,
     refetch: courseRefetch,
-  } = useQuery(["/api/coursedetails", String(id)], getACourse);
+  } = useQuery(["/api/coursedetails", String(id)], getACourseByUID);
 
   useEffect(async () => {
-    const data = await getACourse({
+    const data = await getACourseByUID({
       queryKey: ["/api/coursedetails", String(id)],
     });
-    console.log("useEffect", data);
     if (data.success) {
       setCid(data.data.courseID);
     }
@@ -89,7 +89,6 @@ const CourseDetails = () => {
   async function submitCourseRating() {
     if (rating["difficulty"]) {
       const data = await postCourseRating({ rating, courseID: cid });
-      console.log(data);
       if (typeof data !== "undefined" && data.success) {
         setRating({});
         addToast("Thanks for the feedback!");
