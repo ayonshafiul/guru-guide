@@ -1,8 +1,14 @@
 const dbPool = require("../../dbPool");
+const redisClient = require("../../redisClient");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = process.env.CLIENT_ID;
-const { createErrorObject, createSuccessObject } = require("../../utils");
+const {
+  createErrorObject,
+  createSuccessObject,
+  validateEmail,
+  validateComment,
+} = require("../../utils");
 
 module.exports = function (req, res, next) {
   const token = req.headers.auth;
@@ -12,16 +18,28 @@ module.exports = function (req, res, next) {
       idToken: token,
       audience: process.env.CLIENT_ID,
     });
-    const payload = ticket.getPayload();
-    // Chance of error! Fix in future
+    let payload = null;
+    let email = null;
+    try {
+      payload = ticket.getPayload();
+      email = validateEmail(payload.email);
+      if (email.error) {
+        return res.json(createErrorObject("notbracu"));
+      }
+      email = email.value;
+    } catch (err) {
+      if (err) {
+        return res.json(createErrorObject("Uh oh! Something bad happened!"));
+      }
+    }
 
-    let sql = "SELECT email,studentID from student where email = ?";
+    let sql = "SELECT studentID, email from student where email = ?";
     dbPool.getConnection(function (err, connection) {
       if (err) {
         next(err);
         return;
       }
-      connection.query(sql, payload.email, (error, results) => {
+      connection.query(sql, email, (error, results) => {
         if (error) {
           console.log(error);
           connection.release();
@@ -46,8 +64,8 @@ module.exports = function (req, res, next) {
               connection.release();
             });
           } else {
-            connection.release();
             signInUser(results[0].studentID);
+            connection.release();
           }
         }
       });
@@ -60,14 +78,31 @@ module.exports = function (req, res, next) {
     const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
+    const refreshToken = jwt.sign({ studentID }, process.env.JWT_SECRET, {
+      expiresIn: process.env.REFRESH_JWT_EXPIRES_IN,
+    });
     res.cookie("jwt", token, {
       expires: new Date(
         Date.now() +
-          Number(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000
+          parseInt(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000
       ),
       httpOnly: true,
       secure: true,
     });
+    res.cookie("rjwt", refreshToken, {
+      expires: new Date(
+        Date.now() +
+          parseInt(process.env.JWT_COOKIE_EXPIRES) * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: true,
+    });
+    redisClient.setex(
+      "s" + studentID,
+      86400 * 30,
+      refreshToken,
+      function (err, reply) {}
+    );
     res.status(200).json(createSuccessObject("loginsuccessfull"));
   }
 };

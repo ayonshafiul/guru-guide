@@ -1,22 +1,5 @@
 const Joi = require("joi");
 
-const userLoginValidatorSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(4).max(32).required(),
-});
-
-const userRegistrationValidation = Joi.object({
-  email: Joi.string()
-    .email()
-    .regex(/@g.bracu.ac.bd$/),
-  password: Joi.string().min(6).max(32).required(),
-  passwordConfirm: Joi.any()
-    .equal(Joi.ref("password"))
-    .required()
-    .label("Confirm password")
-    .messages({ "any.only": "{{#label}} does not match" }),
-});
-
 module.exports.createSuccessObject = (msg) => {
   return {
     success: true,
@@ -36,6 +19,11 @@ module.exports.createErrorObject = (msg) => {
     success: false,
     message: msg,
   };
+};
+module.exports.validateEmail = (email) => {
+  return Joi.string()
+    .regex(/@g.bracu.ac.bd$/)
+    .validate(email);
 };
 
 module.exports.validateComment = (cmnt) => {

@@ -286,3 +286,10 @@ export const postCourseVote = async ({ voteType, courseID }) => {
   );
   return res.data;
 };
+
+export const getLogOut = async () => {
+  const res = await axios.get(server.url + "/api/logout/", {
+    withCredentials: true,
+  });
+  return res.data;
+};

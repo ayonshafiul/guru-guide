@@ -35,4 +35,8 @@ export default [
     title: "Contact",
     path: "/contact",
   },
+  {
+    title: "Logout",
+    path: "/logout",
+  },
 ];
