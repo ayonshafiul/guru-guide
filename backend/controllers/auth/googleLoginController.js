@@ -78,7 +78,7 @@ module.exports = function (req, res, next) {
     const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-    const refreshToken = jwt.sign({ studentID }, process.env.JWT_SECRET, {
+    const refreshToken = jwt.sign({ studentID }, process.env.REFRESH_JWT_SECRET, {
       expiresIn: process.env.REFRESH_JWT_EXPIRES_IN,
     });
     res.cookie("jwt", token, {
