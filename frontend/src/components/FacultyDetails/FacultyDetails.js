@@ -6,7 +6,7 @@ import pageAnimationVariant, {
 import Comment from "../Comment/Comment";
 import Rating from "../Rating/Rating";
 import TextInput from "../TextInput/TextInput";
-import { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import server, { departments } from "../../serverDetails";
 import { useQuery, useQueryClient } from "react-query";
@@ -285,7 +285,7 @@ const FacultyDetails = (props) => {
               })
               .map((course) => {
                 return (
-                  <option key={course.courseID} value={String(course.courseID)}>
+                  <option key={course.cuid} value={String(course.courseID)}>
                     {course.courseCode}
                   </option>
                 );
@@ -484,7 +484,7 @@ function showFacultyRatingSection(
   }
 
   return (
-    <>
+    <React.Fragment key={teaching + "" + grading + friendliness + overall}>
       <div className="faculty-details-info">{title}</div>
       <div className="faculty-details-overall">
         <span className="faculty-details-text-bg  yellow-stars">
@@ -520,7 +520,7 @@ function showFacultyRatingSection(
           style={{ width: friendliness * 10 + 0.5 + "%" }}
         ></div>
       </div>
-    </>
+    </React.Fragment>
   );
 }
 
@@ -550,6 +550,7 @@ function showFacultyCourseRatingSection(
       variants={pageAnimationVariant}
       initial="initial"
       animate="animate"
+      key={courseCode + "" + teaching + grading + friendliness}
     >
       <div className="fd-rating-wrapper">
         <div className="fd-average-rating">

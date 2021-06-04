@@ -121,7 +121,10 @@ const FacultyList = () => {
           typeof data.data !== undefined &&
           data.data.sort(sortFunction).map((faculty) => {
             return (
-              <FacultyListItem faculty={faculty} key={faculty.facultyID} />
+              <FacultyListItem
+                faculty={faculty}
+                key={faculty.facultyInitials}
+              />
             );
           })}
       </div>
