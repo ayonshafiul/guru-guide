@@ -1,4 +1,11 @@
-const dbPool = require("./dbPool");
+const mysql = require("mysql");
+const dbPool = mysql.createPool({
+  connectionLimit: 150,
+  host: "10.104.0.3",
+  user: "remote",
+  password: "MAnsura_7989@12345m",
+  database: "yahoo",
+});
 
 dbPool.getConnection(function (err, connection) {
   if (err) {
@@ -216,6 +223,11 @@ dbPool.getConnection(function (err, connection) {
     }
   });
 });
+setTimeout(function () {
+  dbPool.end(function (err) {
+    console.log("Pool ended");
+  });
+}, 30000);
 setTimeout(function () {
   process.exit(0);
 }, 40000);
