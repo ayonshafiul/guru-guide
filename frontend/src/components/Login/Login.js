@@ -24,7 +24,11 @@ const Login = () => {
             history.go(-1);
             setIsAuth(true);
           } else {
-            alert("An error occured while logging you in. :(");
+            if (res.data.message === "notbracu") {
+              alert("Please use your g.bracu.ac.bd email account!");
+            } else {
+              alert("An error occured while logging you in. :(");
+            }
           }
         }
       })

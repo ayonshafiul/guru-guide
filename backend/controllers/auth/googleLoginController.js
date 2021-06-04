@@ -2,7 +2,12 @@ const dbPool = require("../../dbPool");
 const jwt = require("jsonwebtoken");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = process.env.CLIENT_ID;
-const { createErrorObject, createSuccessObject } = require("../../utils");
+const {
+  createErrorObject,
+  createSuccessObject,
+  validateEmail,
+  validateComment,
+} = require("../../utils");
 
 module.exports = function (req, res, next) {
   const token = req.headers.auth;
@@ -12,8 +17,20 @@ module.exports = function (req, res, next) {
       idToken: token,
       audience: process.env.CLIENT_ID,
     });
-    const payload = ticket.getPayload();
-    // Chance of error! Fix in future
+    let payload = null;
+    let email = null;
+    try {
+      payload = ticket.getPayload();
+      email = validateEmail(payload.email);
+      if (email.error) {
+        return res.json(createErrorObject("notbracu"));
+      }
+      email = email.value;
+    } catch (err) {
+      if (err) {
+        return res.json(createErrorObject("Uh oh! Something bad happened!"));
+      }
+    }
 
     let sql = "SELECT email,studentID from student where email = ?";
     dbPool.getConnection(function (err, connection) {
@@ -21,7 +38,7 @@ module.exports = function (req, res, next) {
         next(err);
         return;
       }
-      connection.query(sql, payload.email, (error, results) => {
+      connection.query(sql, email, (error, results) => {
         if (error) {
           console.log(error);
           connection.release();

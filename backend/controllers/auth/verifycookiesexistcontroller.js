@@ -7,12 +7,14 @@ module.exports = (req, res, next) => {
     try {
       const decodedtoken = jwt.verify(token, process.env.JWT_SECRET);
       if (typeof decodedtoken.studentID != "undefined") {
-        return res.json(createSuccessObject("Authenticated!"));
+        res.json(createSuccessObject("Authenticated!"));
       } else {
-        return res.json(createErrorObject("Invalid authentication!"));
+        res.clearCookie("jwt");
+        res.json(createErrorObject("Invalid authentication!"));
       }
     } catch (err) {}
   } else {
-    return res.json(createErrorObject("Not authenticated!"));
+    res.clearCookie("jwt");
+    res.json(createErrorObject("Not authenticated!"));
   }
 };
