@@ -30,6 +30,7 @@ import menu from "../../assets/img/menu.png";
 import AuthContextProvider, { AuthContext } from "../../contexts/AuthContext";
 import CourseList from "../CourseList/CourseList";
 import logo from "../../assets/img/logo.png";
+import Logout from "../Logout/Logout";
 
 function App() {
   const [navStyle, setNavStyle] = useState(false);
@@ -112,6 +113,9 @@ function App() {
                   </Route>
                   <Route exact path="/login">
                     <Login />
+                  </Route>
+                  <Route exact path="/logout">
+                    <Logout />
                   </Route>
                   <Route exact path="/">
                     <Home></Home>

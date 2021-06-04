@@ -88,7 +88,6 @@ module.exports = function (req, res, next) {
       ),
       httpOnly: true,
       secure: true,
-      sameSite: 'none'
     });
     res.cookie("rjwt", refreshToken, {
       expires: new Date(
@@ -97,7 +96,6 @@ module.exports = function (req, res, next) {
       ),
       httpOnly: true,
       secure: true,
-      sameSite: 'none'
     });
     redisClient.setex(
       "s" + studentID,

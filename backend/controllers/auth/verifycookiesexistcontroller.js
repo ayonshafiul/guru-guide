@@ -42,7 +42,6 @@ module.exports = (req, res, next) => {
               ),
               httpOnly: true,
               secure: true,
-              sameSite: 'none',
             });
             console.log(counter++);
             res.json(createSuccessObject("Authenticated!"));

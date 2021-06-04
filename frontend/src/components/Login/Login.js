@@ -21,7 +21,7 @@ const Login = () => {
       .then((res) => {
         if (typeof res.data !== "undefined") {
           if (res.data.success) {
-            history.go(-1);
+            history.push("/faculty");
             setIsAuth(true);
           } else {
             if (res.data.message === "notbracu") {
