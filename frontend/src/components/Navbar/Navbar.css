@@ -94,11 +94,19 @@ Link {
     justify-content: center;
     z-index: 1000;
   }
+  .nav-list {
+    max-height: 80vh;
+    overflow-y: scroll;
+  }
 }
 
 @media screen and (min-width: 769px) {
   .navbar {
     visibility: visible;
+  }
+  .nav-list {
+    max-height: 100vh;
+    overflow-y: hidden;
   }
   .nav-title {
     display: block;
