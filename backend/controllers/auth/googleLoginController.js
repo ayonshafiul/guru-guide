@@ -41,7 +41,7 @@ module.exports = function (req, res, next) {
       }
       connection.query(sql, email, (error, results) => {
         if (error) {
-          console.log(error);
+          
           connection.release();
           res.json(createErrorObject("Error while querying for student!"));
         } else {
@@ -54,7 +54,7 @@ module.exports = function (req, res, next) {
             };
             connection.query(sql, studentObject, (error, results) => {
               if (error) {
-                console.log(error);
+                
                 res.json(
                   createErrorObject("Error while creating a new student!")
                 );

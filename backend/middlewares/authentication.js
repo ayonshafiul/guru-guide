@@ -2,8 +2,6 @@ const jwt = require("jsonwebtoken");
 const redisClient = require("../redisClient");
 const { createSuccessObjectWithData, createErrorObject } = require("../utils");
 
-let counter = 0;
-
 module.exports = function (req, res, next) {
   if (typeof req.cookies == "undefined") {
     return res.json(createErrorObject("invalid credentials"));
@@ -36,7 +34,6 @@ module.exports = function (req, res, next) {
       redisClient.get("s" + studentID, function (err, reply) {
         if (reply) {
           if (refreshToken == reply) {
-            console.log("match");
             const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRES_IN,
             });
@@ -50,7 +47,7 @@ module.exports = function (req, res, next) {
               secure: true,
               sameSite: "none",
             });
-            console.log(counter++);
+
             req.user = { studentID };
             next();
           } else {

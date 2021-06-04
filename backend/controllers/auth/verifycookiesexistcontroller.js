@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { createErrorObject, createSuccessObject } = require("../../utils");
 const redisClient = require("../../redisClient");
-let counter = 0;
+
 module.exports = (req, res, next) => {
   const token = req.cookies["jwt"];
   const refreshToken = req.cookies["rjwt"];
@@ -30,7 +30,6 @@ module.exports = (req, res, next) => {
       redisClient.get("s" + studentID, function (err, reply) {
         if (reply) { // token exists in redis
           if (refreshToken == reply) { // token matches
-            console.log("exist match");
             const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
               expiresIn: process.env.JWT_EXPIRES_IN,
             });
@@ -43,7 +42,6 @@ module.exports = (req, res, next) => {
               httpOnly: true,
               secure: true,
             });
-            console.log(counter++);
             res.json(createSuccessObject("Authenticated!"));
           } else { // token does not match
             res.clearCookie("jwt");
