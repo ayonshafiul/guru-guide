@@ -17,6 +17,7 @@ const CourseCombo = () => {
   const { isAuth } = useContext(AuthContext);
   const { addToast } = useToasts();
   const [departmentID, setDepartmentID] = useState("0");
+  const [showHelp, setShowHelp] = useState(false);
   const [courseID, setCourseID] = useState("0");
   const [courseCombo, setCourseCombo] = useState([]);
   const {
@@ -89,6 +90,12 @@ const CourseCombo = () => {
           {" "}
           Course Combo
         </h1>
+        <div
+          className="global-info-header"
+          onClick={(event) => setShowHelp((prev) => !prev)}
+        >
+          {showHelp ? "Ever wondered how difficult or easy your next semester is going to be? Well, here you can select your advised courses and get a rough idea about the cumulative difficulty of your next semester." : "What's this?"}
+        </div>
         {courseCombo.length > 0 ? (
           <>
             <motion.div

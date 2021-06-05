@@ -1,6 +1,6 @@
 import "./FacultyList.css";
 import { motion } from "framer-motion";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import { useQuery } from "react-query";
@@ -14,6 +14,7 @@ import refetchicon from "../../assets/img/refetch.svg";
 const FacultyList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
+  const [showHelp, setShowHelp] = useState(false);
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
@@ -108,6 +109,14 @@ const FacultyList = () => {
             <option value="vote">Number of votes</option>
           </select>
         )}
+        <div
+          className="global-info-header"
+          onClick={(event) => setShowHelp((prev) => !prev)}
+        >
+          {showHelp
+            ? "Here you'll see all the verified faculties. You can go ahead and say nice things about them or better yet, show your appreciation in the rating section. Please keep in mind that you can give multiple reviews and/or ratings for multiple courses they teach. If you can't find your favorite faculty in this list then head over to contribute section and add information about your favorite faculty yourself!."
+            : "What's this?"}
+        </div>
         <motion.div
           whileTap={{ scale: 0.8 }}
           className="global-refetch-btn"

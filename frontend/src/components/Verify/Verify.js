@@ -17,6 +17,7 @@ const Verify = () => {
   const { isAuth } = useContext(AuthContext);
   const [tab, setTab] = useLocalStorage("verifytab", "");
   const [initials, setInitials] = useState("");
+  const [showHelp, setShowHelp] = useState(false);
   const [courseCode, setCourseCode] = useState("");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "0");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
@@ -69,6 +70,12 @@ const Verify = () => {
         >
           Course
         </div>
+      </div>
+      <div
+        className="global-info-header"
+        onClick={(event) => setShowHelp((prev) => !prev)}
+      >
+        {showHelp ? "You might be wondering why the faculty or course that you added in the contribute section didn't appear in the faculty or course list immediately. It's because since everyone can contribute, there might be wrong or incorrect data. That's why in this section through voting we decide which entry is the correct one, since the right information will get all the upvotes. So go ahead and vote. If the correct faculty or course gets at least 10 upvotes then it will be updated in the verified list automatically at about 3 A.M. every night. Likewise, entries in the verified list can be removed too. Cause you know, there would be people who will add 'TBA' as a faculty and upvote it till it's verified. To unverify, the highest upvoted entry needs to have more downvotes than upvotes and it would be removed from the verified list. Btw, thank you for reading this long tutorial :)" : "What's this?"}
       </div>
       {tab === "faculty" && (
         <>

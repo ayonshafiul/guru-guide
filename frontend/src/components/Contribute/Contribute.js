@@ -30,9 +30,12 @@ const Contribute = () => {
   const [initials, setInitials] = useState("");
   const [showName, setShowName] = useState(false);
   const [showTitle, setShowTitle] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   const [name, setName] = useState("");
   const [courseTitle, setCourseTitle] = useState("");
   const [courseCode, setCourseCode] = useState("");
+  const inRegex = /^[a-zA-Z]{3}$/;
+  const ccRegex = /^[a-zA-Z]{3}[0-9]{3}$/;
   const { isSuccess, data, refetch } = useQuery(
     ["/api/facultyverify", departmentID, String(initials)],
     getAFacultyVerification,
@@ -48,11 +51,13 @@ const Contribute = () => {
     ["/api/courseverify", departmentID, String(courseCode)],
     getACourseVerification,
     {
-      enabled: parseInt(departmentID) !== 0 && courseCode.length == 6,
+      enabled:
+        parseInt(departmentID) !== 0 &&
+        courseCode.length == 6 &&
+        !!courseCode.match(ccRegex),
     }
   );
   async function submitFaculty() {
-    const inRegex = /^[a-zA-Z]{3}$/;
     if (
       parseInt(departmentID) !== 0 &&
       initials.match(inRegex) &&
@@ -73,7 +78,7 @@ const Contribute = () => {
       }
     }
   }
-  const ccRegex = /^[a-zA-Z]{3}[0-9]{3}$/;
+
   async function submitCourse() {
     if (
       parseInt(departmentID) !== 0 &&
@@ -225,6 +230,14 @@ const Contribute = () => {
           Course
         </div>
       </div>
+      <div
+        className="global-info-header"
+        onClick={(event) => setShowHelp((prev) => !prev)}
+      >
+        {showHelp
+          ? "We all take about four courses each semester. So we know about the the courses and the faculties who take them. In theory, if each of us write the information about the faculties and courses we have taken, then we'll have a complete listing of all the faculties and courses in each department. So go ahead and give those little bits of information like faculty initials and faculty name or course code and course title. Please keep in mind that, after contributing, you should also verify by giving an upvote or downvote in the verify section. Cause you know, not everyone can type accurately all the time."
+          : "What's this?"}
+      </div>
       {tab === "faculty" && (
         <>
           <div className="contribute-verify-wrapper">
@@ -254,8 +267,8 @@ const Contribute = () => {
                   limit={3}
                   finalRegex={/^[a-zA-Z]{3}$/}
                   allowedRegex={/^[a-zA-Z]*$/}
-                  errorMsg={`Type something like "TBA" :)`}
-                  placeholder={`Type the initials of the faculty you would like to add to the database`}
+                  errorMsg={`Type something like "ARF"`}
+                  placeholder={`Faculty Initials`}
                 />
               </div>
             )}
@@ -335,8 +348,8 @@ const Contribute = () => {
                               limit={50}
                               finalRegex={/^[a-zA-Z ]{3, 50}$/}
                               allowedRegex={/^[a-zA-Z ]*$/}
-                              errorMsg={`Type something like "To Be Announced" :)`}
-                              placeholder={`Type the full name of the faculty you would like to add to the database`}
+                              errorMsg={`Type something like "ARIF SHAKIL"`}
+                              placeholder={`Full name of the faculty`}
                             />
                           </div>
                           <div className="submit-btn" onClick={submitFaculty}>
@@ -363,8 +376,8 @@ const Contribute = () => {
                     limit={50}
                     finalRegex={/^[a-zA-Z ]{3, 50}$/}
                     allowedRegex={/^[a-zA-Z ]*$/}
-                    errorMsg={`Type something like "To Be Announced" :)`}
-                    placeholder={`Type the full name of the faculty you would like to add to the database`}
+                    errorMsg={`Type something like "ARIF SHAKIL"`}
+                    placeholder={`Full name of the faculty`}
                   />
                 </div>
                 <div className="submit-btn" onClick={submitFaculty}>
@@ -406,8 +419,8 @@ const Contribute = () => {
                   type=""
                   finalRegex={/^[a-zA-Z]{3}[0-9]{3}$/}
                   allowedRegex={/^[a-zA-Z0-9]*$/}
-                  errorMsg={`Type something like "CSE420" :)`}
-                  placeholder={`Type the course code of the course you would like to add to the database`}
+                  errorMsg={`Type something like "CSE110" :)`}
+                  placeholder={`Course Code`}
                 />
               </div>
             )}
@@ -481,8 +494,8 @@ const Contribute = () => {
                               type=""
                               finalRegex={/^[a-zA-Z ]{3, 50}$/}
                               allowedRegex={/^[a-zA-Z ]*$/}
-                              errorMsg={`Type something like "Introduction to microfinance" :)`}
-                              placeholder={`Type the full title of the course you would like to add to the database`}
+                              errorMsg={`Type something like "PROGRAMMING LANGUAGE I" :)`}
+                              placeholder={`Full title of the course`}
                             />
                           </div>
                           <div className="submit-btn" onClick={submitCourse}>
@@ -511,8 +524,8 @@ const Contribute = () => {
                       type=""
                       finalRegex={/^[a-zA-Z ]{3, 50}$/}
                       allowedRegex={/^[a-zA-Z ]*$/}
-                      errorMsg={`Type something like "Introduction to microfinance" :)`}
-                      placeholder={`Type the full title of the course you would like to add to the database`}
+                      errorMsg={`Type something like "PROGRAMMING LANGUAGE I"`}
+                      placeholder={`Full title of the course`}
                     />
                   </div>
                   <div className="submit-btn" onClick={submitCourse}>

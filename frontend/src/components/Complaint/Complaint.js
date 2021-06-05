@@ -20,6 +20,7 @@ import refetchicon from "../../assets/img/refetch.svg";
 const Complaint = () => {
   const queryClient = useQueryClient();
   const topBarRef = useRef(null);
+  const [showHelp, setShowHelp] = useState(false);
   const [tab, setTab] = useLocalStorage("complaintab", "");
   const { addToast } = useToasts();
   const [complaint, setComplaint] = useState("");
@@ -126,6 +127,14 @@ const Complaint = () => {
         >
           Post complaint
         </div>
+      </div>
+      <div
+        className="global-info-header"
+        onClick={(event) => setShowHelp((prev) => !prev)}
+      >
+        {showHelp
+          ? "There's always some drama in each semester. It usually goes like, authority takes a sudden decision >  students disagree > authority changes deicison (not always though ;)) So you might have already guessed it, Here we post all our complaints about each and everything and see which one is best complaint!"
+          : "What's this?"}
       </div>
 
       {tab === "addcomplaint" && (

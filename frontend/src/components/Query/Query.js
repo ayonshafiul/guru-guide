@@ -23,6 +23,7 @@ const Query = () => {
   const [tab, setTab] = useLocalStorage("querytab", "");
   const [page, setPage] = useState(1);
   const [userQueryPage, setUserQueryPage] = useState(1);
+  const [showHelp, setShowHelp] = useState(false);
   const [showQueryInput, setShowQueryInput] = useState(true);
   const [queryText, setQueryText] = useState("");
   const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{10,500}$/;
@@ -150,6 +151,14 @@ const Query = () => {
         </div>
       </div>
 
+      <div
+        className="global-info-header"
+        onClick={(event) => setShowHelp((prev) => !prev)}
+      >
+        {showHelp
+          ? "This section is just like a youtube comment section but people ask here questions and get answers! Please keep in mind that eveyrone can see your questions and answers. So, try to maintain a high level of decency."
+          : "What's this?"}
+      </div>
       {tab === "queries" && isQuerySuccess && typeof queryData !== "undefined" && (
         <>
           <motion.div

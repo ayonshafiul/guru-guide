@@ -1,7 +1,7 @@
 import "./CourseList.css";
 import { motion } from "framer-motion";
 import pageAnimationVariant from "../../AnimationData";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useQuery } from "react-query";
 import { getCourse } from "../../Queries";
 import { departments } from "../../serverDetails";
@@ -14,6 +14,7 @@ import refetchicon from "../../assets/img/refetch.svg";
 const CourseList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
+  const [showHelp, setShowHelp] = useState(false);
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("courselistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
@@ -91,6 +92,14 @@ const CourseList = () => {
             <option value="vote">Number of votes</option>
           </select>
         )}
+      </div>
+      <div
+        className="global-info-header"
+        onClick={(event) => setShowHelp((prev) => !prev)}
+      >
+        {showHelp
+          ? "Here you'll see all verified courses in each deparment. You can go ahead and post a review about each course or give a rating on the difficulty level. If you can't find the course then head over to the contribute section and add information about  that course."
+          : "What's this?"}
       </div>
       <motion.div
         whileTap={{ scale: 0.8 }}
