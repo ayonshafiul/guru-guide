@@ -249,7 +249,10 @@ const FacultyDetails = (props) => {
             )
           : ""}
       </div>
-
+      <div classname="global-info-text">
+        In order to post a review or a rating you must select a course from
+        below:
+      </div>
       <div className="course-wrapper">
         <select
           className="select-css"
