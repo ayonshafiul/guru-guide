@@ -30,8 +30,8 @@ dbPool.getConnection(function (err, connection) {
             } else {
               if (
                 secondResults.length > 0 &&
-                secondResults[0].downVoteSum < result.upvote
-                /* && result.upvote > 9 */
+                secondResults[0].downVoteSum < result.upvote &&
+                result.upvote > 9
               ) {
                 let thirdSql =
                   "Update faculty set facultyName = ? , approved = 1 where facultyInitials = ? and departmentID = ?";
@@ -139,7 +139,8 @@ dbPool.getConnection(function (err, connection) {
             } else {
               if (
                 secondResults.length > 0 &&
-                secondResults[0].downVoteSum < result.upvote
+                secondResults[0].downVoteSum < result.upvote &&
+                result.upvote > 9
               ) {
                 let thirdSql =
                   "Update course set courseTitle = ? , approved = 1 where courseCode = ? and departmentID = ?";
