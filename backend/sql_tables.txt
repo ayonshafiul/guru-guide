@@ -109,7 +109,7 @@ CREATE TABLE comment (
     studentID int,
     facultyID int,
     courseID int,
-    commentText varchar(500),
+    commentText varchar(510),
     upVoteSum int not null default '0',
     downVoteSum int not null default '0',
     Primary Key(commentID),
@@ -132,7 +132,7 @@ CREATE TABLE commentvote(
 CREATE TABLE complain (
     complainID int AUTO_INCREMENT,
     studentID int,
-    complainText varchar(310),
+    complainText varchar(510),
     upVoteSum int not null default '0',
     downVoteSum int not null default '0',
     Primary Key(complainID),

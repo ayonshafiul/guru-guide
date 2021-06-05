@@ -22,7 +22,7 @@ const QueryItem = (props) => {
   const [showReplyInput, setShowReplyInput] = useState(false);
   const [showReply, setShowReply] = useState(false);
   const [reply, setReply] = useState("");
-  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{10,300}$/;
+  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{10,500}$/;
   const allowedRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]*$/;
   const { isSuccess, data, refetch } = useQuery(
     ["/api/reply", String(queryID), String(page)],
@@ -194,7 +194,7 @@ const QueryItem = (props) => {
             value={reply}
             type={"textarea"}
             setValue={setReply}
-            limit={300}
+            limit={500}
             finalRegex={finalRegex}
             allowedRegex={allowedRegex}
             lowercase={true}

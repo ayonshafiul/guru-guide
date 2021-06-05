@@ -41,7 +41,7 @@ const FacultyDetails = (props) => {
   const [commentPage, setCommentPage] = useState(1);
   const [comment, setComment] = useState("");
   const allowedRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]*$/;
-  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,300}$/;
+  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,500}$/;
 
   const {
     isLoading: commentIsLoading,
@@ -392,7 +392,7 @@ const FacultyDetails = (props) => {
                     value={comment}
                     type={"textarea"}
                     setValue={setComment}
-                    limit={300}
+                    limit={500}
                     finalRegex={finalRegex}
                     allowedRegex={allowedRegex}
                     lowercase={true}

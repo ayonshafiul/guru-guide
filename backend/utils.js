@@ -28,13 +28,13 @@ module.exports.validateEmail = (email) => {
 
 module.exports.validateComment = (cmnt) => {
   return Joi.string()
-    .regex(/^[a-zA-Z0-9 ,.()?:-_'"!]{2,300}$/)
+    .regex(/^[a-zA-Z0-9 ,.()?:-_'"!]{2,510}$/)
     .validate(cmnt);
 };
 
 module.exports.validateComplaint = (complaint) => {
   return Joi.string()
-    .regex(/^[a-zA-Z0-9 ,.()?:-_'"!]{10,310}$/)
+    .regex(/^[a-zA-Z0-9 ,.()?:-_'"!]{10,510}$/)
     .validate(complaint);
 };
 

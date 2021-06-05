@@ -25,7 +25,7 @@ const Query = () => {
   const [userQueryPage, setUserQueryPage] = useState(1);
   const [showQueryInput, setShowQueryInput] = useState(true);
   const [queryText, setQueryText] = useState("");
-  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{10,300}$/;
+  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{10,500}$/;
   const allowedRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]*$/;
   const {
     isSuccess: isQuerySuccess,
@@ -204,7 +204,7 @@ const Query = () => {
                 value={queryText}
                 type={"textarea"}
                 setValue={setQueryText}
-                limit={300}
+                limit={500}
                 finalRegex={finalRegex}
                 allowedRegex={allowedRegex}
                 lowercase={true}

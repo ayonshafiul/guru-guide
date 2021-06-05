@@ -68,7 +68,7 @@ const CourseDetails = () => {
     });
   }
   const allowedRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]*$/;
-  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,300}$/;
+  const finalRegex = /^[a-zA-Z0-9 ,.()?:-_'"!]{2,500}$/;
   async function submitCourseComment() {
     if (comment.match(finalRegex)) {
       const data = await postCourseComment({ comment, courseID: cid });
@@ -263,7 +263,7 @@ const CourseDetails = () => {
                     value={comment}
                     type={"textarea"}
                     setValue={setComment}
-                    limit={300}
+                    limit={500}
                     finalRegex={finalRegex}
                     allowedRegex={allowedRegex}
                     lowercase={true}

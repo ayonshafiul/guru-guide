@@ -172,8 +172,8 @@ const Complaint = () => {
                     value={complaint}
                     type={"textarea"}
                     setValue={setComplaint}
-                    limit={300}
-                    finalRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]{10,300}$/}
+                    limit={500}
+                    finalRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]{10,500}$/}
                     allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
                     lowercase={true}
                     errorMsg={`Please type at least 10 characters!.`}
@@ -191,8 +191,8 @@ const Complaint = () => {
                 value={complaint}
                 type={"textarea"}
                 setValue={setComplaint}
-                limit={300}
-                finalRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]{10,300}$/}
+                limit={500}
+                finalRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]{10,500}$/}
                 allowedRegex={/^[a-zA-Z0-9 ,.()?:-_'"!]*$/}
                 lowercase={true}
                 errorMsg={`Please type at least 10 characters!.`}
