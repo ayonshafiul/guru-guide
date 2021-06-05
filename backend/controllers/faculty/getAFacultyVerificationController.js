@@ -4,11 +4,12 @@ const {
   createSuccessObjectWithData,
   validateNumber,
   validateCharactersOnly,
+  validateInitials
 } = require("../../utils");
 
 module.exports = function (req, res, next) {
   let departmentID = validateNumber(req.params.departmentID);
-  let facultyInitials = validateCharactersOnly(req.params.facultyInitials);
+  let facultyInitials = validateInitials(req.params.facultyInitials);
 
   if (departmentID.error || facultyInitials.error) {
     return res.json(

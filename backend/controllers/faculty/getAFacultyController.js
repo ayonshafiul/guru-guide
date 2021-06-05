@@ -1,12 +1,15 @@
 const dbPool = require("../../dbPool");
 const {
-  validateNumber,
+  validateHex,
   createErrorObject,
   createSuccessObjectWithData,
 } = require("../../utils");
 
 module.exports = function (req, res, next) {
-  let facultyID = req.params.facultyID;
+  let facultyID = validateHex(req.params.facultyID);
+  if (facultyID.error) {
+    return res.json(createErrorObject("Invalid hex"));
+  }
   dbPool.getConnection(function (err, connection) {
     if (err) {
       next(err);

@@ -4,11 +4,13 @@ const {
   createSuccessObjectWithData,
   validateAlphaNumeric,
   validateNumber,
+  validateCourseCode
 } = require("../../utils");
 module.exports = function (req, res) {
   let departmentID = validateNumber(req.params.departmentID);
-  let courseCode = validateAlphaNumeric(req.params.courseCode);
+  let courseCode = validateCourseCode(req.params.courseCode);
 
+  
   if (departmentID.error || courseCode.error) {
     return res.json(createErrorObject("Invalid departmentID or courseCode"));
   }

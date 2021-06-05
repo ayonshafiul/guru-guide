@@ -1,22 +1,26 @@
 const dbPool = require("../../dbPool");
 const {
-  validateNumber,
+  validateHex,
   createErrorObject,
   createSuccessObjectWithData,
 } = require("../../utils");
 
 module.exports = function (req, res, next) {
-  let courseID = req.params.courseID;
+  let courseID = validateHex(req.params.courseID);
+
+  if(courseID.error) {
+    return res.json(createErrorObject("Invalid hex"));
+  }
 
   dbPool.getConnection(function (err, connection) {
     if (err) {
       next(err);
       return;
     }
-    let sql = "SELECT courseID, courseTitle, courseCode, departmentID, difficulty, rateCount from course where cuid=UUID_TO_BIN(?)";
-    connection.query(sql, courseID, (error, results) => {
+    let sql =
+      "SELECT courseID, courseTitle, courseCode, departmentID, difficulty, rateCount from course where cuid=UUID_TO_BIN(?)";
+    connection.query(sql, courseID.value, (error, results) => {
       if (error) {
-        console.log(error);
         connection.release();
         res.json(createErrorObject("Error while querying"));
       } else {

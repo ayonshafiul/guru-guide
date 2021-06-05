@@ -76,7 +76,7 @@ const Verify = () => {
         onClick={(event) => setShowHelp((prev) => !prev)}
       >
         {showHelp
-          ? "You might be wondering why the faculty or course that you added in the contribute section didn't appear in the faculty or course list immediately. It's because since everyone can contribute, there might be wrong or incorrect data. That's why in this section through voting we decide which entry is the correct one, since the right information will get all the upvotes. So go ahead and vote. If the correct faculty or course gets at least 10 upvotes then it will be updated in the verified list automatically at about 3 A.M. every night. Likewise, entries in the verified list can be removed too. Cause you know, there would be people who will add 'TBA' as a faculty and upvote it till it's verified. To unverify, the highest upvoted entry needs to have more downvotes than upvotes and it would be removed from the verified list. Btw, thank you for reading this long tutorial :)"
+          ? "You might be wondering why the faculty or course that you added in the contribute section didn't appear in the faculty or course list immediately. It's because since everyone can contribute, there might be wrong or incorrect data. That's why in this section through voting we decide which entry is the correct one, since the right information will get all the upvotes. So go ahead and vote. If the correct faculty or course gets at least 3 upvotes then it will be updated in the verified list automatically at about 3 A.M. every night. Likewise, entries in the verified list can be removed too. Cause you know, there would be people who will add 'TBA' as a faculty and upvote it till it's verified. To unverify, the highest upvoted entry needs to have more downvotes than upvotes and it would be removed from the verified list. Btw, thank you for reading this long tutorial :)"
           : "I'm confused! What does this section do?"}
       </div>
       {tab === "faculty" && (
@@ -147,14 +147,18 @@ const Verify = () => {
                       >
                         <div
                           className={
-                            faculty.upVoteSum > 9
+                            faculty.upVoteSum > 2
                               ? "verify-list-item"
                               : "verify-list-item needs-verification"
                           }
                         >
                           <div>{faculty.facultyInitials}</div>
                           <div>
-                            {faculty.upVoteSum > 9 ? "" : "Needs Verification"}
+                            {faculty.upVoteSum > 2
+                              ? ""
+                              : `Needs Verification. ${
+                                  3 - faculty.upVoteSum
+                                } vote(s) needed`}
                           </div>
                         </div>
                       </Link>
@@ -232,14 +236,18 @@ const Verify = () => {
                       >
                         <div
                           className={
-                            course.upVoteSum > 9
+                            course.upVoteSum > 2
                               ? "verify-list-item"
                               : "verify-list-item needs-verification"
                           }
                         >
                           <div>{course.courseCode}</div>
                           <div>
-                            {course.upVoteSum > 9 ? "" : "Needs Verification"}
+                            {course.upVoteSum > 2
+                              ? ""
+                              : `Needs Verification. ${
+                                  3 - course.upVoteSum
+                                } vote(s) needed`}
                           </div>
                         </div>
                       </Link>

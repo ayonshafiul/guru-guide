@@ -31,7 +31,7 @@ dbPool.getConnection(function (err, connection) {
               if (
                 secondResults.length > 0 &&
                 secondResults[0].downVoteSum < result.upvote &&
-                result.upvote > 9
+                result.upvote > 2
               ) {
                 let thirdSql =
                   "Update faculty set facultyName = ? , approved = 1 where facultyInitials = ? and departmentID = ?";
@@ -140,7 +140,7 @@ dbPool.getConnection(function (err, connection) {
               if (
                 secondResults.length > 0 &&
                 secondResults[0].downVoteSum < result.upvote &&
-                result.upvote > 9
+                result.upvote > 2
               ) {
                 let thirdSql =
                   "Update course set courseTitle = ? , approved = 1 where courseCode = ? and departmentID = ?";

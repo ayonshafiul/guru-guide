@@ -48,6 +48,23 @@ module.exports.validateCharactersOnly = (str) => {
     .validate(str);
 };
 
+module.exports.validateInitials = (str) => {
+  return Joi.string()
+    .regex(/^[A-Z]{3}$/)
+    .validate(str);
+};
+
+module.exports.validateHex = (str) => {
+  return Joi.string()
+    .regex(/^[a-z0-9-]{36}$/)
+    .validate(str);
+};
+
+module.exports.validateCourseCode = (str) => {
+  return Joi.string()
+    .regex(/^[A-Z]{3}[0-9]{3}$/)
+    .validate(str);
+};
 module.exports.validateCharactersOnlyWithSpaces = (str) => {
   return Joi.string()
     .regex(/^[a-zA-Z ]*$/)

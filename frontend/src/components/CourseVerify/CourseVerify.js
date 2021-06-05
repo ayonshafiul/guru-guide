@@ -125,6 +125,8 @@ const CourseVerify = () => {
         Next update in {Math.floor(nextUpdateRemainingTime / 60 / 60) + "h: "}
         {(Math.floor(nextUpdateRemainingTime / 60) % 60) + "m: "}
         {(nextUpdateRemainingTime % 60) + "s"}
+        <br/>
+        After this waiting time if {code} gets at least 3 upvotes in one of its entries it will be automatically updated
       </div>
       <div className="faculty-verify-header">
         Showing all the entries for "{code}"
@@ -182,7 +184,7 @@ const CourseVerify = () => {
                   <div className="course-verify-info">
                     &#8593; This is the entry with the highest number of upvotes
                     and will be included in the verified database during the
-                    next update cycle <b>only if it has at least 10 upvotes.</b>
+                    next update cycle <b>only if it has at least 3 upvotes.</b>
                     <br />
                     If it gets more downvotes than upvotes then <b>
                       {code}
