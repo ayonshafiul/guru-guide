@@ -156,7 +156,7 @@ const Verify = () => {
                           <div>
                             {faculty.upVoteSum > 2
                               ? ""
-                              : `Needs Verification. ${
+                              : `${
                                   3 - faculty.upVoteSum
                                 } vote(s) needed`}
                           </div>
@@ -245,7 +245,7 @@ const Verify = () => {
                           <div>
                             {course.upVoteSum > 2
                               ? ""
-                              : `Needs Verification. ${
+                              : `${
                                   3 - course.upVoteSum
                                 } vote(s) needed`}
                           </div>
