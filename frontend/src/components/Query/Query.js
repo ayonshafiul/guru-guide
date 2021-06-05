@@ -157,7 +157,7 @@ const Query = () => {
       >
         {showHelp
           ? "This section is just like a youtube comment section but people ask here questions and get answers! Please keep in mind that eveyrone can see your questions and answers. So, try to maintain a high level of decency."
-          : "What's this?"}
+          : "I'm confused! What does this section do?"}
       </div>
       {tab === "queries" && isQuerySuccess && typeof queryData !== "undefined" && (
         <>

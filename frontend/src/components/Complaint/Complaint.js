@@ -134,7 +134,7 @@ const Complaint = () => {
       >
         {showHelp
           ? "There's always some drama in each semester. It usually goes like, authority takes a sudden decision >  students disagree > authority changes deicison (not always though ;)) So you might have already guessed it, Here we post all our complaints about each and everything and see which one is best complaint!"
-          : "What's this?"}
+          : "I'm confused! What does this section do?"}
       </div>
 
       {tab === "addcomplaint" && (

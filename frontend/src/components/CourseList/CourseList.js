@@ -99,7 +99,7 @@ const CourseList = () => {
       >
         {showHelp
           ? "Here you'll see all verified courses in each deparment. You can go ahead and post a review about each course or give a rating on the difficulty level. If you can't find the course then head over to the contribute section and add information about  that course."
-          : "What's this?"}
+          : "I'm confused! What does this section do?"}
       </div>
       <motion.div
         whileTap={{ scale: 0.8 }}

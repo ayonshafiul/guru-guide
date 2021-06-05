@@ -115,7 +115,7 @@ const FacultyList = () => {
         >
           {showHelp
             ? "Here you'll see all the verified faculties. You can go ahead and say nice things about them or better yet, show your appreciation in the rating section. Please keep in mind that you can give multiple reviews and/or ratings for multiple courses they teach. If you can't find your favorite faculty in this list then head over to contribute section and add information about your favorite faculty yourself!."
-            : "What's this?"}
+            : "I'm confused! What does this section do?"}
         </div>
         <motion.div
           whileTap={{ scale: 0.8 }}

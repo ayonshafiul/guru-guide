@@ -94,7 +94,7 @@ const CourseCombo = () => {
           className="global-info-header"
           onClick={(event) => setShowHelp((prev) => !prev)}
         >
-          {showHelp ? "Ever wondered how difficult or easy your next semester is going to be? Well, here you can select your advised courses and get a rough idea about the cumulative difficulty of your next semester." : "What's this?"}
+          {showHelp ? "Ever wondered how difficult or easy your next semester is going to be? Well, here you can select your advised courses and get a rough idea about the cumulative difficulty of your next semester." : "I'm confused! What does this section do?"}
         </div>
         {courseCombo.length > 0 ? (
           <>

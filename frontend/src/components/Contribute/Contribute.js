@@ -236,7 +236,7 @@ const Contribute = () => {
       >
         {showHelp
           ? "We all take about four courses each semester. So we know about the the courses and the faculties who take them. In theory, if each of us write the information about the faculties and courses we have taken, then we'll have a complete listing of all the faculties and courses in each department. So go ahead and give those little bits of information like faculty initials and faculty name or course code and course title. Please keep in mind that, after contributing, you should also verify by giving an upvote or downvote in the verify section. Cause you know, not everyone can type accurately all the time."
-          : "What's this?"}
+          : "I'm confused! What does this section do?"}
       </div>
       {tab === "faculty" && (
         <>
