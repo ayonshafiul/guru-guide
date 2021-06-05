@@ -18,7 +18,7 @@ module.exports = function (req, res, next) {
 
     let sql =
       "SELECT facultyID, facultyName, facultyInitials, departmentID, teaching, grading, friendliness, voteCount from faculty where fuid=UUID_TO_BIN(?)";
-    connection.query(sql, facultyID, (error, results) => {
+    connection.query(sql, facultyID.value, (error, results) => {
       if (error) {
         console.log(error);
         res.json(createErrorObject("Error while querying"));

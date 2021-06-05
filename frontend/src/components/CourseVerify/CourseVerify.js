@@ -126,7 +126,7 @@ const CourseVerify = () => {
         {(Math.floor(nextUpdateRemainingTime / 60) % 60) + "m: "}
         {(nextUpdateRemainingTime % 60) + "s"}
         <br/>
-        After this waiting time if {code} gets at least 3 upvotes in one of its entries it will be automatically updated
+        After this waiting time if {code} gets at least 3 upvotes in one of its entries it will be automatically added in course list
       </div>
       <div className="faculty-verify-header">
         Showing all the entries for "{code}"

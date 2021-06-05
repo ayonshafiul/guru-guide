@@ -124,7 +124,7 @@ const FacultyVerify = () => {
         {(nextUpdateRemainingTime % 60) + "s"}
         <br />
         After this waiting time if {initials} gets at least 3 upvotes in one of
-        its entries it will be automatically updated
+        its entries it will be automatically added in the faculty list
       </div>
       <div className="faculty-verify-header">
         Showing all the entries for "{initials}"
