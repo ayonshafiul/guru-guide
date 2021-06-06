@@ -25,31 +25,46 @@ const FacultyList = () => {
     switch (sort) {
       case "rating":
         let avgA =
-          (a.teaching / a.voteCount +
-            a.grading / a.voteCount +
-            a.friendliness / a.voteCount) /
-          3;
+          a.voteCount != 0
+            ? (a.teaching / a.voteCount +
+                a.grading / a.voteCount +
+                a.friendliness / a.voteCount) /
+              3
+            : 0;
         let avgB =
-          (b.teaching / b.voteCount +
-            b.grading / b.voteCount +
-            b.friendliness / b.voteCount) /
-          3;
+          b.voteCount != 0
+            ? (b.teaching / b.voteCount +
+                b.grading / b.voteCount +
+                b.friendliness / b.voteCount) /
+              3
+            : 0;
         sortValue = avgB >= avgA ? 1 : -1;
         break;
       case "alphabetical":
         sortValue =
-          a.facultyName.toUpperCase() > b.facultyName.toUpperCase() ? 1 : -1;
+          a.facultyName.toUpperCase() >= b.facultyName.toUpperCase() ? 1 : -1;
         break;
       case "teaching":
         sortValue =
-          b.teaching / b.voteCount >= a.teaching / a.voteCount ? 1 : -1;
+          (b.voteCount != 0 ? b.teaching / b.voteCount : 0) >=
+          (a.voteCount != 0 ? a.teaching / a.voteCount : 0)
+            ? 1
+            : -1;
         break;
       case "grading":
-        sortValue = b.grading / b.voteCount >= a.grading / a.voteCount ? 1 : -1;
+        sortValue =
+          (b.voteCount != 0 ? b.grading / b.voteCount : 0) >=
+          (a.voteCount != 0 ? a.grading / a.voteCount : 0)
+            ? 1
+            : -1;
         break;
       case "friendliness":
         sortValue =
-          b.friendliness / b.voteCount >= a.friendliness / a.voteCount ? 1 : -1;
+          (b.voteCount != 0 ? b.friendliness / b.voteCount : 0) >=
+          (a.voteCount != 0 ? a.friendliness / a.voteCount : 0)
+            ? 1
+            : -1;
+
         break;
       case "vote":
         sortValue = b.voteCount >= a.voteCount ? 1 : -1;
@@ -125,17 +140,17 @@ const FacultyList = () => {
           <img src={refetchicon} />
           <div className="global-refetch-btn-title">Refresh</div>
         </motion.div>
-        {isError ? <div>Error Fetching data...</div> : null}
-        {isSuccess &&
-          typeof data.data !== undefined &&
-          data.data.sort(sortFunction).map((faculty) => {
-            return (
-              <FacultyListItem
-                faculty={faculty}
-                key={faculty.facultyInitials}
-              />
-            );
-          })}
+        {isError ? <div>Couldn't load faculty data...</div> : null}
+        {isSuccess && typeof data !== "undefined"
+          ? data.data.sort(sortFunction).map((faculty) => {
+              return (
+                <FacultyListItem
+                  faculty={faculty}
+                  key={faculty.facultyInitials}
+                />
+              );
+            })
+          : null}
       </div>
     </motion.div>
   );

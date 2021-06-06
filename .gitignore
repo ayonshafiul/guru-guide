@@ -4,3 +4,4 @@ dist/
 .env
 TODO
 .yarn
+localVerify.js
