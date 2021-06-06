@@ -10,7 +10,7 @@ const Comment = (props) => {
         className="comment-text"
         onClick={(event) => (event.target.innerText = commentText)}
       >
-        {downVoteSum - upVoteSum > 5
+        {downVoteSum > upVoteSum 
           ? "Negative content ahead! *CLICK* to view anyway."
           : commentText}
       </div>
