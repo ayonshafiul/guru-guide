@@ -8,7 +8,8 @@ export const departments = [
     "MNS",
     "BBS",
     "PHR",
-    "TBA"
+    "",
+    "ENH"
 ]
 
 const server  = {

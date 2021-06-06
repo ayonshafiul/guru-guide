@@ -16,6 +16,7 @@ const departmentArray = [
   "BBS",
   "PHR",
   "TBA",
+  "ENH",
 ];
 const numVotes = 100;
 const numRates = 100;
