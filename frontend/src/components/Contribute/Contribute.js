@@ -238,6 +238,7 @@ const Contribute = () => {
           ? "We all take about four courses each semester. So we know about the the courses and the faculties who take them. In theory, if each of us write the information about the faculties and courses we have taken, then we'll have a complete listing of all the faculties and courses in each department. So go ahead and give those little bits of information like faculty initials and faculty name or course code and course title. Please keep in mind that, after contributing, you should also verify by giving an upvote or downvote in the verify section. Cause you know, not everyone can type accurately all the time."
           : "I'm confused! What does this section do?"}
       </div>
+
       {tab === "faculty" && (
         <>
           <div className="contribute-verify-wrapper">
@@ -259,6 +260,11 @@ const Contribute = () => {
                 }
               })}
             </select>
+            <div className="global-info-header">
+              Please keep in mind that, when you add a new faculty, it will not
+              be updated in the faculty list immediately. It needs to get votes
+              from other users in the verify section.
+            </div>
             {parseInt(departmentID) !== 0 && (
               <div className="input">
                 <TextInput
@@ -410,6 +416,11 @@ const Contribute = () => {
                 }
               })}
             </select>
+            <div className="global-info-header">
+              Please keep in mind that, when you add a new course, it will not
+              be updated in the course list immediately. It needs to get votes
+              from other users in the verify section.
+            </div>
             {parseInt(departmentID) !== 0 && (
               <div className="input">
                 <TextInput

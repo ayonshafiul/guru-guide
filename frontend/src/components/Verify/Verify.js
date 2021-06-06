@@ -79,6 +79,7 @@ const Verify = () => {
           ? "You might be wondering why the faculty or course that you added in the contribute section didn't appear in the faculty or course list immediately. It's because since everyone can contribute, there might be wrong or incorrect data. That's why in this section through voting we decide which entry is the correct one, since the right information will get all the upvotes. So go ahead and vote. If the correct faculty or course gets at least 3 upvotes then it will be updated in the verified list automatically at about 3 A.M. every night. Likewise, entries in the verified list can be removed too. Cause you know, there would be people who will add 'TBA' as a faculty and upvote it till it's verified. To unverify, the highest upvoted entry needs to have more downvotes than upvotes and it would be removed from the verified list. Btw, thank you for reading this long tutorial :)"
           : "I'm confused! What does this section do?"}
       </div>
+
       {tab === "faculty" && (
         <>
           <motion.div
@@ -117,6 +118,11 @@ const Verify = () => {
               errorMsg={``}
               placeholder={`Search by initials...`}
             />
+            <div className="global-info-header">
+              If you have just verified a faculty with your vote and do not see
+              it in the faculty list immediately, please do not worry. It will
+              be updated at 3 A.M midnight.
+            </div>
             <div className="verify-list-wrapper">
               {isSuccess &&
                 typeof data !== "undefined" &&
@@ -156,9 +162,7 @@ const Verify = () => {
                           <div>
                             {faculty.upVoteSum > 2
                               ? ""
-                              : `${
-                                  3 - faculty.upVoteSum
-                                } vote(s) needed`}
+                              : `${3 - faculty.upVoteSum} vote(s) needed`}
                           </div>
                         </div>
                       </Link>
@@ -207,6 +211,11 @@ const Verify = () => {
               errorMsg={``}
               placeholder={`Search by course code...`}
             />
+            <div className="global-info-header">
+              If you have just verified a course with your vote and do not see
+              it in the course list immediately, please do not worry. It will be
+              updated at 3 A.M midnight.
+            </div>
             <div className="verify-list-wrapper">
               {isCourseSuccess &&
                 typeof courseData !== "undefined" &&
@@ -245,9 +254,7 @@ const Verify = () => {
                           <div>
                             {course.upVoteSum > 2
                               ? ""
-                              : `${
-                                  3 - course.upVoteSum
-                                } vote(s) needed`}
+                              : `${3 - course.upVoteSum} vote(s) needed`}
                           </div>
                         </div>
                       </Link>
