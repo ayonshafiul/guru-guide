@@ -10,11 +10,14 @@ import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
 import refetchicon from "../../assets/img/refetch.svg";
+import TextInput from "../TextInput/TextInput";
 
 const FacultyList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [showHelp, setShowHelp] = useState(false);
+  const [showContribute, setShowContribute] = useState(false);
+  const [initials, setInitials] = useState("");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
@@ -89,6 +92,33 @@ const FacultyList = () => {
       animate="animate"
     >
       <h1 className="header"> Faculty List</h1>
+      <div
+        className="global-btn-full"
+        onClick={() => {
+          setShowContribute((prev) => !prev);
+        }}
+      >
+        Add faculty in <span className="red">{departments[departmentID]}</span>{" "}
+        department
+      </div>
+      {showContribute && (
+        <>
+          <div className="global-info-text"></div>
+          {parseInt(departmentID) !== 0 && (
+            <div className="input">
+              <TextInput
+                value={initials}
+                setValue={setInitials}
+                limit={3}
+                finalRegex={/^[a-zA-Z]{3}$/}
+                allowedRegex={/^[a-zA-Z]*$/}
+                errorMsg={`Type something like "ARF"`}
+                placeholder={`Faculty Initials`}
+              />
+            </div>
+          )}
+        </>
+      )}
       <div className="faculty-list-wrapper">
         <select
           className="select-css select-css-full"

@@ -6,12 +6,11 @@ CREATE TABLE department(
 
 CREATE TABLE student (
     studentID int AUTO_INCREMENT,
-    name varchar(50),
-    email varchar(50),
+    hash varchar(40),
     departmentID int,
     Primary Key(studentID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index email(email)
+    index hash(hash)
 );
 
 CREATE TABLE faculty(

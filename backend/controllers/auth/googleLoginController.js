@@ -1,12 +1,14 @@
 const dbPool = require("../../dbPool");
 const redisClient = require("../../redisClient");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const { OAuth2Client } = require("google-auth-library");
 const CLIENT_ID = process.env.CLIENT_ID;
 const {
   createErrorObject,
   createSuccessObject,
-  validateEmail,
+  validatesub,
   validateComment,
 } = require("../../utils");
 
@@ -19,42 +21,42 @@ module.exports = function (req, res, next) {
       audience: process.env.CLIENT_ID,
     });
     let payload = null;
-    let email = null;
+    let sub = null;
     try {
       payload = ticket.getPayload();
-      email = validateEmail(payload.email);
-      if (email.error) {
+      if (payload.hd != "g.bracu.ac.bd") {
         return res.json(createErrorObject("notbracu"));
       }
-      email = email.value;
+      sub = payload.sub;
     } catch (err) {
       if (err) {
         return res.json(createErrorObject("Uh oh! Something bad happened!"));
       }
     }
+    let finalSub = sub + process.env.SALT;
+    var shasum = crypto.createHash("sha1");
+    shasum.update(finalSub);
+    let hash = shasum.digest("hex");
 
-    let sql = "SELECT studentID, email from student where email = ?";
     dbPool.getConnection(function (err, connection) {
       if (err) {
         next(err);
         return;
       }
-      connection.query(sql, email, (error, results) => {
+      let sql = "SELECT studentID from student where hash = ?";
+      connection.query(sql, hash, (error, results) => {
         if (error) {
-          
           connection.release();
           res.json(createErrorObject("Error while querying for student!"));
         } else {
           if (results.length == 0) {
             sql = "Insert into student set ?";
             let studentObject = {
-              name: payload.name,
               departmentID: 8,
-              email: payload.email,
+              hash: hash,
             };
             connection.query(sql, studentObject, (error, results) => {
               if (error) {
-                
                 res.json(
                   createErrorObject("Error while creating a new student!")
                 );
@@ -78,9 +80,13 @@ module.exports = function (req, res, next) {
     const token = jwt.sign({ studentID }, process.env.JWT_SECRET, {
       expiresIn: process.env.JWT_EXPIRES_IN,
     });
-    const refreshToken = jwt.sign({ studentID }, process.env.REFRESH_JWT_SECRET, {
-      expiresIn: process.env.REFRESH_JWT_EXPIRES_IN,
-    });
+    const refreshToken = jwt.sign(
+      { studentID },
+      process.env.REFRESH_JWT_SECRET,
+      {
+        expiresIn: process.env.REFRESH_JWT_EXPIRES_IN,
+      }
+    );
     res.cookie("jwt", token, {
       expires: new Date(
         Date.now() +
