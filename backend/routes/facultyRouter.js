@@ -7,12 +7,14 @@ const getAFaculty = require("../controllers/faculty/getAFacultyController");
 const facultyVoteController = require("../controllers/faculty/facultyVoteController");
 const getFacultyVerificationController = require("../controllers/faculty/getFacultyVerificationController");
 const getAFacultyVerificationController = require("../controllers/faculty/getAFacultyVerificationController");
+const getAFacultyByInitials = require("../controllers/faculty/getAFacultyByInitials");
 
 router.route("/faculty").post(addFaculty);
 
 router.route("/faculty/department/:departmentID").get(getFaculty);
 
 router.route("/faculty/:facultyID").get(getAFaculty);
+router.route("/faculty/initials/:facultyInitials").get(getAFacultyByInitials);
 
 router.route("/facultyvote/:facultyID").post(facultyVoteController);
 

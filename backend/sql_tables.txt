@@ -19,14 +19,17 @@ CREATE TABLE faculty(
     facultyName varchar(50),
     departmentID int,
     facultyInitials varchar(3) not null,
-    approved boolean,
     teaching double not null default '0.00',
     grading double not null default '0.00',
     friendliness double not null default '0.00',
     voteCount int not null default '0',
+    duplicateCount int not null default '0',
+    upVoteSum int not null default '0',
+    downVoteSum int not null default '0',
     Primary Key(facultyID),
     Foreign Key(departmentID) references department(departmentID) ON DELETE CASCADE ON UPDATE CASCADE,
-    index f(fuid)
+    index f(fuid),
+    index faculty(facultyInitials, departmentID, upVoteSum)
 );
 
 
