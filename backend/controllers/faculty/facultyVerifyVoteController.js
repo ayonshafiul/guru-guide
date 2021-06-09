@@ -29,7 +29,7 @@ module.exports = function (req, res, next) {
       return;
     }
     let sql =
-      "SELECT facultyID, studentID, upVote, downVote from facultyvote where facultyID = ? AND studentID = ?";
+      "SELECT facultyID, studentID, upVote, downVote from vote where facultyID = ? AND studentID = ?";
     connection.query(
       sql,
       [facultyID.value, studentID],

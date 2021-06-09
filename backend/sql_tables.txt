@@ -72,7 +72,7 @@ CREATE TABLE courseverify (
     index courseverify(courseCode, departmentID, upVoteSum)
 );
 
-CREATE TABLE vote (
+CREATE TABLE facultyverifyvote (
     studentID int,
     facultyID int,
     upVote int,
@@ -81,6 +81,17 @@ CREATE TABLE vote (
     Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
     Foreign Key(facultyID) references facultyverify(facultyID) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE facultyvote (
+    studentID int,
+    fuid binary(16),
+    upVote int,
+    downVote int,
+    Primary Key(studentID, fuid),
+    Foreign Key(studentID) references student(studentID) ON DELETE CASCADE ON UPDATE CASCADE,
+    Foreign Key(fuid) references faculty(fuid) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 
 
 CREATE TABLE coursevote (

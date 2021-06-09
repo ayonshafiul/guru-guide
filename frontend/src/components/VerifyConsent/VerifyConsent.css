@@ -1,0 +1,23 @@
+.verify-consent-wrapper {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.verify-question-wrapper {
+  flex: 10;
+  background-color: #ccc;
+  color: #1f1f1f;
+  padding: 1em;
+  border-radius: 10px;
+
+}
+
+.verify-options-wrapper {
+  flex: 4;
+  margin-left: 1em;
+  background-color: #ccc;
+  color: #1f1f1f;
+  padding: 1em;
+  border-radius: 10px;
+}

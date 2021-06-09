@@ -4,7 +4,7 @@ import { useContext, useState } from "react";
 import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import { useQuery } from "react-query";
-import { getFaculty } from "../../Queries";
+import { getFaculty, getAFacultyByInitials } from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -22,6 +22,14 @@ const FacultyList = () => {
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
     useQuery(["/api/faculty/department", String(departmentID)], getFaculty);
+
+    const { isSuccess: facultyIsSuccess, data: facultyData, refetch : facultyRefetch} = useQuery(
+      ["/api/facultyverify", departmentID, String(initials)],
+      getAFacultyByInitials,
+      {
+        enabled: parseInt(departmentID) !== 0 && initials.length == 3,
+      }
+    );
 
   function sortFunction(a, b) {
     let sortValue = 0;

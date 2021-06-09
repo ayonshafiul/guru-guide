@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
     }
 
     let sql =
-      "SELECT facultyID, facultyName, facultyInitials from faculty where facultyInitials = ";
+      "SELECT facultyID, BIN_TO_UUID(fuid) as fuid, facultyName, facultyInitials from faculty where facultyInitials = ";
     connection.query(sql, facultyInitials.value, (error, results) => {
       if (error) {
         console.log(error);

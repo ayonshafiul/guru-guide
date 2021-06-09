@@ -28,6 +28,15 @@ export const getFacultyVerification = async ({ queryKey }) => {
   );
   return res.data;
 };
+export const getAFacultyByInitials = async ({ queryKey }) => {
+  const [key, departmentID] = queryKey;
+  const res = await axios.get(
+    server.url + "/api/facultyverify/" + departmentID,
+    { withCredentials: true }
+  );
+  return res.data;
+};
+
 
 export const getAFacultyVerification = async ({ queryKey }) => {
   const [key, departmentID, facultyInitials] = queryKey;
