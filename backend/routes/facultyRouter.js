@@ -14,7 +14,9 @@ router.route("/faculty").post(addFaculty);
 router.route("/faculty/department/:departmentID").get(getFaculty);
 
 router.route("/faculty/:facultyID").get(getAFaculty);
-router.route("/faculty/initials/:facultyInitials").get(getAFacultyByInitials);
+router
+  .route("/faculty/:departmentID/:facultyInitials")
+  .get(getAFacultyByInitials);
 
 router.route("/facultyvote/:facultyID").post(facultyVoteController);
 
@@ -25,6 +27,5 @@ router
 router
   .route("/facultyverify/:departmentID/:facultyInitials")
   .get(getAFacultyVerificationController);
-
 
 module.exports = router;

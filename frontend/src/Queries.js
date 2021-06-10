@@ -29,9 +29,9 @@ export const getFacultyVerification = async ({ queryKey }) => {
   return res.data;
 };
 export const getAFacultyByInitials = async ({ queryKey }) => {
-  const [key, departmentID] = queryKey;
+  const [key, departmentID, facultyInitials] = queryKey;
   const res = await axios.get(
-    server.url + "/api/facultyverify/" + departmentID,
+    server.url + "/api/faculty/" + departmentID + "/" + facultyInitials,
     { withCredentials: true }
   );
   return res.data;

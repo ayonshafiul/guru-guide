@@ -2,22 +2,47 @@
   display: flex;
   align-items: stretch;
   justify-content: space-between;
+  font-weight: bold;
 }
 
 .verify-question-wrapper {
   flex: 10;
   background-color: #ccc;
   color: #1f1f1f;
+  display: flex;
+  align-items: center;
   padding: 1em;
   border-radius: 10px;
-
 }
 
 .verify-options-wrapper {
   flex: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-left: 1em;
   background-color: #ccc;
   color: #1f1f1f;
   padding: 1em;
   border-radius: 10px;
+}
+
+.options-button {
+  width: 40%;
+  text-align: center;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 5px;
+}
+.options-img {
+  width: 20px;
+  height: 20px;
+}
+
+.options-no {
+  background-color: #ff6347;
+}
+
+.options-yes {
+  background-color: yellowgreen;
 }

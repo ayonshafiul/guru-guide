@@ -11,25 +11,34 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
 import refetchicon from "../../assets/img/refetch.svg";
 import TextInput from "../TextInput/TextInput";
+import VerifyConsent from "../VerifyConsent/VerifyConsent";
 
 const FacultyList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
   const [showHelp, setShowHelp] = useState(false);
   const [showContribute, setShowContribute] = useState(false);
+  const [legitFaculty, setLegitFaculty] = useState("");
   const [initials, setInitials] = useState("");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
     useQuery(["/api/faculty/department", String(departmentID)], getFaculty);
 
-    const { isSuccess: facultyIsSuccess, data: facultyData, refetch : facultyRefetch} = useQuery(
-      ["/api/facultyverify", departmentID, String(initials)],
-      getAFacultyByInitials,
-      {
-        enabled: parseInt(departmentID) !== 0 && initials.length == 3,
-      }
-    );
+  const {
+    isSuccess: facultyIsSuccess,
+    data: facultyData,
+    refetch: facultyRefetch,
+  } = useQuery(
+    ["/api/faculty/initials", departmentID, String(initials)],
+    getAFacultyByInitials,
+    {
+      enabled: parseInt(departmentID) !== 0 && initials.length == 3,
+      onSuccess: function (data) {
+        console.log(data);
+      },
+    }
+  );
 
   function sortFunction(a, b) {
     let sortValue = 0;
@@ -125,6 +134,33 @@ const FacultyList = () => {
               />
             </div>
           )}
+          {typeof facultyData !== "undefined" && facultyData.data.length > 0 ? (
+            <>
+              <div className="global-info-text">
+                We have the following information in our database:{" "}
+              </div>
+              <FacultyListItem
+                faculty={facultyData.data[0]}
+                key={facultyData.data.facultyInitials}
+              />
+              <VerifyConsent
+                question="Are you sure the faculty initals and faculty name given above are correct?"
+                yesButtonHandler={() => {
+                  console.log("yes");
+                  setLegitFaculty("yes");
+                }}
+                noButtonHandler={() => {
+                  setLegitFaculty("no");
+                }}
+                answerStateVariable={legitFaculty}
+              />
+              {legitFaculty === "yes" ? (
+                <div className="global-btn-full">
+                  Yes, the information is correct.
+                </div>
+              ) : null}
+            </>
+          ) : null}
         </>
       )}
       <div className="faculty-list-wrapper">
