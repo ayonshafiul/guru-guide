@@ -1,6 +1,6 @@
 .faculty-wrapper {
   display: flex;
-  margin: 20px auto;
+  margin: 1em auto;
   color: #1f1f1f;
   justify-content: space-between;
   align-items: stretch;
@@ -25,10 +25,10 @@
 .rating-wrapper {
   margin-left: 1em;
   padding: 1em;
-  border-radius: 10px;
   background: #ccc;
   flex: 4 0 0;
   display: flex;
+  border-radius: 10px;
   justify-content: space-between;
   align-items: center;
 }
@@ -61,6 +61,33 @@
 .red {
   color: red;
 }
+
+.faculty-list-verify-wrapper {
+  color: #ccc;
+  font-weight: bold;
+  margin-bottom: 1em;
+  justify-content: space-between;
+  background-color: #202124;
+  border-radius: 10px;
+}
+/* .faculty-list-verify-left {
+  background-color: #ccc;
+  flex: 10 4 0;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.faculty-list-verify-right {
+  flex: 4 0 0;
+  padding-left: 1em;
+  padding-right: 1em;
+  margin-left: 1em;
+  background-color: #ccc;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+} */
 
 @media screen and (max-width: 600px) {
   .faculty-wrapper {

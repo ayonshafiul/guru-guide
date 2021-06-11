@@ -1,10 +1,14 @@
 import "./FacultyList.css";
 import { motion } from "framer-motion";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import pageAnimationVariant from "../../AnimationData";
 import FacultyListItem from "../FacultyListItem/FacultyListItem";
 import { useQuery } from "react-query";
-import { getFaculty, getAFacultyByInitials } from "../../Queries";
+import {
+  getFaculty,
+  getAFacultyByInitials,
+  getAFacultyVerification,
+} from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -12,6 +16,7 @@ import { Redirect, useLocation } from "react-router-dom";
 import refetchicon from "../../assets/img/refetch.svg";
 import TextInput from "../TextInput/TextInput";
 import VerifyConsent from "../VerifyConsent/VerifyConsent";
+import VerifyPicker from "../VerifyPicker/VerifyPicker";
 
 const FacultyList = () => {
   const location = useLocation();
@@ -19,7 +24,11 @@ const FacultyList = () => {
   const [showHelp, setShowHelp] = useState(false);
   const [showContribute, setShowContribute] = useState(false);
   const [legitFaculty, setLegitFaculty] = useState("");
+  const [legitFacultyID, setLegitFacultyID] = useState(0);
+  const [showVerifyPicker, setShowVerifyPicker] = useState(false);
+  const [showInput, setShowInput] = useState(false);
   const [initials, setInitials] = useState("");
+  const [facultyName, setFacultyName] = useState("");
   const [departmentID, setDepartmentID] = useLocalStorage("departmentID", "1");
   const [sort, setSort] = useLocalStorage("facultylistsort", "");
   const { isSuccess, isLoading, isError, error, data, isFetching, refetch } =
@@ -33,12 +42,50 @@ const FacultyList = () => {
     ["/api/faculty/initials", departmentID, String(initials)],
     getAFacultyByInitials,
     {
-      enabled: parseInt(departmentID) !== 0 && initials.length == 3,
-      onSuccess: function (data) {
-        console.log(data);
-      },
+      enabled: parseInt(departmentID) !== 0 && initials.length === 3,
     }
   );
+
+  const { isSuccess: facultyVerifyIsSuccess, data: facultyVerifyData } =
+    useQuery(
+      ["/api/facultyverify", String(departmentID), String(initials)],
+      getAFacultyVerification,
+      {
+        enabled: parseInt(departmentID) !== 0 && initials.length === 3,
+        onSuccess: function (data) {
+          console.log(data);
+        },
+      }
+    );
+
+  async function submitFacultyVote(event, fuid) {
+    if (legitFaculty === "yes") {
+      // post upvote to faculty
+      // set initials to ""
+      // hide contribute
+    } else {
+      if (typeof facultyData !== "undefined") {
+        setShowVerifyPicker(true);
+        if (facultyData.data[0].duplicateCount > 0) {
+          setShowVerifyPicker(true);
+        } else {
+          // post downvote to faculty
+          // set initials to ""
+          // hide contribute
+        }
+      }
+    }
+  }
+
+  async function submitFaculty() {}
+
+  async function submitFacultyAndFacultyVerifyVote(event, fuid, facultyID) {
+    if (legitFacultyID === -1) {
+      setShowInput(true);
+    } else {
+      // setShowVerifyPicker false
+    }
+  }
 
   function sortFunction(a, b) {
     let sortValue = 0;
@@ -92,6 +139,17 @@ const FacultyList = () => {
     }
     return sortValue;
   }
+
+  useEffect(() => {
+    if (initials.length < 3) {
+      console.log("use");
+      setLegitFacultyID(0);
+      setLegitFaculty("");
+      setShowInput(false);
+      setShowVerifyPicker(false);
+      setFacultyName("");
+    }
+  }, [initials]);
   if (!isAuth)
     return (
       <Redirect
@@ -113,6 +171,11 @@ const FacultyList = () => {
         className="global-btn-full"
         onClick={() => {
           setShowContribute((prev) => !prev);
+          setInitials("");
+          setLegitFaculty("");
+          setLegitFacultyID(0);
+          setFacultyName("");
+          setShowInput(false);
         }}
       >
         Add faculty in <span className="red">{departments[departmentID]}</span>{" "}
@@ -134,35 +197,95 @@ const FacultyList = () => {
               />
             </div>
           )}
-          {typeof facultyData !== "undefined" && facultyData.data.length > 0 ? (
+          {initials.length === 3 && typeof facultyData !== "undefined" && (
             <>
-              <div className="global-info-text">
-                We have the following information in our database:{" "}
-              </div>
-              <FacultyListItem
-                faculty={facultyData.data[0]}
-                key={facultyData.data.facultyInitials}
-              />
-              <VerifyConsent
-                question="Are you sure the faculty initals and faculty name given above are correct?"
-                yesButtonHandler={() => {
-                  console.log("yes");
-                  setLegitFaculty("yes");
-                }}
-                noButtonHandler={() => {
-                  setLegitFaculty("no");
-                }}
-                answerStateVariable={legitFaculty}
-              />
-              {legitFaculty === "yes" ? (
-                <div className="global-btn-full">
-                  Yes, the information is correct.
-                </div>
-              ) : null}
+              {facultyData.data.length > 0 ? (
+                <>
+                  <div className="global-info-text">
+                    We have the following information in our database:{" "}
+                  </div>
+                  <FacultyListItem
+                    faculty={facultyData.data[0]}
+                    key={facultyData.data.facultyInitials}
+                  />
+                  <VerifyConsent
+                    question="Are you sure the faculty initals and faculty name given above are correct?"
+                    yesButtonHandler={() => {
+                      console.log("yes");
+                      setLegitFaculty("yes");
+                    }}
+                    noButtonHandler={() => {
+                      setLegitFaculty("no");
+                    }}
+                    answerStateVariable={legitFaculty}
+                  />
+                  {legitFaculty === "yes" || legitFaculty === "no" ? (
+                    <div
+                      className="global-btn-full"
+                      onClick={submitFacultyVote}
+                    >
+                      {legitFaculty === "yes"
+                        ? "Yes, the informations is correct"
+                        : "No, the information is wrong."}
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  <TextInput
+                    value={facultyName}
+                    setValue={setFacultyName}
+                    limit={50}
+                    finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                    allowedRegex={/^[a-zA-Z ]*$/}
+                    errorMsg={`Type something like "ARIF SHAKIL"`}
+                    placeholder={`Full name of the faculty`}
+                  />
+                  <div className="submit-btn" onClick={submitFaculty}>
+                    Add Faculty
+                  </div>{" "}
+                </>
+              )}
+              {showVerifyPicker && (
+                <>
+                  <VerifyPicker
+                    header="Choose which entry is the correct one from below: "
+                    idKeyName="facultyID"
+                    titleKeyName="facultyName"
+                    verifySelectedID={legitFacultyID}
+                    setVerifySelectedID={setLegitFacultyID}
+                    optionsData={facultyVerifyData}
+                    allowNoVote={true}
+                    submitHandler={submitFacultyAndFacultyVerifyVote}
+                  />
+                  {showInput && (
+                    <>
+                      <div className="global-info-text">
+                        Since you have confirmed that none of the entries we
+                        have so far are correct, please feel free to add the
+                        correct details:
+                      </div>
+                      <TextInput
+                        value={facultyName}
+                        setValue={setFacultyName}
+                        limit={50}
+                        finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                        allowedRegex={/^[a-zA-Z ]*$/}
+                        errorMsg={`Type something like "ARIF SHAKIL"`}
+                        placeholder={`Full name of the faculty`}
+                      />
+                      <div className="submit-btn" onClick={submitFaculty}>
+                        Add Faculty
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
             </>
-          ) : null}
+          )}
         </>
       )}
+
       <div className="faculty-list-wrapper">
         <select
           className="select-css select-css-full"
@@ -221,6 +344,7 @@ const FacultyList = () => {
                 <FacultyListItem
                   faculty={faculty}
                   key={faculty.facultyInitials}
+                  showVerify={true}
                 />
               );
             })
