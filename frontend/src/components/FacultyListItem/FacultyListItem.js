@@ -1,7 +1,12 @@
 import "./FacultyListItem.css";
 import { Link } from "react-router-dom";
+import up from "../../assets/img/up.png";
+import down from "../../assets/img/down.png";
+import { useState } from "react";
 
 const FacultyListItem = (props) => {
+  const [showVerify, setShowVerify] = useState(false);
+  const [showReport, setShowReport] = useState(false);
   let {
     facultyName,
     facultyID,
@@ -58,8 +63,30 @@ const FacultyListItem = (props) => {
         </div>
       </Link>
       {props.showVerify && (
-        <div className="faculty-list-verify-wrapper">Verify</div>
+        <div className="faculty-list-item-verify-wrapper">
+          <div
+            className="faculty-list-item-verify"
+            onClick={() => {
+              setShowVerify((prev) => !prev);
+              setShowReport(false);
+            }}
+          >
+            <img src={showVerify ? up : down} />
+            Verify
+          </div>
+          <div
+            className="faculty-list-item-report"
+            onClick={() => {
+              setShowReport((prev) => !prev);
+              setShowVerify(false);
+            }}
+          >
+            <img src={showReport ? up : down} />
+            Report
+          </div>
+        </div>
       )}
+      
     </>
   );
 };

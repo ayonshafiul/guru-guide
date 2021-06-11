@@ -62,13 +62,21 @@
   color: red;
 }
 
-.faculty-list-verify-wrapper {
+.faculty-list-item-verify-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   color: #ccc;
   font-weight: bold;
   margin-bottom: 1em;
   justify-content: space-between;
   background-color: #202124;
-  border-radius: 10px;
+}
+
+.faculty-list-item-verify-wrapper img {
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
 }
 /* .faculty-list-verify-left {
   background-color: #ccc;

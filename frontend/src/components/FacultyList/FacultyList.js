@@ -167,6 +167,7 @@ const FacultyList = () => {
       animate="animate"
     >
       <h1 className="header"> Faculty List</h1>
+      {showContribute}
       <div
         className="global-btn-full"
         onClick={() => {
