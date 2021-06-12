@@ -11,3 +11,7 @@
 .verify-picker-option-selected {
   background-color: yellowgreen;
 }
+
+.margin {
+  margin: 0em 1em;
+}

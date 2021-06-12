@@ -3,10 +3,17 @@ import { Link } from "react-router-dom";
 import up from "../../assets/img/up.png";
 import down from "../../assets/img/down.png";
 import { useState } from "react";
+import VerifyConsent from "../VerifyConsent/VerifyConsent";
+import VerifyPicker from "../VerifyPicker/VerifyPicker";
+import { useQuery } from "react-query";
+import { getAFacultyVerification } from "../../Queries";
 
 const FacultyListItem = (props) => {
   const [showVerify, setShowVerify] = useState(false);
   const [showReport, setShowReport] = useState(false);
+  const [legitFaculty, setLegitFaculty] = useState("");
+  const [legitFacultyID, setLegitFacultyID] = useState(0);
+  const [report, setReport] = useState("");
   let {
     facultyName,
     facultyID,
@@ -16,7 +23,25 @@ const FacultyListItem = (props) => {
     friendliness,
     voteCount,
     fuid,
+    duplicateCount,
+    departmentID,
   } = props.faculty;
+  const { isSuccess: facultyVerifyIsSuccess, data: facultyVerifyData } =
+    useQuery(
+      ["/api/facultyverify", String(departmentID), String(facultyInitials)],
+      getAFacultyVerification,
+      {
+        enabled: legitFaculty === "no",
+        onSuccess: function (data) {
+          console.log(data);
+        },
+      }
+    );
+
+  async function submitVote() {
+    console.log(legitFaculty);
+  }
+
   if (voteCount === 0) {
     voteCount = 0.1;
   }
@@ -69,6 +94,7 @@ const FacultyListItem = (props) => {
             onClick={() => {
               setShowVerify((prev) => !prev);
               setShowReport(false);
+              setReport("");
             }}
           >
             <img src={showVerify ? up : down} />
@@ -79,6 +105,8 @@ const FacultyListItem = (props) => {
             onClick={() => {
               setShowReport((prev) => !prev);
               setShowVerify(false);
+              setLegitFaculty("");
+              setLegitFacultyID(0);
             }}
           >
             <img src={showReport ? up : down} />
@@ -86,7 +114,49 @@ const FacultyListItem = (props) => {
           </div>
         </div>
       )}
-      
+
+      {showVerify && (
+        <>
+          <VerifyConsent
+            question="Are you sure the faculty initals and faculty name given above are correct?"
+            yesButtonHandler={() => {
+              setLegitFaculty("yes");
+            }}
+            noButtonHandler={() => {
+              setLegitFaculty("no");
+            }}
+            answerStateVariable={legitFaculty}
+            margin={true}
+          />
+          {legitFaculty === "no" && (
+            <VerifyPicker
+              header="Choose which entry is the correct one from below: "
+              idKeyName="facultyID"
+              titleKeyName="facultyName"
+              verifySelectedID={legitFacultyID}
+              setVerifySelectedID={setLegitFacultyID}
+              optionsData={facultyVerifyData}
+              submitHandler={submitVote}
+              allowNoVote={true}
+              submitButtonText="Submit verification"
+              margin={true}
+            />
+          )}
+        </>
+      )}
+      {showReport && (
+        <VerifyConsent
+          question="Do you think that this entry contains offensive language and/or out of context details?"
+          yesButtonHandler={() => {
+            setReport("yes");
+          }}
+          noButtonHandler={() => {
+            setReport("no");
+          }}
+          answerStateVariable={report}
+          margin={true}
+        />
+      )}
     </>
   );
 };

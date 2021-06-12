@@ -10,9 +10,15 @@ const VerifyPicker = (props) => {
     verifySelectedID,
     setVerifySelectedID,
     submitHandler,
+    margin,
+    submitButtonText,
   } = props;
   return (
-    <div className="verify-picker-wrapper">
+    <div
+      className={
+        margin ? "verify-picker-wrapper margin" : "verify-picker-wrapper"
+      }
+    >
       <div className="global-info-text">{header}</div>
       {typeof optionsData !== "undefined" &&
         optionsData.data.map((option) => {
@@ -42,11 +48,11 @@ const VerifyPicker = (props) => {
           }
           onClick={() => setVerifySelectedID(-1)}
         >
-          Each one of them is wrong!
+          None of them are correct
         </div>
       )}
       <div className="global-btn-full" onClick={submitHandler}>
-        Submit Vote
+        {submitButtonText ? submitButtonText : "Submit"}
       </div>
     </div>
   );

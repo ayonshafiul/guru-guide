@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
   }
 
   let sql =
-    "SELECT facultyName, facultyInitials, departmentID, BIN_TO_UUID(fuid) as fuid, teaching, grading, friendliness, voteCount from faculty where departmentID = ? and approved = 1";
+    "SELECT facultyName, facultyInitials, departmentID, BIN_TO_UUID(fuid) as fuid, teaching, grading, friendliness, voteCount, duplicateCount from faculty where departmentID = ? and approved = 1";
 
   dbPool.query(sql, departmentID.value, (error, results) => {
     if (error) {
