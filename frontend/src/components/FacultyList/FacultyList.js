@@ -8,11 +8,13 @@ import {
   getFaculty,
   getAFacultyByInitials,
   getAFacultyVerification,
+  postFaculty,
 } from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Redirect, useLocation } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 import refetchicon from "../../assets/img/refetch.svg";
 import TextInput from "../TextInput/TextInput";
 import VerifyConsent from "../VerifyConsent/VerifyConsent";
@@ -21,6 +23,7 @@ import VerifyPicker from "../VerifyPicker/VerifyPicker";
 const FacultyList = () => {
   const location = useLocation();
   const { isAuth } = useContext(AuthContext);
+  const { addToast } = useToasts();
   const [showHelp, setShowHelp] = useState(false);
   const [showContribute, setShowContribute] = useState(false);
   const [legitFaculty, setLegitFaculty] = useState("");
@@ -77,7 +80,20 @@ const FacultyList = () => {
     }
   }
 
-  async function submitFaculty() {}
+  async function submitFaculty() {
+    const res = await postFaculty({
+      departmentID,
+      facultyInitials: initials,
+      facultyName,
+    });
+    if (res.success) {
+      addToast("Thanks for your feedback!");
+      setShowContribute(false);
+      setFacultyName("");
+      setInitials("");
+      refetch();
+    }
+  }
 
   async function submitFacultyAndFacultyVerifyVote(event, fuid, facultyID) {
     if (legitFacultyID === -1) {

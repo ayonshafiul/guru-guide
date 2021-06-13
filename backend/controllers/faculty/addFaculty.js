@@ -31,16 +31,17 @@ module.exports = function addFaculty(req, res, next) {
     }
 
     let sql =
-      "SELECT facultyID, facultyName, facultyInitials from faculty where facultyInitials = ";
+      "SELECT facultyID, facultyName, facultyInitials from faculty where facultyInitials = ?";
 
-    connection.query(sql, faculty, function (error, results) {
+    connection.query(sql, facultyInitials.value, function (error, results) {
       if (error) {
         console.log(error);
         connection.release();
       } else {
         if (results.length == 0) {
           // new faculty
-          let sql = "INSERT INTO faculty SET ?";
+          let sql =
+            "INSERT INTO faculty (facultyName, departmentID, facultyInitials, approved, fuid, upVoteSum) values (?, ?, ?, 1, UUID_TO_BIN(UUID(), true), 2)";
           let faculty = {
             departmentID: departmentID.value,
             facultyName: facultyName.value,
@@ -48,17 +49,19 @@ module.exports = function addFaculty(req, res, next) {
             upVoteSum: 2,
             downVoteSum: 0,
           };
-          connection.query(sql, faculty, function (error, results) {
-            if (error) {
-              console.log(error);
-              res.json(
-                createErrorObject("Error while searching for a faculty")
-              );
-            } else {
-              res.json(createSuccessObject("Faculty added in faculty!"));
+          connection.query(
+            sql,
+            [facultyName.value, departmentID.value, facultyInitials.value],
+            function (error, results) {
+              if (error) {
+                console.log(error);
+                res.json(createErrorObject("Error while inserting a faculty"));
+              } else {
+                res.json(createSuccessObject("Faculty added in faculty!"));
+              }
+              connection.release();
             }
-            connection.release();
-          });
+          );
         } else if (results.length > 0) {
           let firstSql = "INSERT INTO facultyverify SET ?";
           let faculty = {
@@ -69,23 +72,27 @@ module.exports = function addFaculty(req, res, next) {
           };
           let secondSql =
             "UPDATE faculty set duplicateCount = duplicateCount + 1 where facultyID = ?";
-          connection.query(firstSql, faculty, function (error, results) {
+          connection.query(firstSql, faculty, function (error, secondResults) {
             if (error) {
               console.log(error);
               connection.release();
               res.json(createErrorObject("Error while inserting a faculty"));
             } else {
-              connection.query(secondSql, facultyID, function (error, results) {
-                if (error) {
-                  console.log(error);
-                  connection.release();
-                  res.json(createErrorObject("Error while updating faculty"));
-                } else {
-                  res.json(
-                    createSuccessObject("Faculty added in facultyverify!")
-                  );
+              connection.query(
+                secondSql,
+                results[0].facultyID,
+                function (error, thirdResults) {
+                  if (error) {
+                    console.log(error);
+                    connection.release();
+                    res.json(createErrorObject("Error while updating faculty"));
+                  } else {
+                    res.json(
+                      createSuccessObject("Faculty added in facultyverify!")
+                    );
+                  }
                 }
-              });
+              );
               connection.release();
             }
           });

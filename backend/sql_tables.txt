@@ -21,6 +21,7 @@ CREATE TABLE faculty(
     facultyInitials varchar(3) not null,
     teaching double not null default '0.00',
     grading double not null default '0.00',
+    approved boolean,
     friendliness double not null default '0.00',
     voteCount int not null default '0',
     duplicateCount int not null default '0',
