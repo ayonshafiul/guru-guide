@@ -19,7 +19,7 @@ module.exports = function (req, res, next) {
     }
 
     let sql =
-      "SELECT BIN_TO_UUID(fuid) as fuid, facultyName, facultyInitials, teaching, grading, friendliness, voteCount from faculty where departmentID = ? and facultyInitials = ?";
+      "SELECT BIN_TO_UUID(fuid) as fuid, facultyName, facultyInitials, teaching, grading, friendliness, voteCount, duplicateCount from faculty where departmentID = ? and facultyInitials = ?";
     connection.query(
       sql,
       [departmentID.value, facultyInitials.value],

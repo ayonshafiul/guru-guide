@@ -77,19 +77,21 @@ const FacultyList = () => {
             fuid: facultyData.data[0].fuid,
           });
         }
-      } else {
-        console.log("facultyDataUndefined");
       }
     } else {
       if (typeof facultyData !== "undefined") {
+        facultyRefetch();
         facultyVerifyRefetch();
-        setShowVerifyPicker(true);
-        if (facultyData.data[0].duplicateCount > 0) {
-          setShowVerifyPicker(true);
-        } else {
-          // post downvote to faculty
-          // set initials to ""
-          // hide contribute
+        if (facultyData.data.length > 0) {
+          console.log(facultyData.data);
+          if (facultyData.data[0].duplicateCount > 0) {
+            setShowVerifyPicker(true);
+          } else {
+            setShowInput(true);
+            // post downvote to faculty
+            // set initials to ""
+            // hide contribute
+          }
         }
       }
     }
@@ -241,7 +243,7 @@ const FacultyList = () => {
                     key={facultyData.data.facultyInitials}
                   />
                   <VerifyConsent
-                    question="Are you sure the faculty initals and faculty name given above are correct?"
+                    question="Are the faculty initals and faculty name given above correct?"
                     yesButtonHandler={() => {
                       console.log("yes");
                       setLegitFaculty("yes");
@@ -290,27 +292,27 @@ const FacultyList = () => {
                     allowNoVote={true}
                     submitHandler={submitFacultyAndFacultyVerifyVote}
                   />
-                  {showInput && (
-                    <>
-                      <div className="global-info-text">
-                        Since you have confirmed that none of the entries we
-                        have so far are correct, please feel free to add the
-                        correct details:
-                      </div>
-                      <TextInput
-                        value={facultyName}
-                        setValue={setFacultyName}
-                        limit={50}
-                        finalRegex={/^[a-zA-Z ]{3, 50}$/}
-                        allowedRegex={/^[a-zA-Z ]*$/}
-                        errorMsg={`Type something like "ARIF SHAKIL"`}
-                        placeholder={`Full name of the faculty`}
-                      />
-                      <div className="submit-btn" onClick={submitFaculty}>
-                        Add Faculty
-                      </div>
-                    </>
-                  )}
+                </>
+              )}
+              {showInput && (
+                <>
+                  <div className="global-info-text">
+                    Since you have confirmed that none of the entries we have so
+                    far are correct, please feel free to add the correct
+                    details:
+                  </div>
+                  <TextInput
+                    value={facultyName}
+                    setValue={setFacultyName}
+                    limit={50}
+                    finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                    allowedRegex={/^[a-zA-Z ]*$/}
+                    errorMsg={`Type something like "ARIF SHAKIL"`}
+                    placeholder={`Full name of the faculty`}
+                  />
+                  <div className="submit-btn" onClick={submitFaculty}>
+                    Add Faculty
+                  </div>
                 </>
               )}
             </>
