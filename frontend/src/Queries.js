@@ -277,12 +277,13 @@ export const postCommentVote = async ({ voteType, commentID }) => {
   return res.data;
 };
 
-export const postFacultyVote = async ({ voteType, facultyID }) => {
+export const postFacultyVote = async ({ voteType, fuid }) => {
   const res = await axios.post(
-    server.url + "/api/facultyvote/" + facultyID,
+    server.url + "/api/facultyvote/" + fuid,
     { voteType },
     { withCredentials: true }
   );
+  console.log(res.data);
   return res.data;
 };
 

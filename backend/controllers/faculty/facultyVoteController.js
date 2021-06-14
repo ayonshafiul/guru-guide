@@ -3,20 +3,22 @@ const {
   validateNumber,
   createErrorObject,
   createSuccessObject,
+  validateHex,
 } = require("../../utils");
 
 module.exports = function (req, res, next) {
   let voteType = validateNumber(req.body.voteType);
   let studentID = req.user.studentID;
-  let facultyID = validateNumber(req.params.facultyID);
+  let fuid = validateHex(req.params.fuid);
 
-  if (voteType.error || facultyID.error) {
-    return res.json(createErrorObject("Invalid studentID or facultyID"));
+  if (voteType.error || fuid.error) {
+    return res.json(createErrorObject("Invalid studentID or fuid"));
   }
 
   if (voteType.value != 1 && voteType.value != 0) {
     return res.json(createErrorObject("Vote not valid!"));
   }
+  
 
   // 1 means upvote
   // 0 means downvote
@@ -29,10 +31,10 @@ module.exports = function (req, res, next) {
       return;
     }
     let sql =
-      "SELECT facultyID, studentID, upVote, downVote from facultyvote where facultyID = ? AND studentID = ?";
+      "SELECT fuid, studentID, upVote, downVote from facultyvote where fuid = UUID_TO_BIN(?) AND studentID = ?";
     connection.query(
       sql,
-      [facultyID.value, studentID],
+      [fuid.value, studentID],
       function (error, results) {
         if (error) {
           console.log(error);
@@ -40,32 +42,22 @@ module.exports = function (req, res, next) {
           res.json(createErrorObject("comment voting failed"));
         } else {
           if (results.length == 0) {
-            let commentratingObj;
+            let facultyVoteArr;
             let secondsql;
-            sql = "INSERT into vote set ?";
+            sql = "INSERT into facultyvote(fuid, studentID, upVote, downVote) values(UUID_TO_BIN(?), ? , ?, ?)";
             let msg = "";
             if (voteType.value == 1) {
-              commentratingObj = {
-                facultyID: facultyID.value,
-                studentID: studentID,
-                upVote: 1,
-                downVote: 0,
-              };
+              facultyVoteArr = [fuid.value, studentID, 1, 0];
               secondsql =
-                "Update facultyverify set upVoteSum = upVoteSum + 1 where facultyID = ? ";
+                "Update faculty set upVoteSum = upVoteSum + 1 where fuid = UUID_TO_BIN(?) ";
               msg = "upvoteinsert";
             } else {
-              commentratingObj = {
-                facultyID: facultyID.value,
-                studentID: studentID,
-                upVote: 0,
-                downVote: 1,
-              };
+              facultyVoteArr = [fuid.value, studentID, 0, 1];
               secondsql =
-                "Update facultyverify set downVoteSum = downVoteSum + 1 where facultyID = ? ";
+                "Update faculty set downVoteSum = downVoteSum + 1 where fuid = UUID_TO_BIN(?) ";
               msg = "downvoteinsert";
             }
-            connection.query(sql, commentratingObj, function (error, results) {
+            connection.query(sql, facultyVoteArr, function (error, results) {
               if (error) {
                 console.log(error);
                 connection.release();
@@ -73,7 +65,7 @@ module.exports = function (req, res, next) {
               } else {
                 connection.query(
                   secondsql,
-                  [facultyID.value],
+                  [fuid.value],
                   function (error, results) {
                     if (error) {
                       console.log(error);
@@ -97,9 +89,9 @@ module.exports = function (req, res, next) {
             ) {
               //when vote is changed from upVote to downVote
               firstSql =
-                "UPDATE vote set upVote=0 , downVote = 1 where facultyID =? and studentID =?";
+                "UPDATE facultyvote set upVote=0 , downVote = 1 where fuid =UUID_TO_BIN(?) and studentID =?";
               secondSql =
-                "UPDATE facultyverify set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where facultyID =?";
+                "UPDATE faculty set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where fuid =UUID_TO_BIN(?)";
               msg = "downvoteupdate";
             } else if (
               results[0].upVote == 0 &&
@@ -108,9 +100,9 @@ module.exports = function (req, res, next) {
             ) {
               //when vote is changed from downVote to upVote
               firstSql =
-                "UPDATE vote set upVote=1 , downVote = 0 where facultyID =? and studentID =?";
+                "UPDATE facultyvote set upVote=1 , downVote = 0 where fuid =UUID_TO_BIN(?) and studentID =?";
               secondSql =
-                "UPDATE facultyverify set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where facultyID =?";
+                "UPDATE faculty set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where fuid =UUID_TO_BIN(?)";
               msg = "upvoteupdate";
             } else {
               connection.release();
@@ -119,7 +111,7 @@ module.exports = function (req, res, next) {
 
             connection.query(
               firstSql,
-              [facultyID.value, studentID],
+              [fuid.value, studentID],
               function (error, results) {
                 if (error) {
                   console.log(error);
@@ -129,7 +121,7 @@ module.exports = function (req, res, next) {
                   //run second sql here
                   connection.query(
                     secondSql,
-                    facultyID.value,
+                    fuid.value,
                     function (error, results) {
                       if (error) {
                         console.log(error);

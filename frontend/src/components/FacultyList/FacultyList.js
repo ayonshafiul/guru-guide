@@ -9,6 +9,7 @@ import {
   getAFacultyByInitials,
   getAFacultyVerification,
   postFaculty,
+  postFacultyVote,
 } from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
@@ -49,25 +50,39 @@ const FacultyList = () => {
     }
   );
 
-  const { isSuccess: facultyVerifyIsSuccess, data: facultyVerifyData } =
-    useQuery(
-      ["/api/facultyverify", String(departmentID), String(initials)],
-      getAFacultyVerification,
-      {
-        enabled: parseInt(departmentID) !== 0 && initials.length === 3,
-        onSuccess: function (data) {
-          console.log(data);
-        },
-      }
-    );
+  const {
+    isSuccess: facultyVerifyIsSuccess,
+    data: facultyVerifyData,
+    refetch: facultyVerifyRefetch,
+  } = useQuery(
+    ["/api/facultyverify", String(departmentID), String(initials)],
+    getAFacultyVerification,
+    {
+      enabled: parseInt(departmentID) !== 0 && initials.length === 3,
+      onSuccess: function (data) {
+        console.log(data);
+      },
+    }
+  );
 
   async function submitFacultyVote(event, fuid) {
     if (legitFaculty === "yes") {
       // post upvote to faculty
       // set initials to ""
       // hide contribute
+      if (typeof facultyData !== "undefined") {
+        if (facultyData.data.length > 0) {
+          const data = await postFacultyVote({
+            voteType: 1,
+            fuid: facultyData.data[0].fuid,
+          });
+        }
+      } else {
+        console.log("facultyDataUndefined");
+      }
     } else {
       if (typeof facultyData !== "undefined") {
+        facultyVerifyRefetch();
         setShowVerifyPicker(true);
         if (facultyData.data[0].duplicateCount > 0) {
           setShowVerifyPicker(true);

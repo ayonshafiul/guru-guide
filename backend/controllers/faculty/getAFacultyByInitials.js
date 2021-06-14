@@ -28,7 +28,6 @@ module.exports = function (req, res, next) {
           console.log(error);
           res.json(createErrorObject("Error while querying"));
         } else {
-          console.log(results);
           res.json(createSuccessObjectWithData(results));
         }
         connection.release();

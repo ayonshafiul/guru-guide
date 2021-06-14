@@ -29,7 +29,7 @@ module.exports = function (req, res, next) {
       return;
     }
     let sql =
-      "SELECT facultyID, studentID, upVote, downVote from vote where facultyID = ? AND studentID = ?";
+      "SELECT facultyID, studentID, upVote, downVote from facultyverifyvote where facultyID = ? AND studentID = ?";
     connection.query(
       sql,
       [facultyID.value, studentID],
@@ -42,7 +42,7 @@ module.exports = function (req, res, next) {
           if (results.length == 0) {
             let commentratingObj;
             let secondsql;
-            sql = "INSERT into vote set ?";
+            sql = "INSERT into facultyverifyvote set ?";
             let msg = "";
             if (voteType.value == 1) {
               commentratingObj = {
@@ -97,7 +97,7 @@ module.exports = function (req, res, next) {
             ) {
               //when vote is changed from upVote to downVote
               firstSql =
-                "UPDATE vote set upVote=0 , downVote = 1 where facultyID =? and studentID =?";
+                "UPDATE facultyverifyvote set upVote=0 , downVote = 1 where facultyID =? and studentID =?";
               secondSql =
                 "UPDATE facultyverify set upVoteSum = upVoteSum - 1 , downVoteSum = downVoteSum + 1 where facultyID =?";
               msg = "downvoteupdate";
@@ -108,7 +108,7 @@ module.exports = function (req, res, next) {
             ) {
               //when vote is changed from downVote to upVote
               firstSql =
-                "UPDATE vote set upVote=1 , downVote = 0 where facultyID =? and studentID =?";
+                "UPDATE facultyverifyvote set upVote=1 , downVote = 0 where facultyID =? and studentID =?";
               secondSql =
                 "UPDATE facultyverify set upVoteSum = upVoteSum + 1 , downVoteSum = downVoteSum - 1 where facultyID =?";
               msg = "upvoteupdate";
