@@ -10,6 +10,7 @@ import {
   getAFacultyVerification,
   postFaculty,
   postFacultyVote,
+  postFacultyVerifyVote,
 } from "../../Queries";
 import { departments } from "../../serverDetails";
 import useLocalStorage from "../../useLocalStorage";
@@ -65,6 +66,13 @@ const FacultyList = () => {
     }
   );
 
+  function resetContribute() {
+    setLegitFacultyID(0);
+    setLegitFaculty("");
+    setShowInput(false);
+    setShowVerifyPicker(false);
+    setFacultyName("");
+  }
   async function submitFacultyVote(event, fuid) {
     if (legitFaculty === "yes") {
       // post upvote to faculty
@@ -76,6 +84,11 @@ const FacultyList = () => {
             voteType: 1,
             fuid: facultyData.data[0].fuid,
           });
+          if (data.success) {
+            addToast("Thanks for your contribution!");
+            resetContribute();
+            setShowContribute(false);
+          }
         }
       }
     } else {
@@ -105,9 +118,8 @@ const FacultyList = () => {
     });
     if (res.success) {
       addToast("Thanks for your feedback!");
+      resetContribute();
       setShowContribute(false);
-      setFacultyName("");
-      setInitials("");
       refetch();
     }
   }
@@ -116,7 +128,27 @@ const FacultyList = () => {
     if (legitFacultyID === -1) {
       setShowInput(true);
     } else {
-      // setShowVerifyPicker false
+      if (typeof facultyData !== "undefined") {
+        if (facultyData.data.length > 0) {
+          const res = await postFacultyVerifyVote({
+            voteType: 1,
+            facultyID: legitFacultyID,
+          });
+          if (res.success) {
+            if (facultyData.data.length > 0) {
+              const data = await postFacultyVote({
+                voteType: 0,
+                fuid: facultyData.data[0].fuid,
+              });
+              if (data.success) {
+                addToast("Thanks for your contribution!");
+                resetContribute();
+                setShowContribute(false);
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -176,11 +208,7 @@ const FacultyList = () => {
   useEffect(() => {
     if (initials.length < 3) {
       console.log("use");
-      setLegitFacultyID(0);
-      setLegitFaculty("");
-      setShowInput(false);
-      setShowVerifyPicker(false);
-      setFacultyName("");
+      resetContribute();
     }
   }, [initials]);
   if (!isAuth)
@@ -280,7 +308,7 @@ const FacultyList = () => {
                   </div>{" "}
                 </>
               )}
-              {showVerifyPicker && (
+              {showVerifyPicker && legitFaculty === "no" && (
                 <>
                   <VerifyPicker
                     header="Choose which entry is the correct one from below: "
@@ -294,27 +322,30 @@ const FacultyList = () => {
                   />
                 </>
               )}
-              {showInput && (
-                <>
-                  <div className="global-info-text">
-                    Since you have confirmed that none of the entries we have so
-                    far are correct, please feel free to add the correct
-                    details:
-                  </div>
-                  <TextInput
-                    value={facultyName}
-                    setValue={setFacultyName}
-                    limit={50}
-                    finalRegex={/^[a-zA-Z ]{3, 50}$/}
-                    allowedRegex={/^[a-zA-Z ]*$/}
-                    errorMsg={`Type something like "ARIF SHAKIL"`}
-                    placeholder={`Full name of the faculty`}
-                  />
-                  <div className="submit-btn" onClick={submitFaculty}>
-                    Add Faculty
-                  </div>
-                </>
-              )}
+              {showInput &&
+                legitFaculty === "no" &&
+                (parseInt(legitFacultyID) === 0 ||
+                  parseInt(legitFacultyID) === -1) && (
+                  <>
+                    <div className="global-info-text">
+                      Since you have confirmed that none of the entries we have
+                      so far are correct, please feel free to add the correct
+                      details:
+                    </div>
+                    <TextInput
+                      value={facultyName}
+                      setValue={setFacultyName}
+                      limit={50}
+                      finalRegex={/^[a-zA-Z ]{3, 50}$/}
+                      allowedRegex={/^[a-zA-Z ]*$/}
+                      errorMsg={`Type something like "ARIF SHAKIL"`}
+                      placeholder={`Full name of the faculty`}
+                    />
+                    <div className="submit-btn" onClick={submitFaculty}>
+                      Add Faculty
+                    </div>
+                  </>
+                )}
             </>
           )}
         </>
