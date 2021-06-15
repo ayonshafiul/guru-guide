@@ -73,11 +73,8 @@ const FacultyList = () => {
     setShowVerifyPicker(false);
     setFacultyName("");
   }
-  async function submitFacultyVote(event, fuid) {
+  async function submitFacultyVote() {
     if (legitFaculty === "yes") {
-      // post upvote to faculty
-      // set initials to ""
-      // hide contribute
       if (typeof facultyData !== "undefined") {
         if (facultyData.data.length > 0) {
           const data = await postFacultyVote({
@@ -93,17 +90,24 @@ const FacultyList = () => {
       }
     } else {
       if (typeof facultyData !== "undefined") {
-        facultyRefetch();
-        facultyVerifyRefetch();
+        facultyRefetch(); // to make sure the duplicateCount is updated
+        facultyVerifyRefetch(); // to get the latest data
         if (facultyData.data.length > 0) {
-          console.log(facultyData.data);
           if (facultyData.data[0].duplicateCount > 0) {
             setShowVerifyPicker(true);
           } else {
-            setShowInput(true);
-            // post downvote to faculty
-            // set initials to ""
-            // hide contribute
+            // no duplicates found so downVote instead and get the input
+            if (typeof facultyData !== "undefined") {
+              if (facultyData.data.length > 0) {
+                const data = await postFacultyVote({
+                  voteType: 0,
+                  fuid: facultyData.data[0].fuid,
+                });
+                if (data.success) {
+                  setShowInput(true);
+                }
+              }
+            }
           }
         }
       }
@@ -111,22 +115,39 @@ const FacultyList = () => {
   }
 
   async function submitFaculty() {
-    const res = await postFaculty({
-      departmentID,
-      facultyInitials: initials,
-      facultyName,
-    });
-    if (res.success) {
-      addToast("Thanks for your feedback!");
-      resetContribute();
-      setShowContribute(false);
-      refetch();
+    if (initials.length === 3 && facultyName.length >= 3) {
+      const res = await postFaculty({
+        departmentID,
+        facultyInitials: initials,
+        facultyName,
+      });
+      if (res.success) {
+        addToast("Thanks for your contribution!");
+        resetContribute();
+        setShowContribute(false);
+        refetch();
+        facultyRefetch();
+      }
+    } else {
+      addToast("Please enter at least 3 characters for Faculty Name!");
     }
   }
 
   async function submitFacultyAndFacultyVerifyVote(event, fuid, facultyID) {
     if (legitFacultyID === -1) {
-      setShowInput(true);
+      if (typeof facultyData !== "undefined") {
+        if (facultyData.data.length > 0) {
+          const data = await postFacultyVote({
+            voteType: 0,
+            fuid: facultyData.data[0].fuid,
+          });
+          if (data.success) {
+            setShowInput(true);
+          }
+        }
+      }
+    } else if (parseInt(legitFacultyID) === 0) {
+      addToast("Please select a option from the list!");
     } else {
       if (typeof facultyData !== "undefined") {
         if (facultyData.data.length > 0) {
