@@ -12,23 +12,6 @@ Faculty Review Website
 * Redis
 * Google Authentication 
 
-## .env file config
-
-
-```
-NODE_ENV=
-PORT=
-DB_HOST=
-DB=
-DB_USER=
-DB_PASS=
-JWT_SECRET=
-CLIENT_ID=
-JWT_EXPIRES_IN=
-JWT_COOKIE_EXPIRES=
-REDIS_HOST=
-REDIS_PORT=
-```
 
 # Folder Structure
 + backend - contains the entire backend nodejs server built with express js and uses mysql database
@@ -51,5 +34,24 @@ REDIS_PORT=
   + Queries.js - contains all the frontend calls with rest api endpoints
   + useAxios - custom hooks for axios
   + useLocalStorage - custom hook for accessing local storage 
+
+## .env file config
+
+
+```
+NODE_ENV=
+PORT=
+DB_HOST=
+DB=
+DB_USER=
+DB_PASS=
+JWT_SECRET=
+CLIENT_ID=
+JWT_EXPIRES_IN=
+JWT_COOKIE_EXPIRES=
+REDIS_HOST=
+REDIS_PORT=
+```
+
  
  
