@@ -1,4 +1,4 @@
-# faculty_review
+# Guru Guide
 
 Web App aimed at university students aiding in planning their next course/faculty of choice, getting answers about their queries, engaging in discussion forums.
 
